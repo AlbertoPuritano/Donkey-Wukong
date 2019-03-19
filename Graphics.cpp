@@ -50,7 +50,7 @@ public:
                 }
             }
         }
-        al_set_target_backbuffer(this->display);
+        al_set_target_backbuffer(display);
         al_clear_to_color(al_map_rgb(0, 0, 0));
         al_draw_scaled_bitmap(buffer, 0, 0, l, h,scaleX, scaleY, scaleW, scaleH,0);
     }
@@ -62,8 +62,19 @@ public:
         bitmap=al_load_bitmap("mario.png");
         al_draw_bitmap(bitmap,Player->getY(),Player->getX(),0);
         al_destroy_bitmap(bitmap);
-        al_set_target_backbuffer(this->display);
+        al_set_target_backbuffer(display);
         al_clear_to_color(al_map_rgb(0,0,0));
         al_draw_scaled_bitmap(buffer, 0, 0, l, h,scaleX, scaleY, scaleW, scaleH,0);
+    }
+
+    void DrawBarrel(Entity* Barrel)
+    {
+        al_set_target_bitmap(buffer);
+        bitmap=al_load_bitmap("barrel.png");
+        al_draw_bitmap(bitmap,Barrel->getX(),Barrel->getY(),0);
+        al_destroy_bitmap(bitmap);
+        al_set_target_backbuffer(display);
+        al_clear_to_color(al_map_rgb(0,0,0));
+        al_draw_scaled_bitmap(bitmap, 0, 0, l, h,scaleX, scaleY, scaleW, scaleH,0);
     } 
 };
