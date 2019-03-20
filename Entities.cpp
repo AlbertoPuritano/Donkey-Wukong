@@ -3,11 +3,9 @@
 using namespace std;
 class Entity
 {
-private:
+protected:
     int x;
     int y;
-    int matX;
-    int matY;
 public:
     Entity(int a, int b):x(a),y(b){}
     int getX(){return x;}
@@ -64,8 +62,24 @@ public:
 class Barrel:public Entity
 {
 private:
-    int init_x;
-    int init_y;
+    bool dx=true;
 public:
-    Barrel():Entity(init_x,init_y){}
+    Barrel():Entity(7,4){}
+    void Move()
+    {
+        if (y/20>=26)
+            dx=false;
+        if (y/20<=1)
+            dx=true;
+        if (griglia[(x/20)+2][y/20]==1)
+        {
+            x/=20;
+            x+=4;
+            x*=20;
+        }
+        if (dx)
+            y+=5;
+        else
+            y-=5;
+  }
 };
