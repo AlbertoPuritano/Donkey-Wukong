@@ -67,14 +67,38 @@ public:
         al_draw_scaled_bitmap(buffer, 0, 0, l, h,scaleX, scaleY, scaleW, scaleH,0);
     }
 
-    void DrawBarrel(Entity* Barrel)
+
+    void DrawKong(Entity* Kong)
     {
         al_set_target_bitmap(buffer);
-        bitmap=al_load_bitmap("barrel.png");
-        al_draw_bitmap(bitmap,Barrel->getX(),Barrel->getY(),0);
+        bitmap = al_load_bitmap("kong.png");
+        al_draw_bitmap(bitmap, Kong -> getX(), Kong -> getY(), 0);
         al_destroy_bitmap(bitmap);
         al_set_target_backbuffer(display);
         al_clear_to_color(al_map_rgb(0,0,0));
-        al_draw_scaled_bitmap(bitmap, 0, 0, l, h,scaleX, scaleY, scaleW, scaleH,0);
+        al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);
     } 
+
+
+    void DrawStaticBarrel()
+    {
+        al_set_target_bitmap(buffer);  
+        bitmap=al_load_bitmap("barrel_standing.png");
+        al_draw_bitmap(bitmap,33, 99,0);
+        al_draw_bitmap(bitmap,33, 120,0);
+        al_draw_bitmap(bitmap,10, 99,0);
+        al_draw_bitmap(bitmap,10, 120,0);
+
+        bitmap=al_load_bitmap("bareele.png");
+        al_draw_bitmap(bitmap,0, 120,0);
+        al_destroy_bitmap(bitmap);
+        al_set_target_backbuffer(display);
+
+
+
+
+        al_clear_to_color(al_map_rgb(0,0,0));
+        al_draw_scaled_bitmap(buffer, 0, 0, l, h,scaleX, scaleY, scaleW, scaleH,0);
+        
+    }
 };

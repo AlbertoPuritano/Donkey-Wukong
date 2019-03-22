@@ -3,7 +3,7 @@
 using namespace std;
 class Entity
 {
-protected:
+private:
     int x;
     int y;
 public:
@@ -61,25 +61,13 @@ public:
 
 class Barrel:public Entity
 {
-private:
-    bool dx=true;
 public:
-    Barrel():Entity(7,4){}
-    void Move()
-    {
-        if (y/20>=26)
-            dx=false;
-        if (y/20<=1)
-            dx=true;
-        if (griglia[(x/20)+2][y/20]==1)
-        {
-            x/=20;
-            x+=4;
-            x*=20;
-        }
-        if (dx)
-            y+=5;
-        else
-            y-=5;
-  }
+    Barrel():Entity(40,80){};
+};
+
+
+class Kong: public Entity
+{
+public:
+    Kong():Entity(60,80){};
 };

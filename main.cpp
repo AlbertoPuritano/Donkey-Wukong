@@ -46,8 +46,8 @@ int main()
     al_register_event_source(queue, al_get_timer_event_source(timer));
 
     Graphics GraphicManager(display,buffer,scaleX,scaleY,scaleW,scaleH);
-    Player* Play= new Player();
-    Barrel* Bar=new Barrel();
+    Entity* Play= new Player();
+    Entity* Wukong = new Kong();
 
     bool done = false;
     bool redraw = true;
@@ -56,9 +56,10 @@ int main()
     al_start_timer(timer);
     #define KEY_SEEN     1
     #define KEY_RELEASED 2
+
     unsigned char key[ALLEGRO_KEY_MAX];
     memset(key, 0, sizeof(key));
-    while(1)       //ciclo del gioco
+    while(1)
     {
         al_wait_for_event(queue, &event);
 
@@ -96,12 +97,7 @@ int main()
                 done = true;
                 break;
         }
-        Bar->Move();se ALLEGRO_EVENT_KEY_DOWN:
-                key[event.keyboard.keycode] = KEY_SEEN | KEY_RELEASED;
-                break;
-                al_start_timer(timer);
-                #define KEY_SEEN     1
-                #define KEY_RELEASED 2
+
         if(done)
             break;
 
@@ -109,7 +105,8 @@ int main()
         {
             GraphicManager.DrawMap();
             GraphicManager.DrawPlayer(Play);
-           /* GraphicManager.DrawBarrel(Bar);*/
+            GraphicManager.DrawKong(Wukong);
+            GraphicManager.DrawStaticBarrel();
             al_flip_display();
             redraw = false;
         }
