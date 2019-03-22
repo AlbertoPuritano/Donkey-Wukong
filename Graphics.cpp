@@ -89,9 +89,6 @@ public:
         al_draw_bitmap(bitmap,10, 99,0);
         al_draw_bitmap(bitmap,10, 120,0);
 
-        bitmap=al_load_bitmap("bareele.png");
-        al_draw_bitmap(bitmap,0, 120,0);
-        al_destroy_bitmap(bitmap);
         al_set_target_backbuffer(display);
 
 
