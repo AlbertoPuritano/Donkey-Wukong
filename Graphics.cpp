@@ -1,6 +1,7 @@
 #include <fstream>
 #include <allegro5/allegro5.h>
 #include <allegro5/allegro_image.h>
+#include <iostream>
 using namespace std;
 const int h=560;
 const int l=500;
