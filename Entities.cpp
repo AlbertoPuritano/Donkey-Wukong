@@ -5,10 +5,13 @@ private:
     int x;
     int y;
     int** griglia=NULL;
+    int frame;
 public:
     Entity(int a, int b,int** c):x(a),y(b),griglia(c){}         //coordinate in pixel dell'entità e puntatore della matrice su cui deve muoversi
     int getX(){return x;}
     int getY(){return y;}
+    int getFrame(){return frame;}
+    int setFrame(){return frame;}
     void MoveUp()
     {
         if ((x/20)-1<=0)
