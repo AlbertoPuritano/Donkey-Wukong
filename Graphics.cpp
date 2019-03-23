@@ -1,6 +1,7 @@
+#include <fstream>
 #include <allegro5/allegro5.h>
 #include <allegro5/allegro_image.h>
-#include "Entities.cpp"
+using namespace std;
 const int h=560;
 const int l=500;
 
@@ -14,7 +15,10 @@ private:
     ALLEGRO_DISPLAY * display=NULL;
     ALLEGRO_BITMAP * buffer=NULL;
     ALLEGRO_BITMAP* bitmap=NULL;
+    int x;
+    int y;
 public:
+    int** griglia = NULL;
     Graphics (){}
     Graphics (ALLEGRO_DISPLAY* display,ALLEGRO_BITMAP* buffer,int scaleX, int scaleY,int scaleW,int scaleH)
     {
@@ -24,6 +28,18 @@ public:
         this->scaleY = scaleY;
         this->buffer = buffer;
         this->display = display;
+        ifstream fileinput;
+        fileinput.open("level1.txt");
+        if (!fileinput)
+            cout<<"could not initialize matrix"<<endl;
+        fileinput>> x >> y;
+        griglia= new int* [x];
+        for (int i=0;i<x;i++)
+            griglia[i]=new int [y];
+        for (int i=0;i<x;i++)
+            for (int j=0;j<y;j++)
+                fileinput>>griglia[i][j];
+        fileinput.close();
     }
     
     
@@ -31,9 +47,9 @@ public:
     {
         al_set_target_bitmap(buffer);
         al_clear_to_color(al_map_rgb(0,0,0));
-        for (int i=0;i<28;i++)
+        for (int i=0;i<x;i++)
         {
-            for (int j=0;j<25;j++)
+            for (int j=0;j<y;j++)
             {
                 switch (griglia[i][j])
                 {
@@ -56,11 +72,11 @@ public:
     }
     
     
-    void DrawPlayer(Entity* Player)
+    void DrawPlayer(int PlayerX ,int PlayerY)
     {
         al_set_target_bitmap(buffer);
         bitmap=al_load_bitmap("mario.png");
-        al_draw_bitmap(bitmap,Player->getY(),Player->getX(),0);
+        al_draw_bitmap(bitmap,PlayerY,PlayerX,0);
         al_destroy_bitmap(bitmap);
         al_set_target_backbuffer(display);
         al_clear_to_color(al_map_rgb(0,0,0));
@@ -68,11 +84,11 @@ public:
     }
 
 
-    void DrawKong(Entity* Kong)
+    void DrawKong(int KongX,int KongY)
     {
         al_set_target_bitmap(buffer);
         bitmap = al_load_bitmap("kong.png");
-        al_draw_bitmap(bitmap, Kong -> getX(), Kong -> getY(), 0);
+        al_draw_bitmap(bitmap, KongY, KongX, 0);
         al_destroy_bitmap(bitmap);
         al_set_target_backbuffer(display);
         al_clear_to_color(al_map_rgb(0,0,0));
@@ -80,7 +96,7 @@ public:
     } 
 
 
-    void DrawStaticBarrel()
+    void DrawStaticBarrels()
     {
         al_set_target_bitmap(buffer);  
         bitmap=al_load_bitmap("barrel_standing.png");
@@ -97,5 +113,11 @@ public:
         al_clear_to_color(al_map_rgb(0,0,0));
         al_draw_scaled_bitmap(buffer, 0, 0, l, h,scaleX, scaleY, scaleW, scaleH,0);
         
+    }
+    ~Graphics()
+    {
+        for (int i=0;i<x;i++)
+            delete griglia[i];
+        delete [] griglia;
     }
 };

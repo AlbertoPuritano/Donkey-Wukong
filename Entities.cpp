@@ -1,17 +1,18 @@
-#include "Matrix.hpp"
-#include <iostream>
-using namespace std;
+#include "Graphics.cpp"
 class Entity
 {
 private:
     int x;
     int y;
+    int** griglia=NULL;
 public:
-    Entity(int a, int b):x(a),y(b){}
+    Entity(int a, int b,int** c):x(a),y(b),griglia(c){}         //coordinate in pixel dell'entità e puntatore della matrice su cui deve muoversi
     int getX(){return x;}
     int getY(){return y;}
     void MoveUp()
     {
+        if ((x/20)-1<=0)
+            return;
         if (griglia[(x/20)-1][y/20]==1)
         {
             x-=10;
@@ -26,12 +27,12 @@ public:
     }
     void MoveDown()
     {
-        if (griglia[(x/20)+1][y/20]==1)
+        if ((x/20)+1<=27 and griglia[(x/20)+1][y/20]==1)
         {
             x+=10;
             return;
         }
-        else if (griglia[(x/20)+1][y/20]==2 and griglia[(x/20)+2][y/20]==1)
+        else if ((x/20)+2<=27 and griglia[(x/20)+1][y/20]==2 and griglia[(x/20)+2][y/20]==1)
         {
             x/=20;
             x+=2;
@@ -55,19 +56,19 @@ public:
 class Player: public Entity
 {
 public:
-    Player():Entity(520,180){}
+    Player(int** c):Entity(520,180,c){}
 };
 
 
 class Barrel:public Entity
 {
 public:
-    Barrel():Entity(40,80){};
+    Barrel(int** c):Entity(40,80,c){};
 };
 
 
 class Kong: public Entity
 {
 public:
-    Kong():Entity(60,80){};
+    Kong(int** c):Entity(80,60,c){};
 };
