@@ -62,7 +62,7 @@ int main()
     while(1)
     {
         al_wait_for_event(queue, &event);
-
+        Play->HandleFall();
         switch(event.type)
         {
             case ALLEGRO_EVENT_TIMER:
@@ -74,6 +74,8 @@ int main()
                     Play->MoveLeft();
                 if(key[ALLEGRO_KEY_RIGHT])
                     Play->MoveRight();
+                if(key[ALLEGRO_KEY_SPACE])
+                    Play->Jump();
                 if(key[ALLEGRO_KEY_ESCAPE])
                     done = true;
 
