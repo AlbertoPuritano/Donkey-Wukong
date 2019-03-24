@@ -1,7 +1,7 @@
 #include <allegro5/allegro5.h>
 #include <allegro5/allegro_image.h>
 #include <iostream>
-#include "Entities.cpp"
+#include "Graphics.cpp"
 using namespace std;
 
 void must_init(bool test, const char *description)
@@ -46,8 +46,8 @@ int main()
     al_register_event_source(queue, al_get_timer_event_source(timer));
 
     Graphics GraphicManager(display,buffer,scaleX,scaleY,scaleW,scaleH);
-    Entity* Play= new Player(GraphicManager.griglia);
-    Entity* Wukong = new Kong(GraphicManager.griglia);
+    Player* Play= new Player(GraphicManager.griglia);
+    Kong* Wukong = new Kong(GraphicManager.griglia);
 
     bool done = false;
     bool redraw = true;
@@ -104,14 +104,14 @@ int main()
         if(redraw && al_is_event_queue_empty(queue))
         {
             GraphicManager.DrawMap();
-            GraphicManager.DrawPlayer(Play->getX(),Play->getY());
-            GraphicManager.DrawKong(Wukong->getX(),Wukong->getY());
             GraphicManager.DrawStaticBarrels();
+            GraphicManager.DrawKong(Wukong);
+            GraphicManager.DrawPlayer(Play);
             al_flip_display();
             redraw = false;
         }
     }
-
+    delete Play;  delete Wukong;
     al_destroy_display(display);
     al_destroy_timer(timer);
     al_destroy_event_queue(queue);

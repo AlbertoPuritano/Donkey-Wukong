@@ -2,6 +2,7 @@
 #include <allegro5/allegro5.h>
 #include <allegro5/allegro_image.h>
 #include <iostream>
+#include "Entities.cpp"
 using namespace std;
 const int h=560;
 const int l=500;
@@ -32,7 +33,7 @@ public:
         ifstream fileinput;
         fileinput.open("level1.txt");
         if (!fileinput)
-            cout<<"could not initialize matrix"<<endl;
+            cout<<"could not initialize level 1"<<endl;
         fileinput>> x >> y;
         griglia= new int* [x];
         for (int i=0;i<x;i++)
@@ -73,11 +74,11 @@ public:
     }
     
     
-    void DrawPlayer(int PlayerX ,int PlayerY)
+    void DrawPlayer(Player* Play)
     {
         al_set_target_bitmap(buffer);
         bitmap=al_load_bitmap("mario.png");
-        al_draw_bitmap(bitmap,PlayerY,PlayerX,0);
+        al_draw_bitmap(bitmap,Play->getY(),Play->getX(),0);
         al_destroy_bitmap(bitmap);
         al_set_target_backbuffer(display);
         al_clear_to_color(al_map_rgb(0,0,0));
@@ -85,15 +86,28 @@ public:
     }
 
 
-    void DrawKong(int KongX,int KongY)
+    void DrawKong(Kong* Wukong)
     {
         al_set_target_bitmap(buffer);
-        bitmap = al_load_bitmap("kong.png");
-        al_draw_bitmap(bitmap, KongY, KongX, 0);
+        if (Wukong->getFrame()>0 and Wukong->getFrame()<=10)
+            bitmap= al_load_bitmap("kong1.png");
+        else if (Wukong->getFrame()>10 and Wukong->getFrame()<=20)
+            bitmap= al_load_bitmap("kong2.png");
+        else if (Wukong->getFrame()>20 and Wukong->getFrame()<=30)
+            bitmap= al_load_bitmap("kong3.png");
+        else if (Wukong->getFrame()>30 and Wukong->getFrame()<=40)
+            bitmap= al_load_bitmap("kong4.png");
+        else
+            bitmap= al_load_bitmap("kong5.png");
+        al_draw_bitmap(bitmap, Wukong->getY(), Wukong->getX(), 0);
         al_destroy_bitmap(bitmap);
         al_set_target_backbuffer(display);
         al_clear_to_color(al_map_rgb(0,0,0));
         al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);
+        if (Wukong->getFrame()<52)
+            Wukong->nextFrame();
+        else
+            Wukong->resetFrame();
     } 
 
 
@@ -105,12 +119,8 @@ public:
         al_draw_bitmap(bitmap,33, 120,0);
         al_draw_bitmap(bitmap,10, 99,0);
         al_draw_bitmap(bitmap,10, 120,0);
-
+        al_destroy_bitmap(bitmap);
         al_set_target_backbuffer(display);
-
-
-
-
         al_clear_to_color(al_map_rgb(0,0,0));
         al_draw_scaled_bitmap(buffer, 0, 0, l, h,scaleX, scaleY, scaleW, scaleH,0);
         
