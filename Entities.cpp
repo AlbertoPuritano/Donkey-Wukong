@@ -7,23 +7,27 @@ protected:
     int y;
     int** griglia=NULL;
     int frame;
+    bool falling;
+    bool ladderstate;
 public:
-    Entity(int a, int b,int** c):x(a),y(b),griglia(c),frame(1){}         //coordinate in pixel dell'entità e puntatore della matrice su cui deve muoversi
+    Entity(int a, int b,int** c):x(a),y(b),griglia(c),frame(1),falling(false),ladderstate(false){}         //coordinate in pixel dell'entità e puntatore della matrice su cui deve muoversi
     int getX(){return x;}
     int getY(){return y;}
     int getFrame(){return frame;}
     void setFrame(int a){frame=a;}
+   // bool operator== (Entity* a)
+    //{
+        
+    //}
 };
 
 
 class Player: public Entity
 {
 private:
-    bool falling;
     int jumpstate;
-    bool ladderstate;
 public:
-    Player(int** c):Entity(520,180,c),falling(false),jumpstate(0),ladderstate(false){}
+    Player(int** c):Entity(520,180,c),jumpstate(0){}
     void MoveUp()
     {
         if (falling)
@@ -75,10 +79,19 @@ public:
     }
     void HandleGravity()
     {
-        if (griglia[(x/20)+1][y/20]==2)
+        if (griglia[(x/20)+1][y/20]==2)     
             ladderstate=false;
-        if (griglia[(x/20)+1][y/20]==0 and jumpstate==0)
+        if (griglia[(x/20)+1][y/20]==0 and jumpstate==0) //se sotto ha il vuoto
             falling=true;
+        if (falling and jumpstate==0)
+        {
+            if (griglia[(x/20)+1][y/20]==2)
+            {
+                falling=false;
+                return;
+            }
+            x+=4;
+        }
         if (!falling and jumpstate>0)
         {
             x-=3;
@@ -90,15 +103,6 @@ public:
                 return;
             }
         }
-        if (falling and jumpstate==0)
-        {
-            if (griglia[(x/20)+1][y/20]==2)
-            {
-                falling=false;
-                return;
-            }
-            x+=4;
-        }
     }
 
 };
@@ -106,8 +110,36 @@ public:
 
 class Barrel:public Entity
 {
+private:
+    bool dx;
 public:
-    Barrel(int** c):Entity(40,80,c){};
+    Barrel(int** c):Entity(120,200,c),dx(true){};
+    void roll()
+    {
+        if (falling)
+            return;
+        if (dx)
+            y+=5;
+        else
+            y-=5;
+    }
+    void HandleGravity()
+    {
+        if (falling)
+        {
+            x+=4;
+            if (griglia[(x/20)+1][y/20]==2)
+                falling=false;
+        }
+        else if (griglia[(x/20)+1][y/20]==0)
+        {
+            falling=true;
+            if (dx)
+                dx=false;
+            else
+                dx=true;
+        }    
+    }
 };
 
 

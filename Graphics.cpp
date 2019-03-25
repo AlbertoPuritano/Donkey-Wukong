@@ -125,6 +125,16 @@ public:
         al_draw_scaled_bitmap(buffer, 0, 0, l, h,scaleX, scaleY, scaleW, scaleH,0);
         
     }
+    void DrawBarrel(Barrel* Bar)
+    {
+        al_set_target_bitmap(buffer);
+        bitmap=al_load_bitmap("barrel.png");
+        al_draw_bitmap(bitmap,Bar->getY(),Bar->getX(),0);
+        al_destroy_bitmap(bitmap);
+        al_set_target_backbuffer(display);
+        al_clear_to_color(al_map_rgb(0,0,0));
+        al_draw_scaled_bitmap(buffer, 0, 0, l, h,scaleX, scaleY, scaleW, scaleH,0);
+    }
     ~Graphics()
     {
         for (int i=0;i<x;i++)

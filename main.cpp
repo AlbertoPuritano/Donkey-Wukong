@@ -28,6 +28,7 @@ int main()
     al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
     ALLEGRO_DISPLAY* display = al_create_display(l,h);
     must_init(display, "display");
+    ALLEGRO_BITMAP* buffer=al_create_bitmap(l,h);
     int windowHeight = al_get_display_height(display);
     int windowWidth = al_get_display_width(display);
     float sx = windowWidth / float(l);
@@ -38,8 +39,9 @@ int main()
     int scaleX = (windowWidth - scaleW) / 2;
     int scaleY = (windowHeight - scaleH) / 2;
     must_init(al_init_image_addon(), "image addon");
-    ALLEGRO_BITMAP* buffer=al_create_bitmap(l,h);
     must_init(buffer, "buffer");
+    al_set_target_bitmap(buffer);
+    al_clear_to_color(al_map_rgb(0,0,0));
    
     al_register_event_source(queue, al_get_keyboard_event_source());
     al_register_event_source(queue, al_get_display_event_source(display));
@@ -48,7 +50,7 @@ int main()
     Graphics GraphicManager(display,buffer,scaleX,scaleY,scaleW,scaleH);
     Player* Play= new Player(GraphicManager.griglia);
     Kong* Wukong = new Kong(GraphicManager.griglia);
-
+    Barrel* Bar=new Barrel(GraphicManager.griglia);
     bool done = false;
     bool redraw = true;
     ALLEGRO_EVENT event;
@@ -62,7 +64,6 @@ int main()
     while(1)
     {
         al_wait_for_event(queue, &event);
-        Play->HandleGravity();
         switch(event.type)
         {
             case ALLEGRO_EVENT_TIMER:
@@ -105,9 +106,15 @@ int main()
 
         if(redraw && al_is_event_queue_empty(queue))
         {
+            Bar->roll();
+            Bar->HandleGravity();
+            Play->HandleGravity();
+            if (Play->getX()/20==Bar->getX()/20 and Play->getY()/20==Bar->getY()/20)
+                done=true;
             GraphicManager.DrawMap();
             GraphicManager.DrawStaticBarrels();
             GraphicManager.DrawKong(Wukong);
+            GraphicManager.DrawBarrel(Bar);
             GraphicManager.DrawPlayer(Play);
             al_flip_display();
             redraw = false;
