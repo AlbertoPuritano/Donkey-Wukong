@@ -26,11 +26,12 @@ int main()
     must_init(queue, "queue");
 
     al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
-    ALLEGRO_DISPLAY* display = al_create_display(l,h);
-    must_init(display, "display");
     ALLEGRO_BITMAP* buffer=al_create_bitmap(l,h);
+    ALLEGRO_DISPLAY* display = al_create_display(1,1);
+    must_init(display, "display");
     int windowHeight = al_get_display_height(display);
     int windowWidth = al_get_display_width(display);
+    cout<<windowHeight<<" "<<windowWidth<<"ciao";
     float sx = windowWidth / float(l);
     float sy = windowHeight / float(h);
     int scale = min(sx, sy);
@@ -46,7 +47,7 @@ int main()
     al_register_event_source(queue, al_get_keyboard_event_source());
     al_register_event_source(queue, al_get_display_event_source(display));
     al_register_event_source(queue, al_get_timer_event_source(timer));
-
+    cout<<sx<<" "<<sy<<" "<<scaleW<<" "<<scaleH<<" "<<scaleX<<" "<<scaleY<<endl;
     Graphics GraphicManager(display,buffer,scaleX,scaleY,scaleW,scaleH);
     Player* Play= new Player(GraphicManager.griglia);
     Kong* Wukong = new Kong(GraphicManager.griglia);

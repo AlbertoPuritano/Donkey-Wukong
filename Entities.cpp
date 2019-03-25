@@ -15,10 +15,10 @@ public:
     int getY(){return y;}
     int getFrame(){return frame;}
     void setFrame(int a){frame=a;}
-   // bool operator== (Entity* a)
-    //{
-        
-    //}
+    bool operator== (Entity* a)
+    {
+        return (a->getX()==x and a->getY()==y);
+    }
 };
 
 
