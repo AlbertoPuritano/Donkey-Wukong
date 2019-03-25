@@ -62,7 +62,7 @@ int main()
     while(1)
     {
         al_wait_for_event(queue, &event);
-        Play->HandleFall();
+        Play->HandleGravity();
         switch(event.type)
         {
             case ALLEGRO_EVENT_TIMER:

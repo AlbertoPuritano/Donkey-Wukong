@@ -1,3 +1,5 @@
+#include <iostream>
+using namespace std;
 class Entity
 {
 protected:
@@ -17,12 +19,13 @@ public:
 class Player: public Entity
 {
 private:
-    int falling;
+    bool falling;
+    int jumpstate;
 public:
-    Player(int** c):Entity(520,180,c),falling(false){}
+    Player(int** c):Entity(520,180,c),falling(false),jumpstate(0){}
     void MoveUp()
     {
-        if (falling>0)
+        if (falling)
             return;
         if ((x/20)-1>=0 and griglia[(x/20)-1][y/20]==1)
         {
@@ -38,8 +41,6 @@ public:
     }
     void MoveDown()
     {
-        if (falling>0)
-            return;
         if ((x/20)+1<=27 and griglia[(x/20)+1][y/20]==1)
         {
             x+=5;
@@ -54,61 +55,44 @@ public:
     }
     void MoveLeft()
     {
-        if ((x/20)+1<=27 and (y/20)-1>=0 and griglia [(x/20)][(y/20)-1]!=2 and griglia[(x/20)+1][y/20]!=1 and griglia[(x/20)+1][(y/20)-1]==2)
-            y-=5;
+        if ((y/20)-1>=0)
+            y-=4;
     }
     void MoveRight()
     {
-        if ((x/20)+1<=27 and (y/20)+1 <=24 and griglia [(x/20)][(y/20)+1]!= 2 and griglia[(x/20)+1][y/20]!=1 and griglia[(x/20)+1][(y/20)+1]==2)
-            y+=5;
+        if ((y/20)+1<=24)
+            y+=4;
     }
-    int isFalling(){return falling;}
     void Jump()
     {
-        if (griglia[x/20][y/20]!= 1 and falling==0)
-            falling=1;
+        if (falling or jumpstate>0)
+            return;
+        x-=5;
+        jumpstate=1;
     }
-    void HandleFall()
+    void HandleGravity()
     {
-        switch(falling)
+        if (griglia[(x/20)+1][y/20]==0 and jumpstate==0)
+            falling=true;
+        if (!falling and jumpstate>0)
         {
-            case 0:
+            x-=5;
+            jumpstate++;
+            if (jumpstate==5)
+            {
+                jumpstate=0;
+                falling=true;
                 return;
-            case 1:
-                x-=8;
-                falling++;
-                break;
-            case 2:
-                x-=8;
-                falling++;
-                break;
-            case 3:
-                x-=5;
-                falling++;
-                break;
-            case 4:
-                x-=5;
-                falling++;
-                break;
-            case 5:
-                x+=5;
-                falling++;
-                break;
-            case 6:
-                x+=5;
-                falling++;
-                break;
-            case 7:
-                x+=8;
-                falling++;
-                break;
-            case 8:
-                x+=8;
-                falling++;
-                break;
-            case 9:
-                falling=0;
+            }
+        }
+        if (falling and jumpstate==0)
+        {
+            if (griglia[(x/20)+1][y/20]==2)
+            {
+                falling=false;
                 return;
+            }
+            x+=5;
         }
     }
 
