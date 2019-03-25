@@ -77,7 +77,16 @@ public:
     void DrawPlayer(Player* Play)
     {
         al_set_target_bitmap(buffer);
-        bitmap=al_load_bitmap("mario.png");
+        if (Play->getFrame()==0)
+            bitmap=al_load_bitmap("still.png");
+        else if (Play->getFrame()==1)
+            bitmap=al_load_bitmap("right.png");
+        else if (Play->getFrame()==2)
+            bitmap=al_load_bitmap("right2.png");
+        else if (Play->getFrame()==3)
+            bitmap=al_load_bitmap("left.png");
+        else if (Play->getFrame()==4)
+            bitmap=al_load_bitmap("left2.png");    
         al_draw_bitmap(bitmap,Play->getY(),Play->getX(),0);
         al_destroy_bitmap(bitmap);
         al_set_target_backbuffer(display);
@@ -128,7 +137,10 @@ public:
     void DrawBarrel(Barrel* Bar)
     {
         al_set_target_bitmap(buffer);
-        bitmap=al_load_bitmap("barrel.png");
+        if (Bar->isFalling())
+            bitmap=al_load_bitmap("barrelfalling.png");
+        else
+            bitmap=al_load_bitmap("barrel.png");
         al_draw_bitmap(bitmap,Bar->getY(),Bar->getX(),0);
         al_destroy_bitmap(bitmap);
         al_set_target_backbuffer(display);

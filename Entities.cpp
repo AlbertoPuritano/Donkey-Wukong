@@ -10,11 +10,12 @@ protected:
     bool falling;
     bool ladderstate;
 public:
-    Entity(int a, int b,int** c):x(a),y(b),griglia(c),frame(1),falling(false),ladderstate(false){}         //coordinate in pixel dell'entità e puntatore della matrice su cui deve muoversi
+    Entity(int a, int b,int** c):x(a),y(b),griglia(c),frame(0),falling(false),ladderstate(false){}         //coordinate in pixel dell'entità e puntatore della matrice su cui deve muoversi
     int getX(){return x;}
     int getY(){return y;}
     int getFrame(){return frame;}
     void setFrame(int a){frame=a;}
+    bool isFalling() {return falling;}
     bool operator== (Entity* a)
     {
         return (a->getX()==x and a->getY()==y);
@@ -26,8 +27,10 @@ class Player: public Entity
 {
 private:
     int jumpstate;
+    bool doubleD;
+    bool doubleS;
 public:
-    Player(int** c):Entity(520,180,c),jumpstate(0){}
+    Player(int** c):Entity(520,180,c),jumpstate(0),doubleD(false),doubleS(false){}
     void MoveUp()
     {
         if (falling)
@@ -64,11 +67,41 @@ public:
     {
         if (ladderstate==false and (y/20)-1>=0)
             y-=4;
+        if (jumpstate==0)
+        {
+            if (doubleD)
+            {    
+                frame=3;
+                doubleD=false;
+            }
+            else
+            {
+                frame=4;
+                doubleD=true;
+            }
+        }
+        else
+            frame=4;
     }
     void MoveRight()
     {
         if (ladderstate==false and (y/20)+1<=24)
             y+=4;
+        if (jumpstate==0)
+        {
+            if (doubleS)
+            {    
+                frame=1;
+                doubleS=false;
+            }
+            else
+            {
+                frame=2;
+                doubleS=true;
+            }
+        }
+        else
+            frame=2;
     }
     void Jump()
     {
@@ -112,11 +145,12 @@ class Barrel:public Entity
 {
 private:
     bool dx;
+    bool stop;
 public:
-    Barrel(int** c):Entity(120,200,c),dx(true){};
+    Barrel(int** c):Entity(120,200,c),dx(true),stop(false){};
     void roll()
     {
-        if (falling)
+        if (falling or stop)
             return;
         if (dx)
             y+=5;
@@ -125,6 +159,8 @@ public:
     }
     void HandleGravity()
     {
+        if (x/20==26 and y/20==2)
+            stop=true;
         if (falling)
         {
             x+=4;

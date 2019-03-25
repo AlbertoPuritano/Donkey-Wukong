@@ -47,7 +47,7 @@ int main()
     al_register_event_source(queue, al_get_keyboard_event_source());
     al_register_event_source(queue, al_get_display_event_source(display));
     al_register_event_source(queue, al_get_timer_event_source(timer));
-    cout<<sx<<" "<<sy<<" "<<scaleW<<" "<<scaleH<<" "<<scaleX<<" "<<scaleY<<endl;
+ //   cout<<sx<<" "<<sy<<" "<<scaleW<<" "<<scaleH<<" "<<scaleX<<" "<<scaleY<<endl;
     Graphics GraphicManager(display,buffer,scaleX,scaleY,scaleW,scaleH);
     Player* Play= new Player(GraphicManager.griglia);
     Kong* Wukong = new Kong(GraphicManager.griglia);
