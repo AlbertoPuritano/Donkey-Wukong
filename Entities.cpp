@@ -21,21 +21,23 @@ class Player: public Entity
 private:
     bool falling;
     int jumpstate;
+    bool ladderstate;
 public:
-    Player(int** c):Entity(520,180,c),falling(false),jumpstate(0){}
+    Player(int** c):Entity(520,180,c),falling(false),jumpstate(0),ladderstate(false){}
     void MoveUp()
     {
         if (falling)
             return;
-        if ((x/20)-1>=0 and griglia[(x/20)-1][y/20]==1)
+        if ((x/20)-1>=0 and griglia[(x/20)-1][y/20]==1 or griglia[(x/20)-1][y/20]==2)
         {
-            x-=5;
+            x-=2;
+            ladderstate=true;
             return;
         }
-        else if (griglia[(x/20)-1][y/20]==2)
+        else if (griglia[(x/20)][y/20]==2)
         {
             x/=20;
-            x-=2;
+            x-=1;
             x*=20;
         }
     }
@@ -43,42 +45,45 @@ public:
     {
         if ((x/20)+1<=27 and griglia[(x/20)+1][y/20]==1)
         {
-            x+=5;
+            x+=2;
             return;
         }
         else if ((x/20)+2<=27 and griglia[(x/20)+1][y/20]==2 and griglia[(x/20)+2][y/20]==1)
         {
             x/=20;
-            x+=2;
+            x+=1;
             x*=20;
+            ladderstate=true;
         }
     }
     void MoveLeft()
     {
-        if ((y/20)-1>=0)
+        if (ladderstate==false and (y/20)-1>=0)
             y-=4;
     }
     void MoveRight()
     {
-        if ((y/20)+1<=24)
+        if (ladderstate==false and (y/20)+1<=24)
             y+=4;
     }
     void Jump()
     {
         if (falling or jumpstate>0)
             return;
-        x-=5;
+  
         jumpstate=1;
     }
     void HandleGravity()
     {
+        if (griglia[(x/20)+1][y/20]==2)
+            ladderstate=false;
         if (griglia[(x/20)+1][y/20]==0 and jumpstate==0)
             falling=true;
         if (!falling and jumpstate>0)
         {
-            x-=5;
+            x-=3;
             jumpstate++;
-            if (jumpstate==5)
+            if (jumpstate==12)
             {
                 jumpstate=0;
                 falling=true;
@@ -92,7 +97,7 @@ public:
                 falling=false;
                 return;
             }
-            x+=5;
+            x+=4;
         }
     }
 
