@@ -28,14 +28,16 @@ class Player: public Entity
 {
 private:
     int jumpstate;
-    bool doubleD;
-    bool doubleS;
 public:
-    Player(int** c):Entity(520,180,c),jumpstate(0),doubleD(false),doubleS(false){}
+    Player(int** c):Entity(520,180,c),jumpstate(0){}
     void MoveUp()
     {
         if (falling)
             return;
+        if (frame<6 or frame>=7)
+            frame=6;
+        else
+            frame++;
         if ((x/20)-1>=0 and griglia[(x/20)-1][y/20]==1 or griglia[(x/20)-1][y/20]==2)
         {
             x-=2;
@@ -51,64 +53,44 @@ public:
     }
     void MoveDown()
     {
-        if ((x/20)+1<=27 and griglia[(x/20)+1][y/20]==1)
-        {
-            x+=2;
+        if ((x/20)+1>=27 and griglia[(x/20)+1][y/20]!=1)
             return;
-        }
-        else if ((x/20)+2<=27 and griglia[(x/20)+1][y/20]==2 and griglia[(x/20)+2][y/20]==1)
-        {
-            x/=20;
-            x+=1;
-            x*=20;
-            ladderstate=true;
-        }
+        x+=2;
+        if (frame<6 or frame>=7)
+            frame=6;
+        else
+            frame++;
     }
     void MoveLeft()
     {
-        if (ladderstate==false and (y/20)-1>=0)
-            y-=4;
+        if (ladderstate and (y/20)-1<0)
+            return;
+        y-=4;
         if (jumpstate==0)
         {
-            if (doubleD)
-            {    
+            if (frame<3 or frame>=5) // <3
                 frame=3;
-                doubleD=false;
-            }
             else
-            {
-                frame=4;
-                doubleD=true;
-            }
+                frame++;
         }
-        else
-            frame=4;
     }
-    void MoveRight()
+    void MoveRight() 
     {
-        if (ladderstate==false and (y/20)+1<=24)
-            y+=4;
+        if (ladderstate and (y/20)+1>24)
+            return;
+        y+=4;
         if (jumpstate==0)
         {
-            if (doubleS)
-            {    
-                frame=1;
-                doubleS=false;
-            }
+            if (frame>=2)
+                frame=0;
             else
-            {
-                frame=2;
-                doubleS=true;
-            }
+                frame++;
         }
-        else
-            frame=2;
-    }
+    } 
     void Jump()
     {
-        if (falling or jumpstate>0)
+        if (falling or jumpstate>0 or ladderstate)
             return;
-  
         jumpstate=1;
     }
     void HandleGravity()

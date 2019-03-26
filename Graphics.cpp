@@ -78,15 +78,21 @@ public:
     {
         al_set_target_bitmap(buffer);
         if (Play->getFrame()==0)
-            bitmap=al_load_bitmap("still.png");
+            bitmap=al_load_bitmap("right1.png");
         else if (Play->getFrame()==1)
-            bitmap=al_load_bitmap("right.png");
-        else if (Play->getFrame()==2)
             bitmap=al_load_bitmap("right2.png");
+        else if (Play->getFrame()==2)
+            bitmap=al_load_bitmap("right3.png");
         else if (Play->getFrame()==3)
-            bitmap=al_load_bitmap("left.png");
+            bitmap=al_load_bitmap("left1.png");
         else if (Play->getFrame()==4)
-            bitmap=al_load_bitmap("left2.png");    
+            bitmap=al_load_bitmap("left2.png");
+        else if(Play->getFrame()==5)
+            bitmap=al_load_bitmap("left3.png");
+        else if (Play->getFrame()==6)
+            bitmap=al_load_bitmap("climb1.png");
+        else if (Play->getFrame()==7)
+            bitmap=al_load_bitmap("climb2.png");
         al_draw_bitmap(bitmap,Play->getY(),Play->getX(),0);
         al_destroy_bitmap(bitmap);
         al_set_target_backbuffer(display);
@@ -132,7 +138,6 @@ public:
         al_set_target_backbuffer(display);
         al_clear_to_color(al_map_rgb(0,0,0));
         al_draw_scaled_bitmap(buffer, 0, 0, l, h,scaleX, scaleY, scaleW, scaleH,0);
-        
     }
     void DrawBarrel(Barrel* Bar)
     {
