@@ -1,4 +1,5 @@
 #include <iostream>
+#include <random> 
 using namespace std;
 class Entity
 {
@@ -166,6 +167,7 @@ public:
             x+=4;
             if (griglia[(x/20)+1][y/20]==2)
                 falling=false;
+            return; 
         }
         else if (griglia[(x/20)+1][y/20]==0)
         {
@@ -174,7 +176,23 @@ public:
                 dx=false;
             else
                 dx=true;
-        }    
+            return; 
+        }   
+     //   random_device rd;
+     //   mt19937 mt(rd());
+     //   uniform_real_distribution<double> dist(1.0, 100.0);
+     //   int a=dist(mt);
+        srand(time(0));
+        int a=rand()%100;
+        if ((x/20)+2<=27 and griglia[(x/20)+2][y/20]==1 and a>=75)
+        {
+            x+=16;
+            falling=true;
+            if (dx)
+                dx=false;
+            else
+                dx=true;
+        }
     }
 };
 
