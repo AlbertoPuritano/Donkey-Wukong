@@ -93,6 +93,10 @@ public:
             bitmap=al_load_bitmap("climb1.png");
         else if (Play->getFrame()==7)
             bitmap=al_load_bitmap("climb2.png");
+        else if (Play->getFrame()==8)
+            bitmap=al_load_bitmap("jumpr.png");
+        else if (Play->getFrame()==9)
+            bitmap=al_load_bitmap("jumpl.png");
         al_draw_bitmap(bitmap,Play->getY(),Play->getX(),0);
         al_destroy_bitmap(bitmap);
         al_set_target_backbuffer(display);
