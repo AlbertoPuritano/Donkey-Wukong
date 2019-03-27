@@ -17,6 +17,7 @@ public:
     int getFrame(){return frame;}
     void setFrame(int a){frame=a;}
     bool isFalling() {return falling;}
+    bool getLadderstate() {return ladderstate;}
     bool operator== (Entity* a)
     {
         return (a->getX()==x and a->getY()==y);
@@ -141,6 +142,7 @@ public:
             }
         }
     }
+
 
 };
 

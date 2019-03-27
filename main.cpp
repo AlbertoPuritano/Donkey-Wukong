@@ -1,7 +1,10 @@
 #include <allegro5/allegro5.h>
 #include <allegro5/allegro_image.h>
+#include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_acodec.h>
 #include <iostream>
 #include "Graphics.cpp"
+#include "Sounds.cpp"
 using namespace std;
 
 void must_init(bool test, const char *description)
@@ -18,6 +21,17 @@ int main()
 {
     must_init(al_init(), "allegro");
     must_init(al_install_keyboard(), "keyboard");
+
+    //sound
+
+    must_init(al_install_audio(), "sound");
+    must_init(al_init_acodec_addon(), "Codec");
+    must_init(al_reserve_samples(1),"Sample");
+     Sounds sound;   
+
+    
+   
+    
 
     ALLEGRO_TIMER* timer = al_create_timer(1.0 / 30.0);
     must_init(timer, "timer");
@@ -59,9 +73,12 @@ int main()
     al_start_timer(timer);
     #define KEY_SEEN     1
     #define KEY_RELEASED 2
-
+int ciao=0;
+            bool porcodio = false;
     unsigned char key[ALLEGRO_KEY_MAX];
     memset(key, 0, sizeof(key));
+    sound.startNewGame();
+ //   sound.backGround();
     while(1)
     {
         al_wait_for_event(queue, &event);
@@ -69,15 +86,15 @@ int main()
         {
             case ALLEGRO_EVENT_TIMER:
                 if(key[ALLEGRO_KEY_UP])
-                    Play->MoveUp();
+                    {   Play->MoveUp();        if(Play->getLadderstate()) sound.walking();    }
                 if(key[ALLEGRO_KEY_DOWN])
-                    Play->MoveDown();
+                    {   Play->MoveDown();      if(Play->getLadderstate()) sound.walking();   }
                 if(key[ALLEGRO_KEY_LEFT])
-                    Play->MoveLeft();
+                    {   Play->MoveLeft();       sound.walking();   }
                 if(key[ALLEGRO_KEY_RIGHT])
-                    Play->MoveRight();
+                    {   Play->MoveRight();      sound.walking();   }
                 if(key[ALLEGRO_KEY_SPACE])
-                    Play->Jump();
+                    {   Play->Jump();           sound.jump();       }
                 if(key[ALLEGRO_KEY_ESCAPE])
                     done = true;
 
@@ -107,17 +124,25 @@ int main()
 
         if(redraw && al_is_event_queue_empty(queue))
         {
+            if (porcodio)
+            ciao++;
+            if (ciao==75)
+                done=true;
             Bar->roll();
             Bar->HandleGravity();
             Play->HandleGravity();
             if (Play->getX()/20==Bar->getX()/20 and Play->getY()/20==Bar->getY()/20)
-                done=true;
+            {
+                sound.playDeath();
+                porcodio=true;
+            }
             GraphicManager.DrawMap();
             GraphicManager.DrawStaticBarrels();
             GraphicManager.DrawKong(Wukong);
             GraphicManager.DrawBarrel(Bar);
             GraphicManager.DrawPlayer(Play);
             al_flip_display();
+
             redraw = false;
         }
     }
@@ -125,6 +150,7 @@ int main()
     al_destroy_display(display);
     al_destroy_timer(timer);
     al_destroy_event_queue(queue);
+
 
     return 0;
 }
