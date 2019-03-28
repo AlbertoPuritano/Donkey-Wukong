@@ -19,6 +19,7 @@ void must_init(bool test, const char *description)
 
 int main()
 {
+    srand(time(0));
     must_init(al_init(), "allegro");
     must_init(al_install_keyboard(), "keyboard");
 

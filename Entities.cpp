@@ -33,9 +33,10 @@ public:
     Player(int** c):Entity(520,180,c),jumpstate(0){}
     void MoveUp()
     {
-     
-        if((griglia[(x/20)][y/20] == 1 && griglia[(x/20) -1][y/20] == 1) ||(griglia[(x/20)][y/20] == 1 && griglia[(x/20)-1][y/20] == 2)
-            || (griglia[x/20][y/20] == 2 && griglia[(x/20) - 1][y/20] == 0)){
+        if (falling)
+            return;
+        if((griglia[(x/20)][y/20] == 1 and griglia[(x/20) -1][y/20] == 1) or (griglia[(x/20)][y/20] == 1 and griglia[(x/20)-1][y/20] == 2)
+            or (griglia[x/20][y/20] == 2 and griglia[(x/20) - 1][y/20] == 0)){
         x-=2;
         ladderstate=true;
         if (frame<6 or frame>=7)
@@ -44,9 +45,9 @@ public:
             frame++;
         }
 
-        if((x/20) + 2 <= 27 &&griglia[x/20][y/20] == 0 && griglia[(x/20) + 2][y/20] == 1)
+        if((x/20) + 2 <= 27 and griglia[x/20][y/20] == 0 and griglia[(x/20) + 2][y/20] == 1 and ladderstate)
         {
-        x-=2;
+        x-=3;
         ladderstate=true;
         if (frame<6 or frame>=7)
             frame=6;
@@ -56,9 +57,11 @@ public:
     }
     void MoveDown()
     {
+        if (falling)
+            return;
         if (griglia[x/20][y/20]==1 and griglia[(x/20)+1][y/20]==2)
             ladderstate=false;
-        if(griglia[x / 20][x / 20] == 0 && griglia[(x / 20) + 1][y / 20] == 2 && griglia[(x / 20) + 2][y / 20] == 1)
+        if(griglia[x / 20][x / 20] == 0 and griglia[(x / 20) + 1][y / 20] == 2 and griglia[(x / 20) + 2][y / 20] == 1)
         {x+=2;
         ladderstate=true;   
         if (frame<6 or frame>=7)
@@ -123,7 +126,7 @@ public:
         }
         else
             frame=8;
-    } 
+    }
     void Jump()
     {
         if (falling or jumpstate>0 or ladderstate)
@@ -132,8 +135,6 @@ public:
     }
     void HandleGravity()
     {
-       // if (griglia[(x/20)+1][y/20]==2)     
-       //     ladderstate=false;
         if (griglia[(x/20)+1][y/20]==0 and jumpstate==0) //se sotto ha il vuoto
             falling=true;
         if (falling and jumpstate==0)
@@ -148,9 +149,9 @@ public:
         }
         if (!falling and jumpstate>0)
         {
-            x-=3;
+            x-=4;
             jumpstate++;
-            if (jumpstate==12)
+            if (jumpstate==8)
             {
                 jumpstate=0;
                 falling=true;
@@ -203,7 +204,7 @@ public:
      //   mt19937 mt(rd());
      //   uniform_real_distribution<double> dist(1.0, 100.0);
      //   int a=dist(mt);
-        srand(time(0));
+        
         int a=rand()%100;
         if ((x/20)+2<=27 and griglia[(x/20)+2][y/20]==1 and a>=75)
         {
