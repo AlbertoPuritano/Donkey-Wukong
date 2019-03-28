@@ -36,7 +36,7 @@ public:
         if((griglia[(x/20)][y/20] == 1 && griglia[(x/20) -1][y/20] == 1) ||(griglia[(x/20)][y/20] == 1 && griglia[(x/20)-1][y/20] == 2)
             || (griglia[x/20][y/20] == 2 && griglia[(x/20) - 1][y/20] == 0)){
         x-=2;
-       // ladderstate=true;
+        ladderstate=true;
         if (frame<6 or frame>=7)
             frame=6;
         else
@@ -46,7 +46,7 @@ public:
         if((x/20) + 2 <= 27 &&griglia[x/20][y/20] == 0 && griglia[(x/20) + 2][y/20] == 1)
         {
         x-=2;
-       // ladderstate=true;
+        ladderstate=true;
         if (frame<6 or frame>=7)
             frame=6;
         else
@@ -57,7 +57,7 @@ public:
     {
         if(griglia[x / 20][x / 20] == 0 && griglia[(x / 20) + 1][y / 20] == 2 && griglia[(x / 20) + 2][y / 20] == 1)
         {x+=2;
-//        ladderstate=true;   
+        ladderstate=true;   
         if (frame<6 or frame>=7)
             frame=6;
         else
@@ -65,7 +65,7 @@ public:
         if(griglia[(x / 20) + 1][y/20] == 1)
         {
             x+=2;
-//        ladderstate=true;   
+        ladderstate=true;   
         if (frame<6 or frame>=7)
             frame=6;
         else
@@ -77,6 +77,8 @@ public:
     }
     void MoveLeft()
     {
+        if (ladderstate)
+            return;
         if ((y/20)-1<0 or griglia[x/20][(y/20)-1]==2 and griglia[x/20][(y/20)]==1 or
             griglia[x/20][(y/20) + 1 ] == 2 or griglia[x/20][(y/20) - 1] == 2 )
             return;
@@ -99,6 +101,8 @@ public:
     }
     void MoveRight() 
     {
+        if (ladderstate)
+            return;
         if ((y/20)+1>24 or griglia[x/20][(y/20)+1]==2 and griglia[x/20][(y/20)]==1)
             return;
         if (falling or jumpstate>0)
@@ -125,12 +129,13 @@ public:
     }
     void HandleGravity()
     {
-       // if (griglia[(x/20)+1][y/20]==2)     
-       //     ladderstate=false;
+        if (griglia[(x/20)+1][y/20]==2)     
+            ladderstate=false;
         if (griglia[(x/20)+1][y/20]==0 and jumpstate==0) //se sotto ha il vuoto
             falling=true;
         if (falling and jumpstate==0)
         {
+            ladderstate=false;
             if (griglia[(x/20)+1][y/20]==2)
             {
                 falling=false;
