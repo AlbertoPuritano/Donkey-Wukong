@@ -43,7 +43,7 @@ public:
             frame++;
         }
 
-        if(griglia[x/20][y/20] == 0 && griglia[(x/20) + 2][y/20] == 1)
+        if((x/20) + 2 <= 27 &&griglia[x/20][y/20] == 0 && griglia[(x/20) + 2][y/20] == 1)
         {
         x-=2;
        // ladderstate=true;
@@ -77,9 +77,10 @@ public:
     }
     void MoveLeft()
     {
-        if ((y/20)-1<0 or griglia[x/20][(y/20)-1]==2 or griglia[x/20][y/20]==2  and griglia[x/20][(y/20)]==1 or
+        if ((y/20)-1<0 or griglia[x/20][(y/20)-1]==2 and griglia[x/20][(y/20)]==1 or
             griglia[x/20][(y/20) + 1 ] == 2 or griglia[x/20][(y/20) - 1] == 2 )
             return;
+            
         if (falling or jumpstate>0)
             y-=3;
         else
@@ -98,7 +99,7 @@ public:
     }
     void MoveRight() 
     {
-        if ((y/20)+1>24 or griglia[x/20][(y/20)+1]==2 or griglia[x/20][y/20]==2  and griglia[x/20][(y/20)]==1)
+        if ((y/20)+1>24 or griglia[x/20][(y/20)+1]==2 and griglia[x/20][(y/20)]==1)
             return;
         if (falling or jumpstate>0)
             y+=3;
