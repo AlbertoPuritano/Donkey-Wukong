@@ -55,6 +55,8 @@ public:
     }
     void MoveDown()
     {
+        if (griglia[x/20][y/20]==1 and griglia[(x/20)+1][y/20]==2)
+            ladderstate=false;
         if(griglia[x / 20][x / 20] == 0 && griglia[(x / 20) + 1][y / 20] == 2 && griglia[(x / 20) + 2][y / 20] == 1)
         {x+=2;
         ladderstate=true;   
@@ -129,8 +131,8 @@ public:
     }
     void HandleGravity()
     {
-        if (griglia[(x/20)+1][y/20]==2)     
-            ladderstate=false;
+       // if (griglia[(x/20)+1][y/20]==2)     
+       //     ladderstate=false;
         if (griglia[(x/20)+1][y/20]==0 and jumpstate==0) //se sotto ha il vuoto
             falling=true;
         if (falling and jumpstate==0)
