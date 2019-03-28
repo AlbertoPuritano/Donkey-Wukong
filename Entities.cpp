@@ -33,20 +33,22 @@ public:
     Player(int** c):Entity(520,180,c),jumpstate(0){}
     void MoveUp()
     {
-       if(!ladderstate and griglia[x/20][y/20] != 1 or jumpstate >0)
-            return;
+        if((griglia[(x/20)][y/20] == 1 && griglia[(x/20) -1][y/20] == 1) ||(griglia[(x/20)][y/20] == 1 && griglia[(x/20)-1][y/20] == 2)
+            || (griglia[x/20][y/20] == 2 && griglia[(x/20) - 1][y/20] == 0)){
         x-=2;
-        ladderstate=true;
+       // ladderstate=true;
         if (frame<6 or frame>=7)
             frame=6;
         else
             frame++;
+        }
+
     }
     void MoveDown()
     {
         if(griglia[x / 20][x / 20] == 0 && griglia[(x / 20) + 1][y / 20] == 2 && griglia[(x / 20) + 2][y / 20] == 1)
         {x+=2;
-        ladderstate=true;   
+//        ladderstate=true;   
         if (frame<6 or frame>=7)
             frame=6;
         else
@@ -54,7 +56,7 @@ public:
         if(griglia[(x / 20) + 1][y/20] == 1)
         {
             x+=2;
-        ladderstate=true;   
+//        ladderstate=true;   
         if (frame<6 or frame>=7)
             frame=6;
         else
@@ -66,7 +68,7 @@ public:
     }
     void MoveLeft()
     {
-        if ((y/20)-1<0 or griglia[x/20][(y/20)-1]==2 or griglia[x/20][y/20]==2 or ladderstate and griglia[x/20][(y/20)]==1 or
+        if ((y/20)-1<0 or griglia[x/20][(y/20)-1]==2 or griglia[x/20][y/20]==2  and griglia[x/20][(y/20)]==1 or
             griglia[x/20][(y/20) + 1 ] == 2 or griglia[x/20][(y/20) - 1] == 2 )
             return;
         if (falling or jumpstate>0)
@@ -87,7 +89,7 @@ public:
     }
     void MoveRight() 
     {
-        if ((y/20)+1>24 or griglia[x/20][(y/20)+1]==2 or griglia[x/20][y/20]==2 or ladderstate and griglia[x/20][(y/20)]==1)
+        if ((y/20)+1>24 or griglia[x/20][(y/20)+1]==2 or griglia[x/20][y/20]==2  and griglia[x/20][(y/20)]==1)
             return;
         if (falling or jumpstate>0)
             y+=3;
