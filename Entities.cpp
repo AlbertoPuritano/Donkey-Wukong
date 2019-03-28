@@ -43,6 +43,15 @@ public:
             frame++;
         }
 
+        if(griglia[x/20][y/20] == 0 && griglia[(x/20) + 2][y/20] == 1)
+        {
+        x-=2;
+       // ladderstate=true;
+        if (frame<6 or frame>=7)
+            frame=6;
+        else
+            frame++;
+        }
     }
     void MoveDown()
     {
