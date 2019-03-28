@@ -33,6 +33,7 @@ public:
     Player(int** c):Entity(520,180,c),jumpstate(0){}
     void MoveUp()
     {
+     
         if((griglia[(x/20)][y/20] == 1 && griglia[(x/20) -1][y/20] == 1) ||(griglia[(x/20)][y/20] == 1 && griglia[(x/20)-1][y/20] == 2)
             || (griglia[x/20][y/20] == 2 && griglia[(x/20) - 1][y/20] == 0)){
         x-=2;
