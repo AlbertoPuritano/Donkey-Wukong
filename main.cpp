@@ -5,6 +5,7 @@
 #include <iostream>
 #include "Graphics.cpp"
 #include "Sounds.cpp"
+#include <list>
 using namespace std;
 
 void must_init(bool test, const char *description)
@@ -23,12 +24,12 @@ int main()
     must_init(al_init(), "allegro");
     must_init(al_install_keyboard(), "keyboard");
 
-    //sound
+    //SoundManager
 
     must_init(al_install_audio(), "sound");
     must_init(al_init_acodec_addon(), "Codec");
     must_init(al_reserve_samples(1),"Sample");
-     Sounds sound;   
+    Sounds SoundManager;   
 
     
    
@@ -46,7 +47,6 @@ int main()
     must_init(display, "display");
     int windowHeight = al_get_display_height(display);
     int windowWidth = al_get_display_width(display);
-    cout<<windowHeight<<" "<<windowWidth<<"ciao";
     float sx = windowWidth / float(l);
     float sy = windowHeight / float(h);
     int scale = min(sx, sy);
@@ -66,7 +66,9 @@ int main()
     Graphics GraphicManager(display,buffer,scaleX,scaleY,scaleW,scaleH);
     Player* Play= new Player(GraphicManager.griglia);
     Kong* Wukong = new Kong(GraphicManager.griglia);
-    Barrel* Bar=new Barrel(GraphicManager.griglia);
+    list <Barrel> Barili;
+    Barrel Bar(GraphicManager.griglia);
+    auto temp=Barili.begin();
     bool done = false;
     bool redraw = true;
     ALLEGRO_EVENT event;
@@ -74,12 +76,12 @@ int main()
     al_start_timer(timer);
     #define KEY_SEEN     1
     #define KEY_RELEASED 2
-int ciao=0;
-            bool porcodio = false;
+    int ciao=0;
+    bool porcodio = false;
     unsigned char key[ALLEGRO_KEY_MAX];
     memset(key, 0, sizeof(key));
-    sound.startNewGame();
- //   sound.backGround();
+    SoundManager.startNewGame();
+ //   SoundManager.backGround();
     while(1)
     {
         al_wait_for_event(queue, &event);
@@ -87,15 +89,15 @@ int ciao=0;
         {
             case ALLEGRO_EVENT_TIMER:
                 if(key[ALLEGRO_KEY_UP])
-                    {   Play->MoveUp();        if(Play->getLadderstate()) sound.walking();    }
+                    {   Play->MoveUp();        if(Play->getLadderstate()) SoundManager.walking();    }
                 if(key[ALLEGRO_KEY_DOWN])
-                    {   Play->MoveDown();      if(Play->getLadderstate()) sound.walking();   }
+                    {   Play->MoveDown();      if(Play->getLadderstate()) SoundManager.walking();   }
                 if(key[ALLEGRO_KEY_LEFT])
-                    {   Play->MoveLeft();       sound.walking();   }
+                    {   Play->MoveLeft();       SoundManager.walking();   }
                 if(key[ALLEGRO_KEY_RIGHT])
-                    {   Play->MoveRight();      sound.walking();   }
+                    {   Play->MoveRight();      SoundManager.walking();   }
                 if(key[ALLEGRO_KEY_SPACE])
-                    {   Play->Jump();           sound.jump();       }
+                    {   Play->Jump();           SoundManager.jump();       }
                 if(key[ALLEGRO_KEY_ESCAPE])
                     done = true;
 
@@ -125,22 +127,34 @@ int ciao=0;
 
         if(redraw && al_is_event_queue_empty(queue))
         {
+            if (Wukong->getFrame()==81)
+                Barili.push_back(Bar);
             if (porcodio)
             ciao++;
             if (ciao==75)
                 done=true;
-         //   Bar->roll();
-            Bar->HandleGravity();
-            Play->HandleGravity();
-            if (Play->getX()/20==Bar->getX()/20 and Play->getY()/20==Bar->getY()/20)
+            for (auto i=Barili.begin();i!=Barili.end();i++)
             {
-                sound.playDeath();
-                porcodio=true;
+                i->roll();
+                i->HandleGravity();
+                if (Play->getX()/20==i->getX()/20 and Play->getY()/20==i->getY()/20)
+                {
+                    SoundManager.playDeath();
+                    porcodio=true;
+                }
+                if (i->getStop())
+                {
+                    temp=i;
+                    i++;
+                    Barili.erase(temp);
+                }
             }
+            Play->HandleGravity();
             GraphicManager.DrawMap();
             GraphicManager.DrawStaticBarrels();
             GraphicManager.DrawKong(Wukong);
-            GraphicManager.DrawBarrel(Bar);
+            for (auto i: Barili)   
+                GraphicManager.DrawBarrel(i);
             GraphicManager.DrawPlayer(Play);
             al_flip_display();
 

@@ -9,7 +9,7 @@ class Sounds
         ALLEGRO_SAMPLE *sounds;
     
     public:
-    Sounds(): sounds(NULL){    /*must_init(sounds, "sounds"); */ };
+    Sounds(): sounds(NULL){};
 
     void startNewGame()
     {

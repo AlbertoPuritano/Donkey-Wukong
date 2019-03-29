@@ -1,5 +1,4 @@
 #include <iostream>
-#include <random> 
 using namespace std;
 class Entity
 {
@@ -37,8 +36,15 @@ public:
             return;
         if(griglia[(x/20)][y/20]==1 or griglia[x/20][y/20]==2 and griglia[(x/20)-1][y/20]==0 or ladderstate)
         {
+            if (!ladderstate)
+            {
+                ladderstate=true;
+                x/=20;
+                y/=20;
+                x*=20;
+                y*=20;
+            }
             x-=2;
-            ladderstate=true;
             
             //ANIMAZIONI
             if (frame<6 or frame>=7)
@@ -53,10 +59,18 @@ public:
             return;
         if (griglia[x/20][y/20]==1 and griglia[(x/20)+1][y/20]==2)
             ladderstate=false;
-        if(griglia[x/20][x/20]==0 and griglia[(x/20)+1][y/20]==2 and griglia[(x/20)+2][y/20]==1 or ladderstate)
+        if(griglia[x/20][x/20]==0 and griglia[(x/20)+1][y/20]==2 and griglia[(x/20)+2][y/20]==1 and griglia[(x/20)+3][y/20]==1 or ladderstate)
         {
+            if (!ladderstate)
+            {
+                ladderstate=true;
+                x/=20;
+                y/=20;
+                x*=20;
+                y*=20;
+            }
             x+=2;
-            ladderstate=true;   
+           
             
             //ANIMAZIONI
             if (frame<6 or frame>=7)
@@ -70,10 +84,7 @@ public:
         if (ladderstate or (y/20)-1<0 or griglia[x/20][(y/20)-1]==2 )
             return;
             
-        if (falling or jumpstate>0)
             y-=3;
-        else
-            y-=4;
         if (ladderstate and griglia[x/20][(y/20)-1]==0)
             ladderstate=false;
         
@@ -92,13 +103,9 @@ public:
     {
         if (ladderstate or (y/20)+1>24 or griglia[x/20][(y/20)+1]==2)
             return;
-        if (falling or jumpstate>0)
-            y+=3;
-        else
-            y+=4;
         if (ladderstate and griglia[x/20][(y/20)+1]==0)
             ladderstate=false;
-        
+        y+=3;
         //ANIMAZIONI
         if (jumpstate==0)
         {
@@ -153,7 +160,7 @@ private:
     bool dx;
     bool stop;
 public:
-    Barrel(int** c):Entity(120,200,c),dx(true),stop(false){};
+    Barrel(int** c):Entity(120,140,c),dx(true),stop(false){};
     void roll()
     {
         if (falling or stop)
@@ -182,12 +189,7 @@ public:
             else
                 dx=true;
             return; 
-        }   
-     //   random_device rd;
-     //   mt19937 mt(rd());
-     //   uniform_real_distribution<double> dist(1.0, 100.0);
-     //   int a=dist(mt);
-        
+        }           
         int a=rand()%100;
         if ((x/20)+2<=27 and griglia[(x/20)+2][y/20]==1 and a>=75)
         {
@@ -199,6 +201,7 @@ public:
                 dx=true;
         }
     }
+    bool getStop(){return stop;}
 };
 
 
