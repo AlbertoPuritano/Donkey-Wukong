@@ -129,7 +129,7 @@ int ciao=0;
             ciao++;
             if (ciao==75)
                 done=true;
-            Bar->roll();
+         //   Bar->roll();
             Bar->HandleGravity();
             Play->HandleGravity();
             if (Play->getX()/20==Bar->getX()/20 and Play->getY()/20==Bar->getY()/20)

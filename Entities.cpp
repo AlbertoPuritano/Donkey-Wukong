@@ -33,60 +33,41 @@ public:
     Player(int** c):Entity(520,180,c),jumpstate(0){}
     void MoveUp()
     {
-        if (falling)
+        if (falling or jumpstate>0)
             return;
-        if((griglia[(x/20)][y/20] == 1 and griglia[(x/20) -1][y/20] == 1) or (griglia[(x/20)][y/20] == 1 and griglia[(x/20)-1][y/20] == 2)
-            or (griglia[x/20][y/20] == 2 and griglia[(x/20) - 1][y/20] == 0)){
-        x-=2;
-        ladderstate=true;
-        if (frame<6 or frame>=7)
-            frame=6;
-        else
-            frame++;
-        }
-
-        if((x/20) + 2 <= 27 and griglia[x/20][y/20] == 0 and griglia[(x/20) + 2][y/20] == 1 and ladderstate)
+        if(griglia[(x/20)][y/20]==1 or griglia[x/20][y/20]==2 and griglia[(x/20)-1][y/20]==0 or ladderstate)
         {
-        x-=3;
-        ladderstate=true;
-        if (frame<6 or frame>=7)
-            frame=6;
-        else
-            frame++;
+            x-=2;
+            ladderstate=true;
+            
+            //ANIMAZIONI
+            if (frame<6 or frame>=7)
+                frame=6;
+            else
+                frame++;
         }
     }
     void MoveDown()
     {
-        if (falling)
+        if (falling or jumpstate>0)
             return;
         if (griglia[x/20][y/20]==1 and griglia[(x/20)+1][y/20]==2)
             ladderstate=false;
-        if(griglia[x / 20][x / 20] == 0 and griglia[(x / 20) + 1][y / 20] == 2 and griglia[(x / 20) + 2][y / 20] == 1)
-        {x+=2;
-        ladderstate=true;   
-        if (frame<6 or frame>=7)
-            frame=6;
-        else
-            frame++;        }
-        if(griglia[(x / 20) + 1][y/20] == 1)
+        if(griglia[x/20][x/20]==0 and griglia[(x/20)+1][y/20]==2 and griglia[(x/20)+2][y/20]==1 or ladderstate)
         {
             x+=2;
-        ladderstate=true;   
-        if (frame<6 or frame>=7)
-            frame=6;
-        else
-            frame++;        
-        }
-        
-             
-
+            ladderstate=true;   
+            
+            //ANIMAZIONI
+            if (frame<6 or frame>=7)
+                frame=6;
+            else
+                frame++;        
+        }                     
     }
     void MoveLeft()
     {
-        if (ladderstate)
-            return;
-        if ((y/20)-1<0 or griglia[x/20][(y/20)-1]==2 and griglia[x/20][(y/20)]==1 or
-            griglia[x/20][(y/20) + 1 ] == 2 or griglia[x/20][(y/20) - 1] == 2 )
+        if (ladderstate or (y/20)-1<0 or griglia[x/20][(y/20)-1]==2 )
             return;
             
         if (falling or jumpstate>0)
@@ -95,6 +76,8 @@ public:
             y-=4;
         if (ladderstate and griglia[x/20][(y/20)-1]==0)
             ladderstate=false;
+        
+        //ANIMAZIONI
         if (jumpstate==0)
         {
             if (frame<3 or frame>=5) // <3
@@ -107,9 +90,7 @@ public:
     }
     void MoveRight() 
     {
-        if (ladderstate)
-            return;
-        if ((y/20)+1>24 or griglia[x/20][(y/20)+1]==2 and griglia[x/20][(y/20)]==1)
+        if (ladderstate or (y/20)+1>24 or griglia[x/20][(y/20)+1]==2)
             return;
         if (falling or jumpstate>0)
             y+=3;
@@ -117,6 +98,8 @@ public:
             y+=4;
         if (ladderstate and griglia[x/20][(y/20)+1]==0)
             ladderstate=false;
+        
+        //ANIMAZIONI
         if (jumpstate==0)
         {
             if (frame>=2)
