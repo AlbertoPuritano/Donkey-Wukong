@@ -47,8 +47,8 @@ public:
             x-=2;
             
             //ANIMAZIONI
-            if (frame<6 or frame>=7)
-                frame=6;
+            if (frame<30 or frame>35)
+                frame=31;
             else
                 frame++;
         }
@@ -73,49 +73,66 @@ public:
            
             
             //ANIMAZIONI
-            if (frame<6 or frame>=7)
-                frame=6;
+            if (frame<30 or frame>35)
+                frame=31;
             else
                 frame++;        
         }                     
     }
     void MoveLeft()
     {
-        if (ladderstate or (y/20)-1<0 or griglia[x/20][(y/20)-1]==2 )
+        if (falling and griglia[(x/20)+1][y/20]==0 and griglia[(x/20)+2][y/20]==0 and griglia[(x/20)+3][y/20]==0) //per evitare che
+            return;                                                                                               //si muova troppo        
+        if (ladderstate or (y/20)-1<0 or griglia[x/20][(y/20)-1]==2)                                              //durante la caduta   
             return;
             
             y-=3;
         if (ladderstate and griglia[x/20][(y/20)-1]==0)
             ladderstate=false;
         
+        
         //ANIMAZIONI
-        if (jumpstate==0)
+        if (!falling)
         {
-            if (frame<3 or frame>=5) // <3
-                frame=3;
+            if (jumpstate==0)
+            {
+                if (frame<15 or frame>29) // <3
+                    frame=18;
+                else
+                    frame++;
+            }
             else
-                frame++;
+                frame=38;
         }
         else
-            frame=9;
+            frame=40;
     }
     void MoveRight() 
     {
-        if (ladderstate or (y/20)+1>24 or griglia[x/20][(y/20)+1]==2)
+        if (falling and griglia[(x/20)-1][y/20]==0 and griglia[(x/20)-2][y/20]==0 and griglia[(x/20)-3][y/20]==0) //per evitare che
+            return;                                                                                               //si muova troppo         
+        if (ladderstate or (y/20)+1>24 or griglia[x/20][(y/20)+1]==2)                                             //durante la caduta
             return;
         if (ladderstate and griglia[x/20][(y/20)+1]==0)
             ladderstate=false;
         y+=3;
+        
+        
         //ANIMAZIONI
-        if (jumpstate==0)
+        if (!falling)
         {
-            if (frame>=2)
-                frame=0;
+            if (jumpstate==0)
+            {
+                if (frame>=15)
+                    frame=0;
+                else
+                    frame++;
+            }
             else
-                frame++;
+                frame=37;
         }
         else
-            frame=8;
+            frame=39;
     }
     void Jump()
     {

@@ -77,26 +77,30 @@ public:
     void DrawPlayer(Player* Play)
     {
         al_set_target_bitmap(buffer);
-        if (Play->getFrame()==0)
+        if (Play->getFrame()>=0 and Play->getFrame()<=5)
             bitmap=al_load_bitmap("right1.png");
-        else if (Play->getFrame()==1)
+        else if (Play->getFrame()>=6 and Play->getFrame()<=10)
             bitmap=al_load_bitmap("right2.png");
-        else if (Play->getFrame()==2)
+        else if (Play->getFrame()>=11 and Play->getFrame()<=15)
             bitmap=al_load_bitmap("right3.png");
-        else if (Play->getFrame()==3)
+        else if (Play->getFrame()>=16 and Play->getFrame()<=20)
             bitmap=al_load_bitmap("left1.png");
-        else if (Play->getFrame()==4)
+        else if (Play->getFrame()>=21 and Play->getFrame()<=25)
             bitmap=al_load_bitmap("left2.png");
-        else if(Play->getFrame()==5)
+        else if (Play->getFrame()>=26 and Play->getFrame()<=30)
             bitmap=al_load_bitmap("left3.png");
-        else if (Play->getFrame()==6)
+        else if (Play->getFrame()>=31 and Play->getFrame()<=33)
             bitmap=al_load_bitmap("climb1.png");
-        else if (Play->getFrame()==7)
+        else if (Play->getFrame()>=34 and Play->getFrame()<=36)
             bitmap=al_load_bitmap("climb2.png");
-        else if (Play->getFrame()==8)
+        else if (Play->getFrame()==37)
             bitmap=al_load_bitmap("jumpr.png");
-        else if (Play->getFrame()==9)
+        else if (Play->getFrame()==38)
             bitmap=al_load_bitmap("jumpl.png");
+        else if (Play->getFrame()==39)
+            bitmap=al_load_bitmap("rightfall.png");
+        else if (Play->getFrame()==40)
+            bitmap=al_load_bitmap("leftfall.png");
         al_draw_bitmap(bitmap,Play->getY(),Play->getX(),0);
         al_destroy_bitmap(bitmap);
         al_set_target_backbuffer(display);
