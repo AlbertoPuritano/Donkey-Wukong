@@ -43,12 +43,12 @@ int main()
 
     al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
     ALLEGRO_BITMAP* buffer=al_create_bitmap(l,h);
-    ALLEGRO_DISPLAY* display = al_create_display(1,1);
+    ALLEGRO_DISPLAY* display = al_create_display(l,h);
     must_init(display, "display");
     int windowHeight = al_get_display_height(display);
     int windowWidth = al_get_display_width(display);
-    float sx = windowWidth / float(l);
-    float sy = windowHeight / float(h);
+    float sx = windowWidth / float(h);
+    float sy = windowHeight / float(l);
     int scale = min(sx, sy);
     int scaleW = l * scale;
     int scaleH = h * scale;
