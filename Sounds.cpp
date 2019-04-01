@@ -13,32 +13,32 @@ class Sounds
 
     void startNewGame()
     {
-        sounds = al_load_sample("newgame.wav");
+        sounds = al_load_sample("Assets/Audio/newgame.wav");
         al_play_sample(sounds, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
     }
 
     void playDeath()
     {
         al_destroy_sample(sounds);
-         sounds = al_load_sample("morte.wav");
+         sounds = al_load_sample("Assets/Audio/morte.wav");
         al_play_sample(sounds, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
     }
 
     void backGround()
     {
-        sounds = al_load_sample("bacmusic.wav");
+        sounds = al_load_sample("Assets/Audio/bacmusic.wav");
         al_play_sample(sounds, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_LOOP,NULL);
     }
 
     void walking()
     {
-        sounds = al_load_sample("walking.wav");
+        sounds = al_load_sample("Assets/Audio/walking.wav");
         al_play_sample(sounds, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
     }
 
     void jump()
     {
-        sounds = al_load_sample("jump.wav");
+        sounds = al_load_sample("Assets/Audio/jump.wav");
         al_play_sample(sounds, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
     }
 

@@ -56,14 +56,14 @@ public:
                 switch (griglia[i][j])
                 {
                     case 1:
-                    bitmap= al_load_bitmap("scala.png");
-                    al_draw_bitmap(bitmap,j*20,i*20,0);
-                    al_destroy_bitmap(bitmap);
+                        bitmap= al_load_bitmap("Assets/Bitmaps/Tiles/scala.png");
+                        al_draw_bitmap(bitmap,j*20,i*20,0);
+                        al_destroy_bitmap(bitmap);
                     break;
-                    case 2:
-                    bitmap= al_load_bitmap("ground.png");
-                    al_draw_bitmap(bitmap,j*20,i*20,0);
-                    al_destroy_bitmap(bitmap);
+                        case 2:
+                        bitmap= al_load_bitmap("Assets/Bitmaps/Tiles/ground.png");
+                        al_draw_bitmap(bitmap,j*20,i*20,0);
+                        al_destroy_bitmap(bitmap);
                     break;
                 }
             }
@@ -78,29 +78,29 @@ public:
     {
         al_set_target_bitmap(buffer);
         if (Play->getFrame()>=0 and Play->getFrame()<=5)
-            bitmap=al_load_bitmap("right1.png");
+            bitmap=al_load_bitmap("Assets/Bitmaps/Player/right1.png");
         else if (Play->getFrame()>=6 and Play->getFrame()<=10)
-            bitmap=al_load_bitmap("right2.png");
+            bitmap=al_load_bitmap("Assets/Bitmaps/Player/right2.png");
         else if (Play->getFrame()>=11 and Play->getFrame()<=15)
-            bitmap=al_load_bitmap("right3.png");
+            bitmap=al_load_bitmap("Assets/Bitmaps/Player/right3.png");
         else if (Play->getFrame()>=16 and Play->getFrame()<=20)
-            bitmap=al_load_bitmap("left1.png");
+            bitmap=al_load_bitmap("Assets/Bitmaps/Player/left1.png");
         else if (Play->getFrame()>=21 and Play->getFrame()<=25)
-            bitmap=al_load_bitmap("left2.png");
+            bitmap=al_load_bitmap("Assets/Bitmaps/Player/left2.png");
         else if (Play->getFrame()>=26 and Play->getFrame()<=30)
-            bitmap=al_load_bitmap("left3.png");
+            bitmap=al_load_bitmap("Assets/Bitmaps/Player/left3.png");
         else if (Play->getFrame()>=31 and Play->getFrame()<=33)
-            bitmap=al_load_bitmap("climb1.png");
+            bitmap=al_load_bitmap("Assets/Bitmaps/Player/climb1.png");
         else if (Play->getFrame()>=34 and Play->getFrame()<=36)
-            bitmap=al_load_bitmap("climb2.png");
+            bitmap=al_load_bitmap("Assets/Bitmaps/Player/climb2.png");
         else if (Play->getFrame()==37)
-            bitmap=al_load_bitmap("jumpr.png");
+            bitmap=al_load_bitmap("Assets/Bitmaps/Player/jumpr.png");
         else if (Play->getFrame()==38)
-            bitmap=al_load_bitmap("jumpl.png");
+            bitmap=al_load_bitmap("Assets/Bitmaps/Player/jumpl.png");
         else if (Play->getFrame()==39)
-            bitmap=al_load_bitmap("rightfall.png");
+            bitmap=al_load_bitmap("Assets/Bitmaps/Player/rightfall.png");
         else if (Play->getFrame()==40)
-            bitmap=al_load_bitmap("leftfall.png");
+            bitmap=al_load_bitmap("Assets/Bitmaps/Player/leftfall.png");
         al_draw_bitmap(bitmap,Play->getY(),Play->getX(),0);
         al_destroy_bitmap(bitmap);
         al_set_target_backbuffer(display);
@@ -113,15 +113,15 @@ public:
     {
         al_set_target_bitmap(buffer);
         if (Wukong->getFrame()>0 and Wukong->getFrame()<=20)
-            bitmap= al_load_bitmap("kong1.png");
+            bitmap= al_load_bitmap("Assets/Bitmaps/Kong/kong1.png");
         else if (Wukong->getFrame()>20 and Wukong->getFrame()<=40)
-            bitmap= al_load_bitmap("kong2.png");
+            bitmap= al_load_bitmap("Assets/Bitmaps/Kong/kong2.png");
         else if (Wukong->getFrame()>40 and Wukong->getFrame()<=60)
-            bitmap= al_load_bitmap("kong3.png");
+            bitmap= al_load_bitmap("Assets/Bitmaps/Kong/kong3.png");
         else if (Wukong->getFrame()>60 and Wukong->getFrame()<=80)
-            bitmap= al_load_bitmap("kong4.png");
+            bitmap= al_load_bitmap("Assets/Bitmaps/Kong/kong4.png");
         else
-            bitmap= al_load_bitmap("kong5.png");
+            bitmap= al_load_bitmap("Assets/Bitmaps/Kong/kong5.png");
         al_draw_bitmap(bitmap, Wukong->getY(), Wukong->getX(), 0);
         al_destroy_bitmap(bitmap);
         al_set_target_backbuffer(display);
@@ -137,7 +137,7 @@ public:
     void DrawStaticBarrels()
     {
         al_set_target_bitmap(buffer);  
-        bitmap=al_load_bitmap("barrel_standing.png");
+        bitmap=al_load_bitmap("Assets/Bitmaps/Barrel/barrel_standing.png");
         al_draw_bitmap(bitmap,33, 99,0);
         al_draw_bitmap(bitmap,33, 120,0);
         al_draw_bitmap(bitmap,10, 99,0);
@@ -151,9 +151,9 @@ public:
     {
         al_set_target_bitmap(buffer);
         if (Bar.isFalling())
-            bitmap=al_load_bitmap("barrelfalling.png");
+            bitmap=al_load_bitmap("Assets/Bitmaps/Barrel/barrelfalling.png");
         else
-            bitmap=al_load_bitmap("barrel.png");
+            bitmap=al_load_bitmap("Assets/Bitmaps/Barrel/barrel.png");
         al_draw_bitmap(bitmap,Bar.getY(),Bar.getX(),0);
         al_destroy_bitmap(bitmap);
         al_set_target_backbuffer(display);
