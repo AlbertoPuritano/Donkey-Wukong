@@ -31,7 +31,7 @@ public:
         this->buffer = buffer;
         this->display = display;
         ifstream fileinput;
-        fileinput.open("level1.txt");
+        fileinput.open("Assets/Maps/level1.txt");
         if (!fileinput)
             cout<<"could not initialize level 1"<<endl;
         fileinput>> x >> y;
