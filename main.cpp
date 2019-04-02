@@ -30,7 +30,6 @@ int main()
     must_init(al_init_acodec_addon(), "Codec");
     must_init(al_reserve_samples(1),"Sample");
     Sounds SoundManager;   
-
     
    
     
@@ -88,17 +87,17 @@ int main()
         switch(event.type)
         {
             case ALLEGRO_EVENT_TIMER:
-                if(key[ALLEGRO_KEY_UP])
+                if(key[ALLEGRO_KEY_UP] && !porcodio)
                     {   Play->MoveUp();        if(Play->getLadderstate()) SoundManager.walking();    }
-                if(key[ALLEGRO_KEY_DOWN])
+                if(key[ALLEGRO_KEY_DOWN] && !porcodio)
                     {   Play->MoveDown();      if(Play->getLadderstate()) SoundManager.walking();   }
-                if(key[ALLEGRO_KEY_LEFT])
+                if(key[ALLEGRO_KEY_LEFT] && !porcodio)
                     {   Play->MoveLeft();       SoundManager.walking();   }
-                if(key[ALLEGRO_KEY_RIGHT])
+                if(key[ALLEGRO_KEY_RIGHT] && !porcodio)
                     {   Play->MoveRight();      SoundManager.walking();   }
-                if(key[ALLEGRO_KEY_SPACE])
+                if(key[ALLEGRO_KEY_SPACE] && !porcodio)
                     {   Play->Jump();           SoundManager.jump();       }
-                if(key[ALLEGRO_KEY_ESCAPE])
+                if(key[ALLEGRO_KEY_ESCAPE] && !porcodio)
                     done = true;
 
                 for(int i = 0; i < ALLEGRO_KEY_MAX; i++)
@@ -138,7 +137,7 @@ int main()
                 i->roll();
                 i->HandleGravity();
                 if (Play->getX()/20==i->getX()/20 and Play->getY()/20==i->getY()/20)
-                {
+                {            
                     SoundManager.playDeath();
                     porcodio=true;
                 }

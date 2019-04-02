@@ -20,7 +20,13 @@ class Sounds
     void playDeath()
     {
         al_destroy_sample(sounds);
-         sounds = al_load_sample("Assets/Audio/morte.wav");
+        sounds = al_load_sample("Assets/Audio/morte.wav");
+        al_play_sample(sounds, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
+    }
+
+    void playMammaMia()
+    {
+        sounds = al_load_sample("Assets/Audio/MammaMiaPizzeria.wav");
         al_play_sample(sounds, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
     }
 
