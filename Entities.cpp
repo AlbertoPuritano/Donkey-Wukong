@@ -28,10 +28,13 @@ class Player: public Entity
 {
 private:
     int jumpstate;
+    bool morto;
 public:
-    Player(int** c):Entity(520,180,c),jumpstate(0){}
+    Player(int** c):Entity(520,180,c),jumpstate(0), morto(false){}
     void MoveUp()
     {
+        if(morto)
+            return;       
         if (falling or jumpstate>0)
             return;
         if(griglia[(x/20)][y/20]==1 or griglia[x/20][y/20]==2 and griglia[(x/20)-1][y/20]==0 or ladderstate)
@@ -55,6 +58,8 @@ public:
     }
     void MoveDown()
     {
+        if(morto)
+            return;        
         if (falling or jumpstate>0)
             return;
         if (griglia[x/20][y/20]==1 and griglia[(x/20)+1][y/20]==2)
@@ -81,6 +86,8 @@ public:
     }
     void MoveLeft()
     {
+        if(morto)
+            return;
         if (falling and griglia[(x/20)+1][y/20]==0 and griglia[(x/20)+2][y/20]==0 and griglia[(x/20)+3][y/20]==0) //per evitare che
             return;                                                                                               //si muova troppo        
         if (ladderstate or (y/20)-1<0 or griglia[x/20][(y/20)-1]==2)                                              //durante la caduta   
@@ -109,6 +116,8 @@ public:
     }
     void MoveRight() 
     {
+        if(morto)
+            return;
         if (falling and griglia[(x/20)-1][y/20]==0 and griglia[(x/20)-2][y/20]==0 and griglia[(x/20)-3][y/20]==0) //per evitare che
             return;                                                                                               //si muova troppo         
         if (ladderstate or (y/20)+1>24 or griglia[x/20][(y/20)+1]==2)                                             //durante la caduta
@@ -136,6 +145,8 @@ public:
     }
     void Jump()
     {
+        if(morto)
+            return;
         if (falling or jumpstate>0 or ladderstate)
             return;
         jumpstate=1;
@@ -166,6 +177,9 @@ public:
             }
         }
     }
+
+    void setMorto(){morto = true;}
+    bool getMorto(){return morto;}
 
 
 };

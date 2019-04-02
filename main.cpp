@@ -76,7 +76,6 @@ int main()
     #define KEY_SEEN     1
     #define KEY_RELEASED 2
     int ciao=0;
-    bool porcodio = false;
     unsigned char key[ALLEGRO_KEY_MAX];
     memset(key, 0, sizeof(key));
     SoundManager.startNewGame();
@@ -87,17 +86,17 @@ int main()
         switch(event.type)
         {
             case ALLEGRO_EVENT_TIMER:
-                if(key[ALLEGRO_KEY_UP] && !porcodio)
+                if(key[ALLEGRO_KEY_UP])
                     {   Play->MoveUp();        if(Play->getLadderstate()) SoundManager.walking();    }
-                if(key[ALLEGRO_KEY_DOWN] && !porcodio)
+                if(key[ALLEGRO_KEY_DOWN])
                     {   Play->MoveDown();      if(Play->getLadderstate()) SoundManager.walking();   }
-                if(key[ALLEGRO_KEY_LEFT] && !porcodio)
+                if(key[ALLEGRO_KEY_LEFT])
                     {   Play->MoveLeft();       SoundManager.walking();   }
-                if(key[ALLEGRO_KEY_RIGHT] && !porcodio)
+                if(key[ALLEGRO_KEY_RIGHT])
                     {   Play->MoveRight();      SoundManager.walking();   }
-                if(key[ALLEGRO_KEY_SPACE] && !porcodio)
+                if(key[ALLEGRO_KEY_SPACE])
                     {   Play->Jump();           SoundManager.jump();       }
-                if(key[ALLEGRO_KEY_ESCAPE] && !porcodio)
+                if(key[ALLEGRO_KEY_ESCAPE])
                     done = true;
 
                 for(int i = 0; i < ALLEGRO_KEY_MAX; i++)
@@ -128,8 +127,8 @@ int main()
         {
             if (Wukong->getFrame()==81)
                 Barili.push_back(Bar);
-            if (porcodio)
-            ciao++;
+            if (Play->getMorto())
+                ciao++;
             if (ciao==75)
                 done=true;
             for (auto i=Barili.begin();i!=Barili.end();i++)
@@ -139,7 +138,7 @@ int main()
                 if (Play->getX()/20==i->getX()/20 and Play->getY()/20==i->getY()/20)
                 {            
                     SoundManager.playDeath();
-                    porcodio=true;
+                    Play->setMorto();
                 }
                 if (i->getStop())
                 {
