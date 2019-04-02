@@ -52,4 +52,5 @@ class Sounds
     {
         al_destroy_sample(sounds);
     }
+
 };

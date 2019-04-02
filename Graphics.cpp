@@ -160,6 +160,30 @@ public:
         al_clear_to_color(al_map_rgb(0,0,0));
         al_draw_scaled_bitmap(buffer, 0, 0, l, h,scaleX, scaleY, scaleW, scaleH,0);
     }
+    void DrawMenu(short unsigned n)
+    {
+        al_set_target_bitmap(buffer);
+        switch(n)
+        {
+            case 0:
+                bitmap=al_load_bitmap("Assets/Bitmaps/Menu/Menu0.png");
+                break;
+            case 1:
+                bitmap=al_load_bitmap("Assets/Bitmaps/Menu/Menu1.png");
+                break;
+            case 2:
+                bitmap=al_load_bitmap("Assets/Bitmaps/Menu/Menu2.png");
+                break;
+            case 3:
+                bitmap=al_load_bitmap("Assets/Bitmaps/Menu/Menu3.png");
+                break;
+        }
+        al_draw_bitmap(bitmap, 0, 0, 0);
+        al_destroy_bitmap(bitmap);
+        al_set_target_backbuffer(display);
+        al_clear_to_color(al_map_rgb(0, 0, 0));
+        al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);
+    }
     ~Graphics()
     {
         for (int i=0;i<x;i++)
