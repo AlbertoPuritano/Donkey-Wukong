@@ -18,6 +18,7 @@ public:
     
     unsigned runMenu(ALLEGRO_TIMER* timer, ALLEGRO_EVENT_QUEUE* queue)
     {
+        SoundManager->playMenu();
         int state=0;
         bool done = false;
         bool redraw = true;
@@ -37,11 +38,14 @@ public:
                     if(event.keyboard.keycode==ALLEGRO_KEY_DOWN and state!=3)
                             state++;
                     if (event.keyboard.keycode==ALLEGRO_KEY_ENTER and state==0)
+                    {
+                        SoundManager->stopsounds();                        
                         return 1;
+                    }
                     if (event.keyboard.keycode==ALLEGRO_KEY_ENTER and state==3)
-                        return 0;
+                        done=true;
                     if(event.keyboard.keycode==ALLEGRO_KEY_ESCAPE)
-                            done = true;
+                        done = true;
                     break;
                 case ALLEGRO_EVENT_DISPLAY_CLOSE:
                     done = true;
@@ -51,13 +55,14 @@ public:
             if(done)
                 break;
 
-            if(redraw && al_is_event_queue_empty(queue))
+            if(redraw && al_is_event_queue_empty(queue)) //sesso
             {
                 GraphicManager->DrawMenu(state);
                 al_flip_display();
                 redraw=false;
             }
         }
+        SoundManager->stopsounds();
         return 0;
     }
     
@@ -88,15 +93,28 @@ public:
             {
                 case ALLEGRO_EVENT_TIMER:
                     if(key[ALLEGRO_KEY_UP])
-                        {   Play->MoveUp();        if(Play->getLadderstate()) SoundManager->walking();    }
+                    {   
+                       Play->MoveUp();
+                    }
                     if(key[ALLEGRO_KEY_DOWN])
-                        {   Play->MoveDown();      if(Play->getLadderstate()) SoundManager->walking();   }
+                    {   
+                        Play->MoveDown();         
+                    }
                     if(key[ALLEGRO_KEY_LEFT])
-                        {   Play->MoveLeft();       SoundManager->walking();   }
+                    {   
+                        Play->MoveLeft();      
+                        SoundManager->playWalking();   
+                    }
                     if(key[ALLEGRO_KEY_RIGHT])
-                        {   Play->MoveRight();      SoundManager->walking();   }
+                    {   
+                        Play->MoveRight();      
+                        SoundManager->playWalking();   
+                    }
                     if(key[ALLEGRO_KEY_SPACE])
-                        {   Play->Jump();           SoundManager->jump();       }
+                    {   
+                        Play->Jump();           
+                        SoundManager->playJump();       
+                    }
                     if(key[ALLEGRO_KEY_ESCAPE])
                         done = true;
 

@@ -6,51 +6,62 @@ using namespace std;
 class Sounds
 {
     private:
-        ALLEGRO_SAMPLE *sounds;
+        ALLEGRO_SAMPLE* newgame;
+        ALLEGRO_SAMPLE* death;
+        ALLEGRO_SAMPLE* mammamia;
+        ALLEGRO_SAMPLE* walking;
+        ALLEGRO_SAMPLE* jump;
+        ALLEGRO_SAMPLE* menu;
+        ALLEGRO_SAMPLE_ID walkingid;
     
     public:
-    Sounds(): sounds(NULL){};
+    Sounds()
+    {
+        al_reserve_samples(5);
+        newgame = al_load_sample("Assets/Audio/newgame.wav");
+        death = al_load_sample("Assets/Audio/morte.wav");
+        mammamia = al_load_sample("Assets/Audio/MammaMiaPizzeria.wav");
+        walking = al_load_sample("Assets/Audio/walking.wav");
+        jump = al_load_sample("Assets/Audio/jump.wav");
+        menu= al_load_sample("Assets/Audio/menu.wav");
+    }
 
     void startNewGame()
     {
-        sounds = al_load_sample("Assets/Audio/newgame.wav");
-        al_play_sample(sounds, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
+        al_play_sample(newgame, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
     }
 
     void playDeath()
     {
-        al_destroy_sample(sounds);
-        sounds = al_load_sample("Assets/Audio/morte.wav");
-        al_play_sample(sounds, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
+        al_play_sample(death, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
     }
 
     void playMammaMia()
     {
-        sounds = al_load_sample("Assets/Audio/MammaMiaPizzeria.wav");
-        al_play_sample(sounds, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
+        al_play_sample(mammamia, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
     }
 
-    void backGround()
+    void playWalking()
     {
-        sounds = al_load_sample("Assets/Audio/bacmusic.wav");
-        al_play_sample(sounds, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_LOOP,NULL);
+        al_play_sample(walking, 1.0, 0.0,0.8,ALLEGRO_PLAYMODE_ONCE,NULL);
     }
 
-    void walking()
+    void playJump()
     {
-        sounds = al_load_sample("Assets/Audio/walking.wav");
-        al_play_sample(sounds, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
+        al_play_sample(jump, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
     }
-
-    void jump()
+    void playMenu()
     {
-        sounds = al_load_sample("Assets/Audio/jump.wav");
-        al_play_sample(sounds, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
+        al_play_sample(menu,1.0,0.0,1.0,ALLEGRO_PLAYMODE_LOOP,NULL);
     }
-
+    void stopsounds(){al_stop_samples();}
     ~Sounds()
     {
-        al_destroy_sample(sounds);
+        al_destroy_sample(newgame);
+        al_destroy_sample(death);
+        al_destroy_sample(mammamia);
+        al_destroy_sample(walking);
+        al_destroy_sample(jump);
     }
 
 };
