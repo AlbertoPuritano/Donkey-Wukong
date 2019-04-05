@@ -62,7 +62,7 @@ int main()
             break;
         case 1:
             al_flush_event_queue(queue);
-            GameManager.runGame(timer,queue);
+            GameManager.runGame(timer,queue, 0.5);
             break;
     }
 

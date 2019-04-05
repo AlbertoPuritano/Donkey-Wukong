@@ -191,7 +191,7 @@ private:
     bool dx;
     bool stop;
 public:
-    Barrel(int** c):Entity(120,140,c),dx(true),stop(false){};
+    Barrel(int** c):Entity(120,110,c),dx(true),stop(false){};
     void roll()
     {
         if (falling or stop)
@@ -207,7 +207,7 @@ public:
             stop=true;
         if (falling)
         {
-            x+=4;
+            x += 4;
             if (griglia[(x/20)+1][y/20]==2)
                 falling=false;
             return; 
@@ -238,8 +238,21 @@ public:
 
 class Kong: public Entity
 {
+    float difficolta;
+    int lancia;
 public:
-    Kong(int** c):Entity(80,60,c){};
+    Kong(int** c, float d):Entity(80,60,c), difficolta(d), lancia(81*d){};
     void resetFrame(){frame=1;}
-    void nextFrame(){frame++;}
+    void nextFrame()
+    {
+        if (frame<difficolta*100)
+            frame++;
+        else
+            frame = 1;        
+    }
+    int getLancia()
+    {return lancia;}
+    float getDifficolta(){return difficolta;}
+
+
 };

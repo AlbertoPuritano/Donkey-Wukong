@@ -67,10 +67,10 @@ public:
     }
     
     
-    void runGame(ALLEGRO_TIMER* timer, ALLEGRO_EVENT_QUEUE* queue)
+    void runGame(ALLEGRO_TIMER* timer, ALLEGRO_EVENT_QUEUE* queue, float difficolta)
     {
         Player* Play= new Player(GraphicManager->griglia);
-        Kong* Wukong = new Kong(GraphicManager->griglia);
+        Kong* Wukong = new Kong(GraphicManager->griglia, difficolta);
         list <Barrel> Barili;
         Barrel Bar(GraphicManager->griglia);
         auto temp=Barili.begin();
@@ -144,7 +144,7 @@ public:
 
             if(redraw && al_is_event_queue_empty(queue))
             {
-                if (Wukong->getFrame()==81)
+                if (Wukong->getLancia() == Wukong->getFrame())
                     Barili.push_back(Bar);
                 if (Play->getMorto())
                     ciao++;

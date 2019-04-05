@@ -112,13 +112,13 @@ public:
     void DrawKong(Kong* Wukong)
     {
         al_set_target_bitmap(buffer);
-        if (Wukong->getFrame()>0 and Wukong->getFrame()<=20)
+        if (Wukong->getFrame()>0 and Wukong->getFrame()<=Wukong->getDifficolta()*20)
             bitmap= al_load_bitmap("Assets/Bitmaps/Kong/kong1.png");
-        else if (Wukong->getFrame()>20 and Wukong->getFrame()<=40)
+        else if (Wukong->getFrame()>Wukong->getDifficolta()*20 and Wukong->getFrame()<=Wukong->getDifficolta()*40)
             bitmap= al_load_bitmap("Assets/Bitmaps/Kong/kong2.png");
-        else if (Wukong->getFrame()>40 and Wukong->getFrame()<=60)
+        else if (Wukong->getFrame()>Wukong->getDifficolta()*40 and Wukong->getFrame()<=Wukong->getDifficolta()*60)
             bitmap= al_load_bitmap("Assets/Bitmaps/Kong/kong3.png");
-        else if (Wukong->getFrame()>60 and Wukong->getFrame()<=80)
+        else if (Wukong->getFrame()>Wukong->getDifficolta()*60 and Wukong->getFrame()<=Wukong->getDifficolta()*80)
             bitmap= al_load_bitmap("Assets/Bitmaps/Kong/kong4.png");
         else
             bitmap= al_load_bitmap("Assets/Bitmaps/Kong/kong5.png");
@@ -127,10 +127,7 @@ public:
         al_set_target_backbuffer(display);
         al_clear_to_color(al_map_rgb(0,0,0));
         al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);
-        if (Wukong->getFrame()<100)
-            Wukong->nextFrame();
-        else
-            Wukong->resetFrame();
+        Wukong -> nextFrame();
     } 
 
 
