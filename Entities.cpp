@@ -250,8 +250,7 @@ public:
         else
             frame = 1;        
     }
-    int getLancia()
-    {return lancia;}
+    int getLancia(){return lancia;}
     float getDifficolta(){return difficolta;}
 
 

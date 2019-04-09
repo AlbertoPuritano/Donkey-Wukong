@@ -62,6 +62,7 @@ class Sounds
         al_destroy_sample(mammamia);
         al_destroy_sample(walking);
         al_destroy_sample(jump);
+        al_destroy_sample(menu);
     }
 
 };

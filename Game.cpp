@@ -85,7 +85,6 @@ public:
         unsigned char key[ALLEGRO_KEY_MAX];
         memset(key, 0, sizeof(key));
         SoundManager->startNewGame();
- //       SoundManager.backGround();
         while(1)
         {
             al_wait_for_event(queue, &event);
