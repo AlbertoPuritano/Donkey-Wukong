@@ -224,6 +224,10 @@ public:
         int a=rand()%100;
         if ((x/20)+2<=27 and griglia[(x/20)+2][y/20]==1 and a>=75)
         {
+            x/=20;
+            x*=20;
+            y/=20;
+            y*=20;
             x+=16;
             falling=true;
             if (dx)
