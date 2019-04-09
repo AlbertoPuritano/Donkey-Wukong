@@ -55,15 +55,28 @@ int main()
     Sounds* SoundManager=new Sounds;
     Game GameManager(GraphicManager,SoundManager);
     
-
-    switch (GameManager.runMenu(timer,queue))
+    int feedback=-1;
+    while (feedback!=0)
     {
-        case 0:
-            break;
-        case 1:
-            al_flush_event_queue(queue);
-            GameManager.runGame(timer,queue, 0.5);
-            break;
+        al_flush_event_queue(queue);
+        feedback=GameManager.runMenu(timer,queue);
+        switch (feedback)
+        {
+            case 0:
+                break;
+            case 1: 
+                al_flush_event_queue(queue);
+                GameManager.runGame(timer,queue);
+                break;
+            case 2:
+                al_flush_event_queue(queue);
+                GameManager.runOptions(timer,queue);
+                break;
+            case 3:
+                al_flush_event_queue(queue);
+                GameManager.runCredits(queue);
+                break;
+        }
     }
 
     

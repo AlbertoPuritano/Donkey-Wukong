@@ -160,6 +160,7 @@ public:
     void DrawMenu(short unsigned n)
     {
         al_set_target_bitmap(buffer);
+        al_clear_to_color(al_map_rgb(0,0,0));
         switch(n)
         {
             case 0:
@@ -179,6 +180,35 @@ public:
         al_destroy_bitmap(bitmap);
         al_set_target_backbuffer(display);
         al_clear_to_color(al_map_rgb(0, 0, 0));
+        al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);
+    }
+    void DrawOptions(int n,float difficulty)
+    {
+        al_set_target_bitmap(buffer);
+        al_clear_to_color(al_map_rgb(0,0,0));
+        if (n==1)
+            bitmap=al_load_bitmap("Assets/Bitmaps/Menu/Options3.png");
+        else if (n==0 and difficulty==1)
+            bitmap=al_load_bitmap("Assets/Bitmaps/Menu/Options0.png");
+        else if (n==0 and difficulty==0.5)
+            bitmap=al_load_bitmap("Assets/Bitmaps/Menu/Options2.png");
+        else if (n==0 and difficulty==1.5)
+            bitmap=al_load_bitmap("Assets/Bitmaps/Menu/Options1.png");
+        al_draw_bitmap(bitmap, 0, 0, 0);
+        al_destroy_bitmap(bitmap);
+        al_set_target_backbuffer(display);
+        al_clear_to_color(al_map_rgb(0, 0, 0));
+        al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);
+    }
+    void DrawCredits()
+    {
+        al_set_target_bitmap(buffer);
+        al_clear_to_color(al_map_rgb(0,0,0));
+        bitmap=al_load_bitmap("Assets/Bitmaps/Menu/Credits.png");
+        al_draw_bitmap(bitmap,0,0,0);
+        al_destroy_bitmap(bitmap);
+        al_set_target_backbuffer(display);
+        al_clear_to_color(al_map_rgb(0,0,0));
         al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);
     }
     ~Graphics()
