@@ -4,6 +4,7 @@
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
+#include <ctime>
 #include <list>
 #include <iostream>
 
@@ -16,7 +17,7 @@ private:
 public:
     Game(Graphics* g,Sounds* s):SoundManager(s),GraphicManager(g),difficulty(1.0){}
     
-    unsigned runMenu(ALLEGRO_TIMER* timer, ALLEGRO_EVENT_QUEUE* queue)
+    int runMenu(ALLEGRO_TIMER* timer, ALLEGRO_EVENT_QUEUE* queue)
     {        
         SoundManager->stopsounds();
         SoundManager->playMenu();
@@ -69,17 +70,20 @@ public:
     }
     
     
-    void runGame(ALLEGRO_TIMER* timer, ALLEGRO_EVENT_QUEUE* queue)
+    bool runGame(ALLEGRO_TIMER* timer, ALLEGRO_EVENT_QUEUE* queue,int& vite,int& livello)
     {
+        GraphicManager->assegnaGriglia(livello);
+        bool complete=false;
+        srand(time(0));
         SoundManager->stopsounds();
         SoundManager->startNewGame();
-        int vite=3;
+        list <Barrel> Barili;
+        Barrel Bar(GraphicManager->griglia);
         while (vite!=0)
         {
             Player* Play= new Player(GraphicManager->griglia);
             Kong* Wukong = new Kong(GraphicManager->griglia, difficulty);
-            list <Barrel> Barili;
-            Barrel Bar(GraphicManager->griglia);
+            Entity* Peach= new Entity(60,220,GraphicManager->griglia);
             auto temp=Barili.begin();
             bool done = false;
             bool redraw = true;
@@ -127,6 +131,34 @@ public:
 
                         for(int i = 0; i < ALLEGRO_KEY_MAX; i++)
                             key[i] &= KEY_SEEN;
+                        
+                        Play->HandleGravity();                    
+                        if (Wukong->getLancia() == Wukong->getFrame())
+                            Barili.push_back(Bar);
+                        for (auto i=Barili.begin();i!=Barili.end();i++)
+                        {
+                            i->roll();
+                            i->HandleGravity();
+                            if (Play->getX()/20==i->getX()/20 and Play->getY()/20==i->getY()/20)
+                            {            
+                                SoundManager->stopsounds();
+                                SoundManager->playDeath();
+                                Play->setMorto();
+                                al_rest(3.2);
+                                done=true;
+                            }
+                            if (i->getStop())
+                            {
+                                temp=i;
+                                i++;
+                                Barili.erase(temp);
+                            }
+                        }
+                        if (Play->getX()/20==Peach->getX()/20 and Play->getY()/20==Peach->getY()/20)
+                        {
+                            complete=true;
+                            done=true;
+                        }
 
                         redraw = true;
                         break;
@@ -152,42 +184,24 @@ public:
 
                 if(redraw && al_is_event_queue_empty(queue))
                 {
-                    if (Wukong->getLancia() == Wukong->getFrame())
-                        Barili.push_back(Bar);
-                    for (auto i=Barili.begin();i!=Barili.end();i++)
-                    {
-                        i->roll();
-                        i->HandleGravity();
-                        if (Play->getX()/20==i->getX()/20 and Play->getY()/20==i->getY()/20)
-                        {            
-                            SoundManager->stopsounds();
-                            SoundManager->playDeath();
-                            Play->setMorto();
-                            al_rest(3.2);
-                            done=true;
-                        }
-                        if (i->getStop())
-                        {
-                            temp=i;
-                            i++;
-                            Barili.erase(temp);
-                        }
-                    }
-                    Play->HandleGravity();
                     GraphicManager->DrawMap();
+                    GraphicManager->DrawPeach(Peach);
                     GraphicManager->DrawStaticBarrels();
                     GraphicManager->DrawKong(Wukong);
+                    GraphicManager->DrawPlayer(Play);                    
                     for (auto i: Barili)   
                         GraphicManager->DrawBarrel(i);
-                    GraphicManager->DrawPlayer(Play);
                     al_flip_display();
                     redraw = false;
                 }
             }
             vite--;
-            delete Play;  delete Wukong;
+            delete Play;    delete Wukong;    delete Peach;   Barili.clear();
+            if (complete)
+                break;
         }
         SoundManager->stopsounds();
+        return complete;
     }   
     void runOptions(ALLEGRO_TIMER* timer, ALLEGRO_EVENT_QUEUE* queue)
     {   

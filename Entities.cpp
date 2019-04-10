@@ -1,5 +1,3 @@
-#include <iostream>
-using namespace std;
 class Entity
 {
 protected:
@@ -207,7 +205,7 @@ public:
             stop=true;
         if (falling)
         {
-            x += 4;
+            x+=4;
             if (griglia[(x/20)+1][y/20]==2)
                 falling=false;
             return; 
@@ -221,19 +219,22 @@ public:
                 dx=true;
             return; 
         }           
-        int a=rand()%100;
-        if ((x/20)+2<=27 and griglia[(x/20)+2][y/20]==1 and a>=75)
+        if ((x/20)+2<=27 and griglia[(x/20)+2][y/20]==1)
         {
-            x/=20;
-            x*=20;
-            y/=20;
-            y*=20;
-            x+=16;
-            falling=true;
-            if (dx)
-                dx=false;
-            else
-                dx=true;
+            int a=rand()%100;            
+            if (a>=75)
+            {
+                x/=20;
+                x*=20;
+                y/=20;
+                y*=20;
+                x+=16;
+                falling=true;
+                if (dx)
+                    dx=false;
+                else
+                    dx=true;
+            }
         }
     }
     bool getStop(){return stop;}
@@ -256,6 +257,5 @@ public:
     }
     int getLancia(){return lancia;}
     float getDifficolta(){return difficolta;}
-
 
 };

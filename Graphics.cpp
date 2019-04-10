@@ -19,10 +19,11 @@ private:
     ALLEGRO_BITMAP* bitmap=NULL;
     int x;
     int y;
+    bool allocata;
 public:
     int** griglia = NULL;
     Graphics (){}
-    Graphics (ALLEGRO_DISPLAY* display,ALLEGRO_BITMAP* buffer,int scaleX, int scaleY,int scaleW,int scaleH)
+    Graphics (ALLEGRO_DISPLAY* display,ALLEGRO_BITMAP* buffer,int scaleX, int scaleY,int scaleW,int scaleH):allocata(false)
     {
         this->scaleH = scaleH;
         this->scaleW = scaleW;
@@ -30,8 +31,17 @@ public:
         this->scaleY = scaleY;
         this->buffer = buffer;
         this->display = display;
+    }
+    void assegnaGriglia(int livello)
+    {
+        if (allocata)
+        {
+            for (int i=0;i<x;i++)
+                delete griglia[i];
+            delete [] griglia;
+        }
         ifstream fileinput;
-        fileinput.open("Assets/Maps/level1.txt");
+        fileinput.open(string("Assets/Maps/level" +to_string(livello)+ ".txt"));
         if (!fileinput)
             cout<<"could not initialize level 1"<<endl;
         fileinput>> x >> y;
@@ -42,8 +52,8 @@ public:
             for (int j=0;j<y;j++)
                 fileinput>>griglia[i][j];
         fileinput.close();
+        allocata=true;
     }
-    
     
     void DrawMap ()
     {
@@ -152,6 +162,16 @@ public:
         else
             bitmap=al_load_bitmap("Assets/Bitmaps/Barrel/barrel.png");
         al_draw_bitmap(bitmap,Bar.getY(),Bar.getX(),0);
+        al_destroy_bitmap(bitmap);
+        al_set_target_backbuffer(display);
+        al_clear_to_color(al_map_rgb(0,0,0));
+        al_draw_scaled_bitmap(buffer, 0, 0, l, h,scaleX, scaleY, scaleW, scaleH,0);
+    }
+    void DrawPeach(Entity* Peach)
+    {
+        al_set_target_bitmap(buffer);
+        bitmap=al_load_bitmap("Assets/Bitmaps/Peach/peach0.png");
+        al_draw_bitmap(bitmap,Peach->getY(),Peach->getX(),0);
         al_destroy_bitmap(bitmap);
         al_set_target_backbuffer(display);
         al_clear_to_color(al_map_rgb(0,0,0));

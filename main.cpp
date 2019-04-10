@@ -55,18 +55,26 @@ int main()
     Sounds* SoundManager=new Sounds;
     Game GameManager(GraphicManager,SoundManager);
     
-    int feedback=-1;
-    while (feedback!=0)
+    int scelta=-1;
+    int vite;
+    int livello;
+    while (scelta!=0)
     {
         al_flush_event_queue(queue);
-        feedback=GameManager.runMenu(timer,queue);
-        switch (feedback)
+        scelta=GameManager.runMenu(timer,queue);
+        switch (scelta)
         {
             case 0:
                 break;
             case 1: 
                 al_flush_event_queue(queue);
-                GameManager.runGame(timer,queue);
+                vite=3;
+                livello=1;
+                while (vite!=0)
+                {
+                    if (GameManager.runGame(timer,queue,vite,livello));
+                        livello++;
+                }
                 break;
             case 2:
                 al_flush_event_queue(queue);
