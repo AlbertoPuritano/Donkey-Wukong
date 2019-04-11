@@ -128,7 +128,11 @@ public:
                             done = true;
                             vite=1;
                         }
-
+                        if (event.keyboard.keycode==ALLEGRO_KEY_ENTER)
+                        {
+                            complete=true;
+                            done=true;
+                        }
                         for(int i = 0; i < ALLEGRO_KEY_MAX; i++)
                             key[i] &= KEY_SEEN;
                         
