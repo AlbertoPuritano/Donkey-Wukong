@@ -129,27 +129,6 @@ public:
                             done = true;
                             vite=1;
                         }
-                        if(key[ALLEGRO_KEY_LSHIFT] && Play->getMartello())
-                        {
-                            if (Play->getFrame()>=0 and Play->getFrame()<=25)
-                                for(auto i = Barili.begin(); i != Barili.end(); i++)
-                                    if(Play->getX()/20==i->getX()/20 and (Play->getY()/20)-1==i->getY()/20)
-                                        {
-                                            temp=i;
-                                            i++;
-                                            Barili.erase(temp); 
-                                        }
-
-                            else if (Play->getFrame()>=16 and Play->getFrame()<=30)
-                                for(auto i = Barili.begin(); i != Barili.end(); i++)
-                                    if(Play->getX()/20==i->getX()/20 and (Play->getY()/20)+1==i->getY()/20)
-                                        {
-                                            temp=i;
-                                            i++;
-                                            Barili.erase(temp);
-                                        }
-
-                        }
                         if (event.keyboard.keycode==ALLEGRO_KEY_ENTER)
                         {
                             complete=true;
@@ -161,6 +140,23 @@ public:
                         Play->HandleGravity(); 
                         if(Play -> getX()/20 == 21 && Play -> getY()/20 == 17 && Play->getMartello()==false)//prende il martello.
                             Play -> setMartello(true);    
+                                                    if (Play->getFrame()>=0 and Play->getFrame()<=25)
+                                for(auto i = Barili.begin(); i != Barili.end(); i++)
+                                    if(Play->getX()/20==i->getX()/20 and (Play->getY()/20)-1==i->getY()/20)
+                                        {
+                                            temp=i;
+                                            i++;
+                                            Barili.erase(temp); 
+                                        }
+
+                        else if (Play->getFrame()>=16 and Play->getFrame()<=30)
+                            for(auto i = Barili.begin(); i != Barili.end(); i++)
+                                if(Play->getX()/20==i->getX()/20 and (Play->getY()/20)+1==i->getY()/20)
+                                    {
+                                        temp=i;
+                                        i++;
+                                        Barili.erase(temp);
+                                    }
                     //  if(Play->getMartello) condizione per togliare il martello for      
                         if (Wukong->getLancia() == Wukong->getFrame())
                             Barili.push_back(Bar);
