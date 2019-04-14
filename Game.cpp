@@ -75,6 +75,7 @@ public:
         GraphicManager->assegnaGriglia(livello);
         GraphicManager->DrawHammer();
         bool complete=false;
+        unsigned hammerTime = 0;
         srand(time(0));
         SoundManager->stopsounds();
         SoundManager->startNewGame();
@@ -112,12 +113,28 @@ public:
                         if(key[ALLEGRO_KEY_LEFT])
                         {   
                             Play->MoveLeft();      
-                            SoundManager->playWalking();   
+                            SoundManager->playWalking();  
+                            for(auto i = Barili.begin(); i != Barili.end(); i++)
+                            if(Play->getX()/20==i->getX()/20 and (Play->getY()/20)-1==i->getY()/20 && Play->getMartello())
+                                    {//mario verso sx
+                                        GraphicManager->DeleteBarrel(i->getX()/20, i->getY()/20);
+                                        temp=i;
+                                        i++;
+                                        Barili.erase(temp); 
+                                    } 
                         }
                         if(key[ALLEGRO_KEY_RIGHT])
                         {   
                             Play->MoveRight();      
-                            SoundManager->playWalking();   
+                            SoundManager->playWalking();
+                            for(auto i = Barili.begin(); i != Barili.end(); i++)
+                                if(Play->getX()/20==i->getX()/20 and (Play->getY()/20)+1==i->getY()/20)
+                                    {
+                                        GraphicManager->DeleteBarrel(i->getX()/20, i->getY()/20);
+                                        temp=i;
+                                        i++;
+                                        Barili.erase(temp);
+                                    }
                         }
                         if(key[ALLEGRO_KEY_SPACE])
                         {   
@@ -138,26 +155,32 @@ public:
                             key[i] &= KEY_SEEN;
                         
                         Play->HandleGravity(); 
-                        if(Play -> getX()/20 == 21 && Play -> getY()/20 == 17 && Play->getMartello()==false)//prende il martello.
+                        if(Play -> getX()/20 == 21 && Play -> getY()/20 == 17 && Play->getMartello()==false && hammerTime == 0)//prende il martello.
                             Play -> setMartello(true);    
-                                                    if (Play->getFrame()>=0 and Play->getFrame()<=25)
-                                for(auto i = Barili.begin(); i != Barili.end(); i++)
-                                    if(Play->getX()/20==i->getX()/20 and (Play->getY()/20)-1==i->getY()/20)
-                                        {
-                                            temp=i;
-                                            i++;
-                                            Barili.erase(temp); 
-                                        }
+ 
+                        if (Play->getFrame()>=0 and Play->getFrame()<=15 && Play->getMartello())
+                            for(auto i = Barili.begin(); i != Barili.end(); i++)
+                                if(Play->getX()/20==i->getX()/20 and (Play->getY()/20)-1==i->getY()/20)
+                                    {//mario verso sx
+                                        GraphicManager->DeleteBarrel(i->getX()/20, i->getY()/20);
+                                        temp=i;
+                                        i++;
+                                        Barili.erase(temp); 
+                                    }
 
-                        else if (Play->getFrame()>=16 and Play->getFrame()<=30)
+                        else if (Play->getFrame()>=16 and Play->getFrame()<=30 && Play->getMartello())
                             for(auto i = Barili.begin(); i != Barili.end(); i++)
                                 if(Play->getX()/20==i->getX()/20 and (Play->getY()/20)+1==i->getY()/20)
                                     {
+                                        GraphicManager->DeleteBarrel(i->getX()/20, i->getY()/20);
                                         temp=i;
                                         i++;
                                         Barili.erase(temp);
                                     }
-                    //  if(Play->getMartello) condizione per togliare il martello for      
+                        if(Play->getMartello())
+                            hammerTime++;
+                        if(hammerTime > 200 && Play->getMartello())
+                            Play->setMartello(false);    
                         if (Wukong->getLancia() == Wukong->getFrame())
                             Barili.push_back(Bar);
                         for (auto i=Barili.begin();i!=Barili.end();i++)

@@ -180,7 +180,7 @@ public:
 
     void setMorto(){morto = true;}
     bool getMorto(){return morto;}
-    void setMartello(bool c){martello = c;cout << "martello";}
+    void setMartello(bool c){martello = c;}
     bool getMartello(){return martello;}
 
 
