@@ -102,11 +102,11 @@ public:
                 switch(event.type)
                 {
                     case ALLEGRO_EVENT_TIMER:
-                        if(key[ALLEGRO_KEY_UP] && !(Play->getMartello()))
+                        if(key[ALLEGRO_KEY_UP])
                         {   
                            Play->MoveUp();
                         }
-                        if(key[ALLEGRO_KEY_DOWN] && !(Play->getMartello()))
+                        if(key[ALLEGRO_KEY_DOWN])
                         {   
                             Play->MoveDown();         
                         }
@@ -114,27 +114,11 @@ public:
                         {   
                             Play->MoveLeft();      
                             SoundManager->playWalking();  
-                            for(auto i = Barili.begin(); i != Barili.end(); i++)
-                            if(Play->getX()/20==i->getX()/20 and (Play->getY()/20)-1==i->getY()/20 && Play->getMartello())
-                                    {//mario verso sx
-                                        GraphicManager->DeleteBarrel(i->getX()/20, i->getY()/20);
-                                        temp=i;
-                                        i++;
-                                        Barili.erase(temp); 
-                                    } 
                         }
                         if(key[ALLEGRO_KEY_RIGHT])
                         {   
                             Play->MoveRight();      
                             SoundManager->playWalking();
-                            for(auto i = Barili.begin(); i != Barili.end(); i++)
-                                if(Play->getX()/20==i->getX()/20 and (Play->getY()/20)+1==i->getY()/20)
-                                    {
-                                        GraphicManager->DeleteBarrel(i->getX()/20, i->getY()/20);
-                                        temp=i;
-                                        i++;
-                                        Barili.erase(temp);
-                                    }
                         }
                         if(key[ALLEGRO_KEY_SPACE])
                         {   
@@ -142,13 +126,13 @@ public:
                             SoundManager->playJump();       
                         }
                         if(key[ALLEGRO_KEY_ESCAPE])
-                        {    
-                            done = true;
+                        {
+                            done = true;                    
                             vite=1;
                         }
-                        if (event.keyboard.keycode==ALLEGRO_KEY_ENTER)
+                        if (key[ALLEGRO_KEY_ENTER])
                         {
-                            complete=true;
+                            complete=true;          //LEVEL SKIPPER CHEAT
                             done=true;
                         }
                         for(int i = 0; i < ALLEGRO_KEY_MAX; i++)
@@ -158,7 +142,7 @@ public:
                         if(Play -> getX()/20 == 21 && Play -> getY()/20 == 17 && Play->getMartello()==false && hammerTime == 0)//prende il martello.
                             Play -> setMartello(true);    
  
-                        if (Play->getFrame()>=0 and Play->getFrame()<=15 && Play->getMartello())
+                     /*   if (Play->getFrame()>=0 and Play->getFrame()<=15 && Play->getMartello())
                             for(auto i = Barili.begin(); i != Barili.end(); i++)
                                 if(Play->getX()/20==i->getX()/20 and (Play->getY()/20)-1==i->getY()/20)
                                     {//mario verso sx
@@ -176,7 +160,7 @@ public:
                                         temp=i;
                                         i++;
                                         Barili.erase(temp);
-                                    }
+                                    }*/
                         if(Play->getMartello())
                             hammerTime++;
                         if(hammerTime > 200 && Play->getMartello())
@@ -185,6 +169,17 @@ public:
                             Barili.push_back(Bar);
                         for (auto i=Barili.begin();i!=Barili.end();i++)
                         {
+                            if (i->getStop() 
+                            or 
+                            Play->getMartello() and Play->getFrame()>=15 and Play->getFrame()<=30 and (Play->getY()/20)-1==i->getY()/20 and Play->getX()/20==i->getX()/20
+                            or
+                            Play->getMartello() and Play->getFrame()<15 and (Play->getY()/20)+1==i->getY()/20 and Play->getX()/20==i->getX()/20)
+                            {
+                                temp=i;
+                                i++;
+                                Barili.erase(temp);
+                            }
+
                             i->roll();
                             i->HandleGravity();
                             if (Play->getX()/20==i->getX()/20 and Play->getY()/20==i->getY()/20)
@@ -194,12 +189,6 @@ public:
                                 Play->setMorto();
                                 al_rest(3.2);
                                 done=true;
-                            }
-                            if (i->getStop())
-                            {
-                                temp=i;
-                                i++;
-                                Barili.erase(temp);
                             }
                         }
                         if (Play->getX()/20==Peach->getX()/20 and Play->getY()/20==Peach->getY()/20)

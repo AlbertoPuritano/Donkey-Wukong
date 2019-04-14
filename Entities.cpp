@@ -32,10 +32,8 @@ private:
 public:
     Player(int** c):Entity(520,180,c),jumpstate(0), morto(false), martello(false){}
     void MoveUp()
-    {
-        if(morto)
-            return;       
-        if (falling or jumpstate>0)
+    {      
+        if (morto or falling or jumpstate>0 or martello)
             return;
         if(griglia[(x/20)][y/20]==1 or griglia[x/20][y/20]==2 and griglia[(x/20)-1][y/20]==0 or ladderstate)
         {
@@ -57,10 +55,8 @@ public:
         }
     }
     void MoveDown()
-    {
-        if(morto)
-            return;        
-        if (falling or jumpstate>0)
+    {        
+        if (morto or falling or jumpstate>0 or martello)
             return;
         if (griglia[x/20][y/20]==1 and griglia[(x/20)+1][y/20]==2)
             ladderstate=false;
@@ -103,8 +99,8 @@ public:
         {
             if (jumpstate==0)
             {
-                if (frame<15 or frame>29) // <3
-                    frame=18;
+                if (frame<15 or frame>29)
+                    frame=16;
                 else
                     frame++;
             }
