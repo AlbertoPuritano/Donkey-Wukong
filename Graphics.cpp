@@ -78,15 +78,24 @@ public:
                 }
             }
         }
+
         al_set_target_backbuffer(display);
         al_clear_to_color(al_map_rgb(0, 0, 0));
         al_draw_scaled_bitmap(buffer, 0, 0, l, h,scaleX, scaleY, scaleW, scaleH,0);
     }
     
+    void DrawHammer()
+    {
+        bitmap = al_load_bitmap("Assets/Bitmaps/hammer.png");
+        al_draw_bitmap(bitmap, 18*20, 21*20, 0);
+        al_destroy_bitmap(bitmap);
+    }
     
     void DrawPlayer(Player* Play)
     {
         al_set_target_bitmap(buffer);
+        if(!(Play->getMartello()))
+            DrawHammer();
         if (Play->getFrame()>=0 and Play->getFrame()<=5)
             bitmap=al_load_bitmap("Assets/Bitmaps/Player/right1.png");
         else if (Play->getFrame()>=6 and Play->getFrame()<=10)
@@ -95,13 +104,15 @@ public:
             bitmap=al_load_bitmap("Assets/Bitmaps/Player/right3.png");
         else if (Play->getFrame()>=16 and Play->getFrame()<=20)
             bitmap=al_load_bitmap("Assets/Bitmaps/Player/left1.png");
-        else if (Play->getFrame()>=21 and Play->getFrame()<=25)
+        else if (Play->getFrame()>=21 and Play->getFrame()<=25 )
             bitmap=al_load_bitmap("Assets/Bitmaps/Player/left2.png");
+    //    else if (Play->getFrame()>=21 and Play->getFrame()<=25 && Play->getMartello())
+    //        bitmap=al_load_bitmap("Assets/Bitmaps/Player/lefth2.png");
         else if (Play->getFrame()>=26 and Play->getFrame()<=30)
             bitmap=al_load_bitmap("Assets/Bitmaps/Player/left3.png");
-        else if (Play->getFrame()>=31 and Play->getFrame()<=33)
+        else if (Play->getFrame()>=31 and Play->getFrame()<=33 && !(Play->getMartello()))
             bitmap=al_load_bitmap("Assets/Bitmaps/Player/climb1.png");
-        else if (Play->getFrame()>=34 and Play->getFrame()<=36)
+        else if (Play->getFrame()>=34 and Play->getFrame()<=36 && !(Play->getMartello()))
             bitmap=al_load_bitmap("Assets/Bitmaps/Player/climb2.png");
         else if (Play->getFrame()==37)
             bitmap=al_load_bitmap("Assets/Bitmaps/Player/jumpr.png");

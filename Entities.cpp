@@ -1,3 +1,4 @@
+#include <list>
 class Entity
 {
 protected:
@@ -27,8 +28,9 @@ class Player: public Entity
 private:
     int jumpstate;
     bool morto;
+    bool martello;
 public:
-    Player(int** c):Entity(520,180,c),jumpstate(0), morto(false){}
+    Player(int** c):Entity(520,180,c),jumpstate(0), morto(false), martello(false){}
     void MoveUp()
     {
         if(morto)
@@ -178,6 +180,8 @@ public:
 
     void setMorto(){morto = true;}
     bool getMorto(){return morto;}
+    void setMartello(bool c){martello = c;cout << "martello";}
+    bool getMartello(){return martello;}
 
 
 };
