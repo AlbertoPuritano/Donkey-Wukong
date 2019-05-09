@@ -83,6 +83,7 @@ public:
         Barrel Bar(GraphicManager->griglia);
         while (vite!=0)
         {
+            hammerTime=0;
             Player* Play= new Player(GraphicManager->griglia);
             Kong* Wukong = new Kong(GraphicManager->griglia, difficulty);
             Entity* Peach= new Entity(60,220,GraphicManager->griglia);
