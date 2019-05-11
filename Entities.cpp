@@ -141,7 +141,7 @@ public:
     }
     void Jump()
     {
-        if(morto)
+        if(morto || martello)
             return;
         if (falling or jumpstate>0 or ladderstate)
             return;

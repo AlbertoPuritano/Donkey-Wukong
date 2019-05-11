@@ -96,18 +96,28 @@ public:
         al_set_target_bitmap(buffer);
         if(!(Play->getMartello()))
             DrawHammer();
-        if (Play->getFrame()>=0 and Play->getFrame()<=5)
+        if (Play->getFrame()>=0 and Play->getFrame()<=5 && Play->getMartello())
+            bitmap=al_load_bitmap("Assets/Bitmaps/Player/Hammer1R.png");
+        else if (Play->getFrame()>=0 and Play->getFrame()<=5)
             bitmap=al_load_bitmap("Assets/Bitmaps/Player/right1.png");
+        else if (Play->getFrame()>=6 and Play->getFrame()<=10 && Play->getMartello())
+            bitmap=al_load_bitmap("Assets/Bitmaps/Player/Hammer3R.png");
         else if (Play->getFrame()>=6 and Play->getFrame()<=10)
             bitmap=al_load_bitmap("Assets/Bitmaps/Player/right2.png");
+        else if (Play->getFrame()>=11 and Play->getFrame()<=15 && Play->getMartello())
+            bitmap=al_load_bitmap("Assets/Bitmaps/Player/Hammer5R.png");
         else if (Play->getFrame()>=11 and Play->getFrame()<=15)
             bitmap=al_load_bitmap("Assets/Bitmaps/Player/right3.png");
+        else if (Play->getFrame()>=16 and Play->getFrame()<=20 && Play->getMartello())
+            bitmap=al_load_bitmap("Assets/Bitmaps/Player/Hammer1.png");
         else if (Play->getFrame()>=16 and Play->getFrame()<=20)
             bitmap=al_load_bitmap("Assets/Bitmaps/Player/left1.png");
+        else if (Play->getFrame()>=21 and Play->getFrame()<=25 && Play->getMartello())
+            bitmap=al_load_bitmap("Assets/Bitmaps/Player/Hammer3.png");//martello
         else if (Play->getFrame()>=21 and Play->getFrame()<=25 )
             bitmap=al_load_bitmap("Assets/Bitmaps/Player/left2.png");
-    //    else if (Play->getFrame()>=21 and Play->getFrame()<=25 && Play->getMartello())
-    //        bitmap=al_load_bitmap("Assets/Bitmaps/Player/lefth2.png");
+        else if (Play->getFrame()>=26 and Play->getFrame()<=30 && Play->getMartello())
+            bitmap=al_load_bitmap("Assets/Bitmaps/Player/Hammer5.png");
         else if (Play->getFrame()>=26 and Play->getFrame()<=30)
             bitmap=al_load_bitmap("Assets/Bitmaps/Player/left3.png");
         else if (Play->getFrame()>=31 and Play->getFrame()<=33 && !(Play->getMartello()))
