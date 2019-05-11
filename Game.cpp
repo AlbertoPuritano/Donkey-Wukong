@@ -142,7 +142,8 @@ public:
                         Play->HandleGravity(); 
                         if(Play -> getX()/20 == 21 && Play -> getY()/20 == 17 && Play->getMartello()==false && hammerTime == 0)//prende il martello.
                             Play -> setMartello(true);    
- 
+                        
+
                      /*   if (Play->getFrame()>=0 and Play->getFrame()<=15 && Play->getMartello())
                             for(auto i = Barili.begin(); i != Barili.end(); i++)
                                 if(Play->getX()/20==i->getX()/20 and (Play->getY()/20)-1==i->getY()/20)
@@ -162,8 +163,8 @@ public:
                                         i++;
                                         Barili.erase(temp);
                                     }*/
-                        if(Play->getMartello())
-                            hammerTime++;
+                      /*  if(Play->getMartello())
+                            hammerTime++;*/
                         if(hammerTime > 200 && Play->getMartello())
                             Play->setMartello(false);    
                         if (Wukong->getLancia() == Wukong->getFrame())
@@ -176,18 +177,21 @@ public:
                             or
                             Play->getMartello() and Play->getFrame()<15 and (Play->getY()/20)+1==i->getY()/20 and Play->getX()/20==i->getX()/20)
                             {
+                                Play->setHammered(true);
                                 temp=i;
                                 i++;
                                 Barili.erase(temp);
+                                
+                            
                             }
-
+                            
                             i->roll();
                             i->HandleGravity();
                             if (Play->getX()/20==i->getX()/20 and Play->getY()/20==i->getY()/20)
                             {            
                                 SoundManager->stopsounds();
                                 SoundManager->playDeath();
-                                Play->setMorto();
+                                Play->setMorto(true);
                                 al_rest(3.2);
                                 done=true;
                             }
@@ -215,6 +219,7 @@ public:
                         done = true;
                         vite=1;
                         break;
+            
                 }
 
                 if(done)
@@ -232,6 +237,7 @@ public:
                     al_flip_display();
                     redraw = false;
                 }
+         Play->setHammered(false);       
             }
             vite--;
             delete Play;    delete Wukong;    delete Peach;   Barili.clear();

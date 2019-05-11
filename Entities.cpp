@@ -28,9 +28,9 @@ class Player: public Entity
 private:
     int jumpstate;
     bool morto;
-    bool martello;
+    bool martello, hammered;
 public:
-    Player(int** c):Entity(520,180,c),jumpstate(0), morto(false), martello(false){}
+    Player(int** c):Entity(520,180,c),jumpstate(0), morto(false), martello(false), hammered(false){}
     void MoveUp()
     {      
         if (morto or falling or jumpstate>0 or martello)
@@ -174,10 +174,13 @@ public:
         }
     }
 
-    void setMorto(){morto = true;}
+    void setMorto(bool m){morto = m;}
     bool getMorto(){return morto;}
     void setMartello(bool c){martello = c;}
     bool getMartello(){return martello;}
+    void setHammered(bool h){hammered = h;}
+    bool getHammered(){return hammered;}
+
 
 
 };

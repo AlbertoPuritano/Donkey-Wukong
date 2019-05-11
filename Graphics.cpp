@@ -96,7 +96,11 @@ public:
         al_set_target_bitmap(buffer);
         if(!(Play->getMartello()))
             DrawHammer();
-        if (Play->getFrame()>=0 and Play->getFrame()<=5 && Play->getMartello())
+        if(Play->getFrame() >= 0 && Play->getFrame() <= 15 && Play->getHammered())
+            bitmap=al_load_bitmap("Assets/Bitmaps/Player/Hammer4R.png");
+        else if(Play->getFrame() >= 16 && Play->getFrame() <= 33 && Play->getHammered())
+            bitmap=al_load_bitmap("Assets/Bitmaps/Player/Hammer4.png");
+        else if (Play->getFrame()>=0 and Play->getFrame()<=5 && Play->getMartello())
             bitmap=al_load_bitmap("Assets/Bitmaps/Player/Hammer1R.png");
         else if (Play->getFrame()>=0 and Play->getFrame()<=5)
             bitmap=al_load_bitmap("Assets/Bitmaps/Player/right1.png");
