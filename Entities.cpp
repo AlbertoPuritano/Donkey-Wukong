@@ -1,4 +1,7 @@
 #include <list>
+
+enum direction { RIGHT = 0, LEFT};
+
 class Entity
 {
 protected:
@@ -8,14 +11,16 @@ protected:
     int frame;
     bool falling;
     bool ladderstate;
+    direction d;
 public:
-    Entity(int a, int b,int** c):x(a),y(b),griglia(c),frame(0),falling(false),ladderstate(false){}         //coordinate in pixel dell'entità e puntatore della matrice su cui deve muoversi
+    Entity(int a, int b,int** c):x(a),y(b),griglia(c),frame(0),falling(false),ladderstate(false), d(RIGHT){}         //coordinate in pixel dell'entità e puntatore della matrice su cui deve muoversi
     int getX(){return x;}
     int getY(){return y;}
     int getFrame(){return frame;}
     void setFrame(int a){frame=a;}
     bool isFalling() {return falling;}
     bool getLadderstate() {return ladderstate;}
+    direction getDirection(){return d;}
     bool operator== (Entity* a)
     {
         return (a->getX()==x and a->getY()==y);
@@ -82,13 +87,13 @@ public:
     }
     void MoveLeft()
     {
-        if(morto)
+        if(morto or hammered)
             return;
         if (falling and griglia[(x/20)+1][y/20]==0 and griglia[(x/20)+2][y/20]==0 and griglia[(x/20)+3][y/20]==0) //per evitare che
             return;                                                                                               //si muova troppo        
         if (ladderstate or (y/20)-1<0 or griglia[x/20][(y/20)-1]==2)                                              //durante la caduta   
             return;
-            
+        d = LEFT;
             y-=3;
         if (ladderstate and griglia[x/20][(y/20)-1]==0)
             ladderstate=false;
@@ -112,7 +117,7 @@ public:
     }
     void MoveRight() 
     {
-        if(morto)
+        if(morto or hammered)
             return;
         if (falling and griglia[(x/20)-1][y/20]==0 and griglia[(x/20)-2][y/20]==0 and griglia[(x/20)-3][y/20]==0) //per evitare che
             return;                                                                                               //si muova troppo         
@@ -120,6 +125,7 @@ public:
             return;
         if (ladderstate and griglia[x/20][(y/20)+1]==0)
             ladderstate=false;
+        d = RIGHT;
         y+=3;
         
         
