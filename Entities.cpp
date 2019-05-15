@@ -1,5 +1,5 @@
 #include <list>
-
+//le X sono le Y. CAMBIALE!
 enum direction { RIGHT = 0, LEFT};
 
 class Entity
@@ -109,8 +109,18 @@ public:
                 else
                     frame++;
             }
+            else if(martello)
+            {
+                frame = 16;
+                return;
+            }
             else
                 frame=38;
+        }
+        else if(martello)
+        {
+            frame = 16;
+            return;
         }
         else
             frame=40;
@@ -139,9 +149,13 @@ public:
                 else
                     frame++;
             }
+            else if(martello)
+                frame = 0;
             else
                 frame=37;
         }
+        else if(martello)
+            frame = 0;
         else
             frame=39;
     }
@@ -197,8 +211,9 @@ class Barrel:public Entity
 private:
     bool dx;
     bool stop;
+    bool jumped;
 public:
-    Barrel(int** c):Entity(120,110,c),dx(true),stop(false){};
+    Barrel(int** c):Entity(120,110,c),dx(true),stop(false),jumped(false){};
     void roll()
     {
         if (falling or stop)
@@ -247,6 +262,8 @@ public:
         }
     }
     bool getStop(){return stop;}
+    bool getJumped(){return jumped;}
+    void setJumped(bool j){jumped = j;}
 };
 
 

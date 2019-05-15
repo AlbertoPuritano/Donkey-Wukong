@@ -14,6 +14,7 @@ private:
     Sounds* SoundManager=NULL;
     Graphics* GraphicManager=NULL;
     float difficulty;
+    int hTime = 0;
 public:
     Game(Graphics* g,Sounds* s):SoundManager(s),GraphicManager(g),difficulty(1.0){}
     
@@ -83,7 +84,6 @@ public:
         while (vite!=0)
         {
             hammerTime=0;
-            score = 0;
             Player* Play= new Player(GraphicManager->griglia);
             Kong* Wukong = new Kong(GraphicManager->griglia, difficulty);
             Entity* Peach= new Entity(60,220,GraphicManager->griglia);
@@ -97,7 +97,7 @@ public:
             #define KEY_RELEASED 2
             unsigned char key[ALLEGRO_KEY_MAX];
             memset(key, 0, sizeof(key));
-            Barili.push_back(Bar);
+       //     Barili.push_back(Bar);
             while(1)
             {
                 al_wait_for_event(queue, &event);
@@ -139,7 +139,8 @@ public:
                         }
                         if(key[ALLEGRO_KEY_LSHIFT] && Play->getMartello())
                         {
-                            Play->setHammered(true); cout << "Preme shift" << endl;
+                            Play->setHammered(true);
+                            hTime++;
                         }
                         for(int i = 0; i < ALLEGRO_KEY_MAX; i++)
                             key[i] &= KEY_SEEN;
@@ -149,8 +150,13 @@ public:
                         Play->HandleGravity(); 
                         if(Play -> getX()/20 == 21 && Play -> getY()/20 == 17 && Play->getMartello()==false && hammerTime == 0)//prende il martello.
                             Play -> setMartello(true);    
-                        
-
+                        if(hTime < 30)
+                            hTime++;
+                        else
+                        {
+                            hTime=0;
+                            Play->setHammered(false);
+                        }
                     
                     /*    if(Play->getMartello())
                             hammerTime++;*/
@@ -163,6 +169,25 @@ public:
                         } 
                         for (auto i=Barili.begin();i!=Barili.end();i++)
                         {
+       
+                            i->roll();
+                            i->HandleGravity();
+                            if (Play->getX()/20==i->getX()/20 and Play->getY()/20==i->getY()/20)
+                            {            
+                                SoundManager->stopsounds();
+                                SoundManager->playDeath();
+                                Play->setMorto(true);
+                                al_rest(3.2);
+                                done=true;
+                            }
+                            
+                            if((Play->getX()/20 == (i->getX()/20)-1 || Play->getX()/20 == (i->getX()/20)-2) && Play->getY()/20 == i->getY()/20 
+                                && i->getJumped() == false && Play->getLadderstate() == false)
+                                {
+                                    score += 100; 
+                                    i->setJumped(true);
+                                }
+                            
                             if (i->getStop())
                             {
                                 temp = i;
@@ -177,33 +202,17 @@ public:
                             or
                             Play->getHammered() and Play->getDirection() == RIGHT and (Play->getY()/20)+1==i->getY()/20 and Play->getX()/20==i->getX()/20)
                             {
-                                cout <<"Martellata " << endl;
                                 temp=i;
                             /*    if(Barili.empty())
                                 {Barili.erase(temp); break;}*/
                                 i++;
-                                i--;
                                 Barili.erase(temp);
-                                score += 100;
+                                score += 300;
                                 
                             //    cout << "Score: " << score;
                             //    cout << "b: " << i->getX() << ","
                             }
                             
-                            i->roll();
-                            i->HandleGravity();
-                            if (Play->getX()/20==i->getX()/20 and Play->getY()/20==i->getY()/20)
-                            {            
-                                SoundManager->stopsounds();
-                                SoundManager->playDeath();
-                                Play->setMorto(true);
-                                al_rest(3.2);
-                                done=true;
-                            }
-                            
-                            if(Play->getX()/20 == i->getX()/20 && Play->getY()/20 == (i->getY()/20)-1)
-                                {score += 100;cout << "Score: " << score;}
-
                         }
                         if (Play->getX()/20==Peach->getX()/20 and Play->getY()/20==Peach->getY()/20)
                         {
@@ -240,7 +249,11 @@ public:
                     GraphicManager->DrawPeach(Peach);
                     GraphicManager->DrawStaticBarrels();
                     GraphicManager->DrawKong(Wukong);
-                    GraphicManager->DrawPlayer(Play);                    
+                    if(Play->getMartello() && Play->getFrame() <= 30)
+                        GraphicManager->DrawPlayerHammer(Play);                    
+                    else
+                        GraphicManager->DrawPlayer(Play);
+                    
                     for (auto i: Barili)   
                         GraphicManager->DrawBarrel(i);
                     if(!(Play->getMartello()))
@@ -257,6 +270,7 @@ public:
                 break;
         }
         SoundManager->stopsounds();
+      //  cout << score << " ";
         return complete;
     }   
     void runOptions(ALLEGRO_TIMER* timer, ALLEGRO_EVENT_QUEUE* queue)

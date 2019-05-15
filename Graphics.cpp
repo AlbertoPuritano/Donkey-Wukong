@@ -126,10 +126,7 @@ public:
     void DrawPlayer(Player* Play)
     {
 
-        al_set_target_bitmap(buffer);
-       
-        
-        
+        al_set_target_bitmap(buffer);        
         if (Play->getFrame()>=0 and Play->getFrame()<=5)
             bitmap=al_load_bitmap("Assets/Bitmaps/Player/right1.png");        
         else if (Play->getFrame()>=6 and Play->getFrame()<=10)
