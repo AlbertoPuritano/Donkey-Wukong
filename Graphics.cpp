@@ -31,6 +31,9 @@ public:
         this->scaleY = scaleY;
         this->buffer = buffer;
         this->display = display;
+        ALLEGRO_BITMAP* icona= al_load_bitmap("Assets/Bitmaps/icon.png");
+        al_set_display_icon(display,icona);
+        al_destroy_bitmap(icona);
     }
     void assegnaGriglia(int livello)
     {
@@ -52,7 +55,7 @@ public:
             for (int j=0;j<y;j++)
                 fileinput>>griglia[i][j];
         fileinput.close();
-        allocata=true;
+        allocata=true;       
     }
     
     void DrawMap ()

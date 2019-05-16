@@ -99,7 +99,6 @@ public:
             memset(key, 0, sizeof(key));
 
             al_start_timer(timer);
-       //     Barili.push_back(Bar);
             while(1)
             {
                 al_wait_for_event(queue, &event);
@@ -147,7 +146,6 @@ public:
                         for(int i = 0; i < ALLEGRO_KEY_MAX; i++)
                             key[i] &= KEY_SEEN;
 
-                      // cout << "Frame: " << Play->getFrame() << endl;
 
                         Play->HandleGravity(); 
                         if(Play -> getX()/20 == 21 && Play -> getY()/20 == 17 && Play->getMartello()==false && hammerTime == 0)//prende il martello.
