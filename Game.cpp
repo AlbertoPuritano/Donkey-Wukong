@@ -91,12 +91,14 @@ public:
             bool done = false;
             bool redraw = true;
             ALLEGRO_EVENT event;
-
-            al_start_timer(timer);
+            
+            
             #define KEY_SEEN     1
             #define KEY_RELEASED 2
             unsigned char key[ALLEGRO_KEY_MAX];
             memset(key, 0, sizeof(key));
+
+            al_start_timer(timer);
        //     Barili.push_back(Bar);
             while(1)
             {
@@ -158,8 +160,8 @@ public:
                             Play->setHammered(false);
                         }
                     
-                    /*    if(Play->getMartello())
-                            hammerTime++;*/
+                        if(Play->getMartello())
+                            hammerTime++;
                         if(hammerTime > 200 && Play->getMartello())
                             Play->setMartello(false);    
                         if (Wukong->getLancia() == Wukong->getFrame())
@@ -226,9 +228,6 @@ public:
                     case ALLEGRO_EVENT_KEY_DOWN:
                         key[event.keyboard.keycode] = KEY_SEEN | KEY_RELEASED;
                         break;
-                        al_start_timer(timer);
-                        #define KEY_SEEN     1
-                        #define KEY_RELEASED 2
                     case ALLEGRO_EVENT_KEY_UP:
                         key[event.keyboard.keycode] &= KEY_RELEASED;
                         break;
