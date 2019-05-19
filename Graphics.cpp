@@ -203,14 +203,49 @@ public:
         al_clear_to_color(al_map_rgb(0,0,0));
         al_draw_scaled_bitmap(buffer, 0, 0, l, h,scaleX, scaleY, scaleW, scaleH,0);
     }
-    void DrawBarrel(Barrel Bar)
+    void DrawBarrel(Barrel& Bar)
     {
         al_set_target_bitmap(buffer);
         if (Bar.isFalling())
-            bitmap=al_load_bitmap("Assets/Bitmaps/Barrel/barrelfalling.png");
+        {    
+            if (Bar.getFrame()>=0 and Bar.getFrame()<5) 
+                bitmap=al_load_bitmap("Assets/Bitmaps/Barrel/barrelfallingN1.png");
+            else if(Bar.getFrame()>=5 and Bar.getFrame()<=7)
+                bitmap=al_load_bitmap("Assets/Bitmaps/Barrel/barrelfallingN2.png");
+            if (Bar.getFrame()>=7)
+                Bar.setFrame(0);
+            else
+                Bar.nextFrame();
+            al_draw_bitmap(bitmap,Bar.getY(),Bar.getX(),0);        
+        }
         else
-            bitmap=al_load_bitmap("Assets/Bitmaps/Barrel/barrel.png");
-        al_draw_bitmap(bitmap,Bar.getY(),Bar.getX(),0);
+        {    
+            if (Bar.getFrame()==0)
+                bitmap=al_load_bitmap("Assets/Bitmaps/Barrel/barrel1.png");
+            if (Bar.getFrame()==1)
+                bitmap=al_load_bitmap("Assets/Bitmaps/Barrel/barrel2.png");
+            if (Bar.getFrame()==2)
+                bitmap=al_load_bitmap("Assets/Bitmaps/Barrel/barrel3.png");
+            if (Bar.getFrame()==3)
+                bitmap=al_load_bitmap("Assets/Bitmaps/Barrel/barrel4.png");
+            if (Bar.getFrame()==4)
+                bitmap=al_load_bitmap("Assets/Bitmaps/Barrel/barrel5.png");
+            if (Bar.getFrame()==5)
+                bitmap=al_load_bitmap("Assets/Bitmaps/Barrel/barrel6.png");
+            if (Bar.getFrame()==6)
+                bitmap=al_load_bitmap("Assets/Bitmaps/Barrel/barrel7.png");
+            if (Bar.getFrame()==7)
+                bitmap=al_load_bitmap("Assets/Bitmaps/Barrel/barrel8.png");
+            if (Bar.getFrame()>=7)
+                Bar.setFrame(0);
+            else
+                Bar.nextFrame();
+            
+            if (Bar.getDirection()==RIGHT)
+                al_draw_bitmap(bitmap,Bar.getY(),Bar.getX(),0);
+            else
+                al_draw_bitmap(bitmap,Bar.getY(),Bar.getX(),1);
+        }
         al_destroy_bitmap(bitmap);
         al_set_target_backbuffer(display);
         al_clear_to_color(al_map_rgb(0,0,0));
@@ -284,6 +319,19 @@ public:
         al_draw_textf(fontpunteggio,al_map_rgb(255,255,255),330,50,0," SCORE");
         al_draw_textf(fontpunteggio,al_map_rgb(255,0,0),386,75,0,"%d",score);
         al_set_target_backbuffer(display);
+        al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);
+    }
+    void DrawLives(int vite)
+    {
+        al_set_target_bitmap(buffer);
+        bitmap=al_load_bitmap("Assets/Bitmaps/life.png");
+        for(int c=0;c<vite;c++)
+        {
+            al_draw_bitmap(bitmap,365+(c*22),32,0);
+        }
+        al_destroy_bitmap(bitmap);
+        al_set_target_backbuffer(display);
+        al_clear_to_color(al_map_rgb(0,0,0));
         al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);
     }
     void DrawOptions(int n,float difficulty)

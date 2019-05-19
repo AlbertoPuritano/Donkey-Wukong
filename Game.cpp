@@ -71,11 +71,11 @@ public:
     }
     
     
-    bool runGame(ALLEGRO_TIMER* timer, ALLEGRO_EVENT_QUEUE* queue,int& vite,int& livello)
+    bool runGame(ALLEGRO_TIMER* timer, ALLEGRO_EVENT_QUEUE* queue,int& vite,int& livello,int &score)
     {
         GraphicManager->assegnaGriglia(livello);
         bool complete=false;
-        unsigned hammerTime = 0, score = 0;
+        unsigned hammerTime = 0;
         srand(time(0));
         SoundManager->stopsounds();
         SoundManager->startNewGame();
@@ -86,7 +86,6 @@ public:
         while (vite!=0)
         {
             hammerTime=0;
-            score=0;
             Player* Play= new Player(GraphicManager->griglia);
             Kong* Wukong = new Kong(GraphicManager->griglia, difficulty);
             Entity* Peach= new Entity(60,220,GraphicManager->griglia);
@@ -254,8 +253,8 @@ public:
                     else
                         GraphicManager->DrawPlayer(Play);
                     
-                    for (auto i: Barili)   
-                        GraphicManager->DrawBarrel(i);
+                    for (auto i=Barili.begin();i!=Barili.end();i++)   
+                        GraphicManager->DrawBarrel(*i);
                     if(Play->getMartello()==false and hammerTime <200)
                         GraphicManager->DrawHammer();
                     GraphicManager->DrawScore(score);
@@ -269,10 +268,10 @@ public:
                         GraphicManager->DrawInstantScore(2,Play->getX()-9,Play->getY());
                         addpunteggiobarile--;
                     }
+                    GraphicManager->DrawLives(vite);
                     al_flip_display();
                     redraw = false;
                 }
-        // Play->setHammered(false);       
             }
             vite--;
             delete Play;    delete Wukong;    delete Peach;   Barili.clear();
@@ -280,7 +279,6 @@ public:
                 break;
         }
         SoundManager->stopsounds();
-      //  cout << score << " ";
         return complete;
     }   
     void runOptions(ALLEGRO_TIMER* timer, ALLEGRO_EVENT_QUEUE* queue)

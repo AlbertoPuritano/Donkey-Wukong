@@ -1,6 +1,6 @@
 #include <list>
 //le X sono le Y. CAMBIALE!
-enum direction { RIGHT = 0, LEFT};
+enum directions { RIGHT = 0, LEFT};
 
 class Entity
 {
@@ -11,16 +11,16 @@ protected:
     int frame;
     bool falling;
     bool ladderstate;
-    direction d;
+    directions direction;
 public:
-    Entity(int a, int b,int** c):x(a),y(b),griglia(c),frame(0),falling(false),ladderstate(false), d(RIGHT){}         //coordinate in pixel dell'entità e puntatore della matrice su cui deve muoversi
+    Entity(int a, int b,int** c):x(a),y(b),griglia(c),frame(0),falling(false),ladderstate(false), direction(RIGHT){}         //coordinate in pixel dell'entità e puntatore della matrice su cui deve muoversi
     int getX(){return x;}
     int getY(){return y;}
     int getFrame(){return frame;}
     void setFrame(int a){frame=a;}
     bool isFalling() {return falling;}
     bool getLadderstate() {return ladderstate;}
-    direction getDirection(){return d;}
+    directions getDirection(){return direction;}
     bool operator== (Entity* a)
     {
         return (a->getX()==x and a->getY()==y);
@@ -87,13 +87,13 @@ public:
     }
     void MoveLeft()
     {
-        if(morto or hammered)
+        if (morto or hammered)
             return;
         if (falling and griglia[(x/20)+1][y/20]==0 and griglia[(x/20)+2][y/20]==0 and griglia[(x/20)+3][y/20]==0) //per evitare che
             return;                                                                                               //si muova troppo        
         if (ladderstate or (y/20)-1<0 or griglia[x/20][(y/20)-1]==2)                                              //durante la caduta   
             return;
-        d = LEFT;
+        direction = LEFT;
             y-=3;
         if (ladderstate and griglia[x/20][(y/20)-1]==0)
             ladderstate=false;
@@ -104,7 +104,9 @@ public:
         {
             if (jumpstate==0)
             {
-                if (frame<15 or frame>29)
+                if (frame>29)
+                    frame=21;
+                else if (frame<15)
                     frame=16;
                 else
                     frame++;
@@ -135,7 +137,7 @@ public:
             return;
         if (ladderstate and griglia[x/20][(y/20)+1]==0)
             ladderstate=false;
-        d = RIGHT;
+        direction = RIGHT;
         y+=3;
         
         
@@ -144,7 +146,9 @@ public:
         {
             if (jumpstate==0)
             {
-                if (frame>=15)
+                if (frame==15)
+                    frame=6;
+                else if (frame>15)
                     frame=0;
                 else
                     frame++;
@@ -209,16 +213,15 @@ public:
 class Barrel:public Entity
 {
 private:
-    bool dx;
     bool stop;
     bool jumped;
 public:
-    Barrel(int** c):Entity(120,110,c),dx(true),stop(false),jumped(false){};
+    Barrel(int** c):Entity(120,110,c),stop(false),jumped(false){};
     void roll()
     {
         if (falling or stop)
             return;
-        if (dx)
+        if (direction==RIGHT)
             y+=5;
         else
             y-=5;
@@ -231,16 +234,18 @@ public:
         {
             x+=4;
             if (griglia[(x/20)+1][y/20]==2)
+            {
                 falling=false;
+            }
             return; 
         }
         else if (griglia[(x/20)+1][y/20]==0)
         {
             falling=true;
-            if (dx)
-                dx=false;
+            if (direction==RIGHT)
+                direction=LEFT;
             else
-                dx=true;
+                direction=RIGHT;
             return; 
         }           
         if ((x/20)+2<=27 and griglia[(x/20)+2][y/20]==1)
@@ -254,16 +259,17 @@ public:
                 y*=20;
                 x+=16;
                 falling=true;
-                if (dx)
-                    dx=false;
+                if (direction==RIGHT)
+                    direction=LEFT;
                 else
-                    dx=true;
+                    direction=RIGHT;
             }
         }
     }
     bool getStop(){return stop;}
     bool getJumped(){return jumped;}
     void setJumped(bool j){jumped = j;}
+    void nextFrame(){frame++;}
 };
 
 
