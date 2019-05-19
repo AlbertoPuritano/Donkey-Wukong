@@ -1,4 +1,5 @@
 #include "Game.cpp"
+#include <stdio.h>
 
 using namespace std;
 
@@ -21,10 +22,14 @@ int main()
     must_init(al_install_audio(), "sound");
     must_init(al_init_acodec_addon(), "Codec");
      
-    
-   
-    
-    
+    must_init(al_init_font_addon(),"font");
+    must_init(al_init_ttf_addon(), "ttf");
+    ALLEGRO_FONT* font = al_create_builtin_font();
+    must_init(font, "fonts");
+    ALLEGRO_FONT* fontpunteggio=al_load_ttf_font("Assets/Fonts/slkscr.ttf", 30, 0);
+    must_init(fontpunteggio,"fontpunteggio");
+
+
     ALLEGRO_TIMER* timer = al_create_timer(1.0 / 30.0);
     must_init(timer, "timer");
 
@@ -51,7 +56,7 @@ int main()
     al_register_event_source(queue, al_get_keyboard_event_source());
     al_register_event_source(queue, al_get_display_event_source(display));
     al_register_event_source(queue, al_get_timer_event_source(timer));
-    Graphics* GraphicManager= new Graphics(display,buffer,scaleX,scaleY,scaleW,scaleH);
+    Graphics* GraphicManager= new Graphics(display,buffer,scaleX,scaleY,scaleW,scaleH,font,fontpunteggio);
     Sounds* SoundManager=new Sounds;
     Game GameManager(GraphicManager,SoundManager);
     
@@ -90,7 +95,7 @@ int main()
     
 
     
-    
+    al_destroy_font(font);
     al_destroy_display(display);
     al_destroy_timer(timer);
     al_destroy_event_queue(queue);

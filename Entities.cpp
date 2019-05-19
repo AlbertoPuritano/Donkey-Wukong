@@ -200,7 +200,7 @@ public:
     bool getMartello(){return martello;}
     void setHammered(bool h){hammered = h;}
     bool getHammered(){return hammered;}
-
+    bool getJump(){return jumpstate>0;}
 
 
 };

@@ -59,7 +59,7 @@ public:
             if(done)
                 break;
 
-            if(redraw && al_is_event_queue_empty(queue))
+            if(redraw and al_is_event_queue_empty(queue))
             {
                 GraphicManager->DrawMenu(state);
                 al_flip_display();
@@ -81,9 +81,12 @@ public:
         SoundManager->startNewGame();
         list <Barrel> Barili;
         Barrel Bar(GraphicManager->griglia);
+        int addpunteggiomartello=0;
+        int addpunteggiobarile=0;
         while (vite!=0)
         {
             hammerTime=0;
+            score=0;
             Player* Play= new Player(GraphicManager->griglia);
             Kong* Wukong = new Kong(GraphicManager->griglia, difficulty);
             Entity* Peach= new Entity(60,220,GraphicManager->griglia);
@@ -97,7 +100,6 @@ public:
             #define KEY_RELEASED 2
             unsigned char key[ALLEGRO_KEY_MAX];
             memset(key, 0, sizeof(key));
-
             al_start_timer(timer);
             while(1)
             {
@@ -133,12 +135,12 @@ public:
                             done = true;                    
                             vite=1;
                         }
-                        if(key[ALLEGRO_KEY_ENTER])
+                        if(key[ALLEGRO_KEY_TAB])
                         {
                             complete=true;          //LEVEL SKIPPER CHEAT
                             done=true;
                         }
-                        if(key[ALLEGRO_KEY_LSHIFT] && Play->getMartello())
+                        if(key[ALLEGRO_KEY_LSHIFT] and Play->getMartello())
                         {
                             Play->setHammered(true);
                             hTime++;
@@ -148,7 +150,7 @@ public:
 
 
                         Play->HandleGravity(); 
-                        if(Play -> getX()/20 == 21 && Play -> getY()/20 == 17 && Play->getMartello()==false && hammerTime == 0)//prende il martello.
+                        if(Play -> getX()/20 == 21 and Play -> getY()/20 == 17 and Play->getMartello()==false and hammerTime == 0)//prende il martello.
                             Play -> setMartello(true);    
                         if(hTime < 30)
                             hTime++;
@@ -160,7 +162,7 @@ public:
                     
                         if(Play->getMartello())
                             hammerTime++;
-                        if(hammerTime > 200 && Play->getMartello())
+                        if(hammerTime > 325 and Play->getMartello())
                             Play->setMartello(false);    
                         if (Wukong->getLancia() == Wukong->getFrame())
                         {    
@@ -181,10 +183,11 @@ public:
                                 done=true;
                             }
                             
-                            if((Play->getX()/20 == (i->getX()/20)-1 || Play->getX()/20 == (i->getX()/20)-2) && Play->getY()/20 == i->getY()/20 
-                                && i->getJumped() == false && Play->getLadderstate() == false)
+                            if((Play->getX()/20 == (i->getX()/20)-1 or Play->getX()/20 == (i->getX()/20)-2) and Play->getY()/20 == i->getY()/20 
+                                and i->getJumped() == false and Play->getLadderstate() == false and (Play->getJump() or Play->isFalling()))
                                 {
-                                    score += 100; 
+                                    score += 100;
+                                    addpunteggiobarile+=4; 
                                     i->setJumped(true);
                                 }
                             
@@ -208,7 +211,7 @@ public:
                                 i++;
                                 Barili.erase(temp);
                                 score += 300;
-                                
+                                addpunteggiomartello+=5;                                                   
                             //    cout << "Score: " << score;
                             //    cout << "b: " << i->getX() << ","
                             }
@@ -240,22 +243,32 @@ public:
                 if(done)
                     break;
 
-                if(redraw && al_is_event_queue_empty(queue))
+                if(redraw and al_is_event_queue_empty(queue))
                 {
                     GraphicManager->DrawMap();
                     GraphicManager->DrawPeach(Peach);
                     GraphicManager->DrawStaticBarrels();
                     GraphicManager->DrawKong(Wukong);
-                    if(Play->getMartello() && Play->getFrame() <= 30)
+                    if(Play->getMartello() and Play->getFrame() <= 30)
                         GraphicManager->DrawPlayerHammer(Play);                    
                     else
                         GraphicManager->DrawPlayer(Play);
                     
                     for (auto i: Barili)   
                         GraphicManager->DrawBarrel(i);
-                    if(!(Play->getMartello()))
+                    if(Play->getMartello()==false and hammerTime <200)
                         GraphicManager->DrawHammer();
-                        
+                    GraphicManager->DrawScore(score);
+                    if (addpunteggiomartello>0)
+                    {
+                        GraphicManager->DrawInstantScore(1,Play->getX()-9,Play->getY());
+                        addpunteggiomartello--;                      
+                    }
+                    if (addpunteggiobarile>0)
+                    {
+                        GraphicManager->DrawInstantScore(2,Play->getX()-9,Play->getY());
+                        addpunteggiobarile--;
+                    }
                     al_flip_display();
                     redraw = false;
                 }
@@ -305,7 +318,7 @@ public:
             if(done)
                 break;
 
-            if(redraw && al_is_event_queue_empty(queue))
+            if(redraw and al_is_event_queue_empty(queue))
             {
                 GraphicManager->DrawOptions(state,difficulty);
                 al_flip_display();

@@ -1,5 +1,7 @@
 #include <fstream>
 #include <allegro5/allegro5.h>
+#include <allegro5/allegro_font.h> 
+#include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_image.h>
 #include <iostream>
 #include "Entities.cpp"
@@ -14,17 +16,21 @@ private:
     int scaleH;
     int scaleX;
     int scaleY;
-    ALLEGRO_DISPLAY * display=NULL;
-    ALLEGRO_BITMAP * buffer=NULL;
-    ALLEGRO_BITMAP* bitmap=NULL;
+    ALLEGRO_DISPLAY * display;
+    ALLEGRO_BITMAP * buffer;
+    ALLEGRO_BITMAP* bitmap;
+    ALLEGRO_FONT* font;
+    ALLEGRO_FONT* fontpunteggio;
     int x;
     int y;
     bool allocata;
 public:
     int** griglia = NULL;
-    Graphics (){}
-    Graphics (ALLEGRO_DISPLAY* display,ALLEGRO_BITMAP* buffer,int scaleX, int scaleY,int scaleW,int scaleH):allocata(false)
+    Graphics (ALLEGRO_DISPLAY* display,ALLEGRO_BITMAP* buffer,int scaleX, int scaleY,int scaleW,int scaleH,ALLEGRO_FONT* font,ALLEGRO_FONT* fontpunteggio)
     {
+        allocata=false;
+        this->font=font;
+        this->fontpunteggio=fontpunteggio;
         this->scaleH = scaleH;
         this->scaleW = scaleW;
         this->scaleX = scaleX;
@@ -258,6 +264,28 @@ public:
         al_clear_to_color(al_map_rgb(0, 0, 0));
         al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);
     }
+    void DrawInstantScore(int opt,int x,int y)
+    {
+        al_set_target_bitmap(buffer);        
+        if (opt==1)
+        {
+            al_draw_text(font, al_map_rgb(255, 255, 255), y, x, 0, "300");
+        }
+        else
+        {
+            al_draw_text(font, al_map_rgb(255, 255, 255), y, x, 0, "100");
+        }
+        al_set_target_backbuffer(display);
+        al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);
+    }
+    void DrawScore (int score)
+    {  
+        al_set_target_bitmap(buffer);
+        al_draw_textf(fontpunteggio,al_map_rgb(255,255,255),330,50,0," SCORE");
+        al_draw_textf(fontpunteggio,al_map_rgb(255,0,0),386,75,0,"%d",score);
+        al_set_target_backbuffer(display);
+        al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);
+    }
     void DrawOptions(int n,float difficulty)
     {
         al_set_target_bitmap(buffer);
@@ -292,5 +320,6 @@ public:
         for (int i=0;i<x;i++)
             delete griglia[i];
         delete [] griglia;
+        al_destroy_bitmap(buffer);
     }
 };
