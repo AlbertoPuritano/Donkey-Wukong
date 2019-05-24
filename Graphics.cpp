@@ -6,8 +6,6 @@
 #include <iostream>
 #include "Entities.cpp"
 using namespace std;
-const int h=560;
-const int l=500;
 
 class Graphics
 {
@@ -52,7 +50,7 @@ public:
         ifstream fileinput;
         fileinput.open(string("Assets/Maps/level" +to_string(livello)+ ".txt"));
         if (!fileinput)
-            cout<<"could not initialize level 1"<<endl;
+            cout<<"could not initialize level "<<livello<<endl;
         fileinput>> x >> y;
         griglia= new int* [x];
         for (int i=0;i<x;i++)
@@ -216,7 +214,11 @@ public:
                 Bar.setFrame(0);
             else
                 Bar.nextFrame();
-            al_draw_bitmap(bitmap,Bar.getY(),Bar.getX(),0);        
+            al_draw_bitmap(bitmap,Bar.getY(),Bar.getX(),0);
+            al_destroy_bitmap(bitmap);
+            al_set_target_backbuffer(display);
+            al_clear_to_color(al_map_rgb(0,0,0));
+            al_draw_scaled_bitmap(buffer, 0, 0, l, h,scaleX, scaleY, scaleW, scaleH,0);        
         }
         else
         {    
@@ -245,11 +247,12 @@ public:
                 al_draw_bitmap(bitmap,Bar.getY(),Bar.getX(),0);
             else
                 al_draw_bitmap(bitmap,Bar.getY(),Bar.getX(),1);
+            al_destroy_bitmap(bitmap);
+            al_set_target_backbuffer(display);
+            al_clear_to_color(al_map_rgb(0,0,0));
+            al_draw_scaled_bitmap(buffer, 0, 0, l, h,scaleX, scaleY, scaleW, scaleH,0);
         }
-        al_destroy_bitmap(bitmap);
-        al_set_target_backbuffer(display);
-        al_clear_to_color(al_map_rgb(0,0,0));
-        al_draw_scaled_bitmap(buffer, 0, 0, l, h,scaleX, scaleY, scaleW, scaleH,0);
+        
     }
 
     void DeleteBarrel(int x, int y)
@@ -352,11 +355,16 @@ public:
         al_clear_to_color(al_map_rgb(0, 0, 0));
         al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);
     }
-    void DrawCredits()
+    void DrawImage(int a)
     {
         al_set_target_bitmap(buffer);
         al_clear_to_color(al_map_rgb(0,0,0));
-        bitmap=al_load_bitmap("Assets/Bitmaps/Menu/Credits.png");
+        if (a==0)
+            bitmap=al_load_bitmap("Assets/Bitmaps/Menu/Credits.png");
+        if (a==1)
+            bitmap=al_load_bitmap("Assets/Bitmaps/victory.png");
+        if (a==2)
+            bitmap=al_load_bitmap("Assets/Bitmaps/death.png");
         al_draw_bitmap(bitmap,0,0,0);
         al_destroy_bitmap(bitmap);
         al_set_target_backbuffer(display);

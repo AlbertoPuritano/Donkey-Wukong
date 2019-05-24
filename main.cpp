@@ -62,8 +62,8 @@ int main()
     
     int scelta=-1;
     int vite=3;
-                int livello=1;
-                int score=0;
+    int livello=1;
+    int score=0;
     while (scelta!=0)
     {
         al_flush_event_queue(queue);
@@ -81,11 +81,13 @@ int main()
                 {
                     if (GameManager.runGame(timer,queue,vite,livello,score));
                         livello++;
+                    if (livello==4)
+                        break;
                 }
-                /*if (livello==4)
-                    HAI VINTO
+                if (livello==4)
+                    GameManager.runStatic(queue,1);
                 else
-                    HAI PERSO PSEUDOCODICE*/
+                    GameManager.runStatic(queue,2);
                 break;
             case 2:
                 al_flush_event_queue(queue);
@@ -93,7 +95,7 @@ int main()
                 break;
             case 3:
                 al_flush_event_queue(queue);
-                GameManager.runCredits(queue);
+                GameManager.runStatic(queue,0);
                 break;
         }
     }

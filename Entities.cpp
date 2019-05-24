@@ -1,4 +1,8 @@
 #include <list>
+const int h=560;
+const int l=500;
+const int hMat=560/20-1;
+const int lMat=500/20-1;
 //le X sono le Y. CAMBIALE!
 enum directions { RIGHT = 0, LEFT};
 
@@ -133,7 +137,7 @@ public:
             return;
         if (falling and griglia[(x/20)-1][y/20]==0 and griglia[(x/20)-2][y/20]==0 and griglia[(x/20)-3][y/20]==0) //per evitare che
             return;                                                                                               //si muova troppo         
-        if (ladderstate or (y/20)+1>24 or griglia[x/20][(y/20)+1]==2)                                             //durante la caduta
+        if (ladderstate or (y/20)+1>lMat or griglia[x/20][(y/20)+1]==2)                                             //durante la caduta
             return;
         if (ladderstate and griglia[x/20][(y/20)+1]==0)
             ladderstate=false;
@@ -187,9 +191,9 @@ public:
         }
         if (!falling and jumpstate>0)
         {
-            x-=4;
+            x-=3;
             jumpstate++;
-            if (jumpstate==8)
+            if (jumpstate==11)
             {
                 jumpstate=0;
                 falling=true;
@@ -222,9 +226,17 @@ public:
         if (falling or stop)
             return;
         if (direction==RIGHT)
+        {    
             y+=5;
+            if ((y/20)+1>lMat or griglia[x/20][y/20]==2)
+                direction=LEFT;
+        }
         else
+        {
             y-=5;
+            if ((y/20)-1<0 or griglia[x/20][y/20]==2)
+                direction=RIGHT;
+        }
     }
     void HandleGravity()
     {
@@ -248,7 +260,7 @@ public:
                 direction=RIGHT;
             return; 
         }           
-        if ((x/20)+2<=27 and griglia[(x/20)+2][y/20]==1)
+        if ((x/20)+2<=hMat and griglia[(x/20)+2][y/20]==1)
         {
             int a=rand()%100;            
             if (a>=75)

@@ -73,6 +73,8 @@ public:
     
     bool runGame(ALLEGRO_TIMER* timer, ALLEGRO_EVENT_QUEUE* queue,int& vite,int& livello,int &score)
     {
+        if (livello==3)                     //il livello 3 contiene piu barili
+            difficulty-=0.3;
         GraphicManager->assegnaGriglia(livello);
         bool complete=false;
         unsigned hammerTime = 0;
@@ -273,11 +275,13 @@ public:
                     redraw = false;
                 }
             }
-            vite--;
             delete Play;    delete Wukong;    delete Peach;   Barili.clear();
             if (complete)
                 break;
+            vite--;
         }
+        if (livello==3)                 //difficoltà torna normale
+            difficulty+=0.3;
         SoundManager->stopsounds();
         return complete;
     }   
@@ -324,9 +328,9 @@ public:
             }
         }
     }
-    void runCredits(ALLEGRO_EVENT_QUEUE* queue)
+    void runStatic(ALLEGRO_EVENT_QUEUE* queue,int a)
     {
-        GraphicManager->DrawCredits();
+        GraphicManager->DrawImage(a);
         al_flip_display();
         ALLEGRO_EVENT event;
         while (1)
