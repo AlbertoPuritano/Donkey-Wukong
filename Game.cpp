@@ -85,6 +85,10 @@ public:
         Barrel Bar(GraphicManager->griglia);
         int addpunteggiomartello=0;
         int addpunteggiobarile=0;
+        #define KEY_SEEN     1
+        #define KEY_RELEASED 2
+        unsigned char key[ALLEGRO_KEY_MAX];
+        memset(key, 0, sizeof(key));
         while (vite!=0)
         {
             hammerTime=0;
@@ -97,10 +101,7 @@ public:
             ALLEGRO_EVENT event;
             
             
-            #define KEY_SEEN     1
-            #define KEY_RELEASED 2
-            unsigned char key[ALLEGRO_KEY_MAX];
-            memset(key, 0, sizeof(key));
+            
             al_start_timer(timer);
             while(1)
             {
@@ -269,7 +270,7 @@ public:
                     {
                         GraphicManager->DrawInstantScore(2,Play->getX()-9,Play->getY());
                         addpunteggiobarile--;
-                    }
+                    } 
                     GraphicManager->DrawLives(vite);
                     al_flip_display();
                     redraw = false;

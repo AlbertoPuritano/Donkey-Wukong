@@ -3,7 +3,7 @@
 
 using namespace std;
 
-void must_init(bool test, const char *description)
+void must_init(bool test, string description)
 {
     if(test) 
         return;
@@ -79,12 +79,12 @@ int main()
                 score=0;
                 while (vite!=0)
                 {
-                    if (GameManager.runGame(timer,queue,vite,livello,score));
-                        livello++;
-                    if (livello==4)
+                     if (livello==5)
                         break;
-                }
-                if (livello==4)
+                    if (GameManager.runGame(timer,queue,vite,livello,score));
+                        livello++;                   
+                } 
+                if (livello==5)
                     GameManager.runStatic(queue,1);
                 else
                     GameManager.runStatic(queue,2);

@@ -5,6 +5,7 @@
 #include <allegro5/allegro_image.h>
 #include <iostream>
 #include "Entities.cpp"
+#include <vector>  
 using namespace std;
 
 class Graphics
@@ -19,6 +20,7 @@ private:
     ALLEGRO_BITMAP* bitmap;
     ALLEGRO_FONT* font;
     ALLEGRO_FONT* fontpunteggio;
+    vector <ALLEGRO_BITMAP*> bitmaps;  
     int x;
     int y;
     bool allocata;
@@ -36,8 +38,12 @@ public:
         this->buffer = buffer;
         this->display = display;
         ALLEGRO_BITMAP* icona= al_load_bitmap("Assets/Bitmaps/icon.png");
+        bitmaps.push_back(al_load_bitmap("Assets/Bitmaps/Tiles/scala.png"));
+        bitmaps.push_back(al_load_bitmap("Assets/Bitmaps/Tiles/ground.png"));
+        bitmaps.push_back(al_load_bitmap("Assets/Bitmaps/hammer.png"));
         al_set_display_icon(display,icona);
         al_destroy_bitmap(icona);
+
     }
     void assegnaGriglia(int livello)
     {
@@ -73,14 +79,10 @@ public:
                 switch (griglia[i][j])
                 {
                     case 1:
-                        bitmap= al_load_bitmap("Assets/Bitmaps/Tiles/scala.png");
-                        al_draw_bitmap(bitmap,j*20,i*20,0);
-                        al_destroy_bitmap(bitmap);
+                        al_draw_bitmap(bitmaps[0],j*20,i*20,0);
                     break;
                         case 2:
-                        bitmap= al_load_bitmap("Assets/Bitmaps/Tiles/ground.png");
-                        al_draw_bitmap(bitmap,j*20,i*20,0);
-                        al_destroy_bitmap(bitmap);
+                        al_draw_bitmap(bitmaps[1],j*20,i*20,0);
                     break;
                 }
             }
@@ -94,9 +96,7 @@ public:
     void DrawHammer()
     {
         al_set_target_bitmap(buffer);
-        bitmap = al_load_bitmap("Assets/Bitmaps/hammer.png");
-        al_draw_bitmap(bitmap, 18*20, 21*20, 0);
-        al_destroy_bitmap(bitmap);
+        al_draw_bitmap(bitmaps[2], 18*20, 21*20, 0);
         al_set_target_backbuffer(display);
         al_clear_to_color(al_map_rgb(0, 0, 0));
         al_draw_scaled_bitmap(buffer, 0, 0, l, h,scaleX, scaleY, scaleW, scaleH,0);
@@ -319,8 +319,8 @@ public:
     void DrawScore (int score)
     {  
         al_set_target_bitmap(buffer);
-        al_draw_textf(fontpunteggio,al_map_rgb(255,255,255),330,50,0," SCORE");
-        al_draw_textf(fontpunteggio,al_map_rgb(255,0,0),386,75,0,"%d",score);
+        al_draw_textf(fontpunteggio,al_map_rgb(255,255,255),315,50,0," SCORE");
+        al_draw_textf(fontpunteggio,al_map_rgb(255,0,0),329,75,0,"%d",score);
         al_set_target_backbuffer(display);
         al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);
     }
@@ -330,7 +330,7 @@ public:
         bitmap=al_load_bitmap("Assets/Bitmaps/life.png");
         for(int c=0;c<vite;c++)
         {
-            al_draw_bitmap(bitmap,365+(c*22),32,0);
+            al_draw_bitmap(bitmap,335+(c*22),32,0);
         }
         al_destroy_bitmap(bitmap);
         al_set_target_backbuffer(display);
@@ -373,9 +373,14 @@ public:
     }
     ~Graphics()
     {
-        for (int i=0;i<x;i++)
-            delete griglia[i];
-        delete [] griglia;
+        if (allocata)
+        {
+            for (int i=0;i<x;i++)
+                delete griglia[i];
+            delete [] griglia;
+        }
         al_destroy_bitmap(buffer);
+        for (int i=0;i<bitmaps.size();i++)
+            al_destroy_bitmap(bitmaps[i]);
     }
 };
