@@ -41,6 +41,8 @@ public:
         bitmaps.push_back(al_load_bitmap("Assets/Bitmaps/Tiles/scala.png"));
         bitmaps.push_back(al_load_bitmap("Assets/Bitmaps/Tiles/ground.png"));
         bitmaps.push_back(al_load_bitmap("Assets/Bitmaps/hammer.png"));
+        bitmaps.push_back(al_load_bitmap("Assets/Bitmaps/Barrel/barrel_standing.png"));
+        bitmaps.push_back(al_load_bitmap("Assets/Bitmaps/Peach/peach0.png"));
         al_set_display_icon(display,icona);
         al_destroy_bitmap(icona);
 
@@ -191,12 +193,10 @@ public:
     void DrawStaticBarrels()
     {
         al_set_target_bitmap(buffer);  
-        bitmap=al_load_bitmap("Assets/Bitmaps/Barrel/barrel_standing.png");
-        al_draw_bitmap(bitmap,33, 99,0);
-        al_draw_bitmap(bitmap,33, 120,0);
-        al_draw_bitmap(bitmap,10, 99,0);
-        al_draw_bitmap(bitmap,10, 120,0);
-        al_destroy_bitmap(bitmap);
+        al_draw_bitmap(bitmaps[3],33, 99,0);
+        al_draw_bitmap(bitmaps[3],33, 120,0);
+        al_draw_bitmap(bitmaps[3],10, 99,0);
+        al_draw_bitmap(bitmaps[3],10, 120,0);
         al_set_target_backbuffer(display);
         al_clear_to_color(al_map_rgb(0,0,0));
         al_draw_scaled_bitmap(buffer, 0, 0, l, h,scaleX, scaleY, scaleW, scaleH,0);
@@ -270,9 +270,7 @@ public:
     void DrawPeach(Entity* Peach)
     {
         al_set_target_bitmap(buffer);
-        bitmap=al_load_bitmap("Assets/Bitmaps/Peach/peach0.png");
-        al_draw_bitmap(bitmap,Peach->getY(),Peach->getX(),0);
-        al_destroy_bitmap(bitmap);
+        al_draw_bitmap(bitmaps[4],Peach->getY(),Peach->getX(),0);
         al_set_target_backbuffer(display);
         al_clear_to_color(al_map_rgb(0,0,0));
         al_draw_scaled_bitmap(buffer, 0, 0, l, h,scaleX, scaleY, scaleW, scaleH,0);
