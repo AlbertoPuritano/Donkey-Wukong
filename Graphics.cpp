@@ -20,7 +20,7 @@ private:
     ALLEGRO_BITMAP* bitmap;
     ALLEGRO_FONT* font;
     ALLEGRO_FONT* fontpunteggio;
-    vector <ALLEGRO_BITMAP*> bitmaps;  
+    vector <ALLEGRO_BITMAP*> staticBitmaps;  
     int x;
     int y;
     bool allocata;
@@ -38,11 +38,11 @@ public:
         this->buffer = buffer;
         this->display = display;
         ALLEGRO_BITMAP* icona= al_load_bitmap("Assets/Bitmaps/icon.png");
-        bitmaps.push_back(al_load_bitmap("Assets/Bitmaps/Tiles/scala.png"));
-        bitmaps.push_back(al_load_bitmap("Assets/Bitmaps/Tiles/ground.png"));
-        bitmaps.push_back(al_load_bitmap("Assets/Bitmaps/hammer.png"));
-        bitmaps.push_back(al_load_bitmap("Assets/Bitmaps/Barrel/barrel_standing.png"));
-        bitmaps.push_back(al_load_bitmap("Assets/Bitmaps/Peach/peach0.png"));
+        staticBitmaps.push_back(al_load_bitmap("Assets/Bitmaps/Tiles/scala.png"));
+        staticBitmaps.push_back(al_load_bitmap("Assets/Bitmaps/Tiles/ground.png"));
+        staticBitmaps.push_back(al_load_bitmap("Assets/Bitmaps/hammer.png"));
+        staticBitmaps.push_back(al_load_bitmap("Assets/Bitmaps/Barrel/barrel_standing.png"));
+        staticBitmaps.push_back(al_load_bitmap("Assets/Bitmaps/Peach/peach0.png"));
         al_set_display_icon(display,icona);
         al_destroy_bitmap(icona);
 
@@ -81,10 +81,10 @@ public:
                 switch (griglia[i][j])
                 {
                     case 1:
-                        al_draw_bitmap(bitmaps[0],j*20,i*20,0);
+                        al_draw_bitmap(staticBitmaps[0],j*20,i*20,0);
                     break;
                         case 2:
-                        al_draw_bitmap(bitmaps[1],j*20,i*20,0);
+                        al_draw_bitmap(staticBitmaps[1],j*20,i*20,0);
                     break;
                 }
             }
@@ -98,7 +98,7 @@ public:
     void DrawHammer()
     {
         al_set_target_bitmap(buffer);
-        al_draw_bitmap(bitmaps[2], 18*20, 21*20, 0);
+        al_draw_bitmap(staticBitmaps[2], 18*20, 21*20, 0);
         al_set_target_backbuffer(display);
         al_clear_to_color(al_map_rgb(0, 0, 0));
         al_draw_scaled_bitmap(buffer, 0, 0, l, h,scaleX, scaleY, scaleW, scaleH,0);
@@ -193,10 +193,10 @@ public:
     void DrawStaticBarrels()
     {
         al_set_target_bitmap(buffer);  
-        al_draw_bitmap(bitmaps[3],33, 99,0);
-        al_draw_bitmap(bitmaps[3],33, 120,0);
-        al_draw_bitmap(bitmaps[3],10, 99,0);
-        al_draw_bitmap(bitmaps[3],10, 120,0);
+        al_draw_bitmap(staticBitmaps[3],33, 99,0);
+        al_draw_bitmap(staticBitmaps[3],33, 120,0);
+        al_draw_bitmap(staticBitmaps[3],10, 99,0);
+        al_draw_bitmap(staticBitmaps[3],10, 120,0);
         al_set_target_backbuffer(display);
         al_clear_to_color(al_map_rgb(0,0,0));
         al_draw_scaled_bitmap(buffer, 0, 0, l, h,scaleX, scaleY, scaleW, scaleH,0);
@@ -270,7 +270,7 @@ public:
     void DrawPeach(Entity* Peach)
     {
         al_set_target_bitmap(buffer);
-        al_draw_bitmap(bitmaps[4],Peach->getY(),Peach->getX(),0);
+        al_draw_bitmap(staticBitmaps[4],Peach->getY(),Peach->getX(),0);
         al_set_target_backbuffer(display);
         al_clear_to_color(al_map_rgb(0,0,0));
         al_draw_scaled_bitmap(buffer, 0, 0, l, h,scaleX, scaleY, scaleW, scaleH,0);
@@ -378,7 +378,7 @@ public:
             delete [] griglia;
         }
         al_destroy_bitmap(buffer);
-        for (int i=0;i<bitmaps.size();i++)
-            al_destroy_bitmap(bitmaps[i]);
+        for (int i=0;i<staticBitmaps.size();i++)
+            al_destroy_bitmap(staticBitmaps[i]);
     }
 };

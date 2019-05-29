@@ -177,8 +177,10 @@ public:
     }
     void HandleGravity()
     {
-        if (griglia[(x/20)+1][y/20]==0 and jumpstate==0) //se sotto ha il vuoto
+        if (griglia[(x/20)+1][((y+19)/20)]==0 and jumpstate==0 and direction == RIGHT) //se sotto ha il vuoto
             falling=true;
+        else if(griglia[(x/20)+1][(y/20)+1]==0 and jumpstate==0 and direction == LEFT)
+            falling = true;
         if (falling and jumpstate==0)
         {
             ladderstate=false;
