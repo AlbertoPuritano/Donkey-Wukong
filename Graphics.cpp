@@ -255,18 +255,6 @@ public:
         
     }
 
-    void DeleteBarrel(int x, int y)
-    {
-        al_set_target_bitmap(buffer);
-        bitmap = al_load_bitmap("Assets/Bitmaps/Barrel/deletebarrel.png");
-        al_draw_bitmap(bitmap,y, x, 0);
-        al_destroy_bitmap(bitmap);
-        al_set_target_backbuffer(display);
-        al_clear_to_color(al_map_rgb(0,0,0));
-        al_draw_scaled_bitmap(buffer, 0, 0, l, h,scaleX, scaleY, scaleW, scaleH,0);
-    }
-
-
     void DrawPeach(Entity* Peach)
     {
         al_set_target_bitmap(buffer);
@@ -313,6 +301,20 @@ public:
         }
         al_set_target_backbuffer(display);
         al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);
+    }
+    void DrawCancella(int& x,int& y)
+    {
+        if (x==0 and y==0)
+            return;
+        al_set_target_bitmap(buffer);
+        bitmap=al_load_bitmap("Assets/Bitmaps/Barrel/deletebarrel.png");
+        al_draw_bitmap(bitmap, y, x, 0);
+        al_destroy_bitmap(bitmap);
+        al_set_target_backbuffer(display);
+        al_clear_to_color(al_map_rgb(0,0,0));
+        al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);
+        x=0;       
+        y=0;     
     }
     void DrawScore (int score)
     {  

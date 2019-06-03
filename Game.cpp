@@ -73,7 +73,7 @@ public:
     
     bool runGame(ALLEGRO_TIMER* timer, ALLEGRO_EVENT_QUEUE* queue,int& vite,int& livello,int &score)
     {
-        if (livello==3)                     //il livello 3 contiene piu barili
+        if (livello==3)                     //nel livello 3 ci sono piu' barili
             difficulty-=0.3;
         GraphicManager->assegnaGriglia(livello);
         bool complete=false;
@@ -85,6 +85,9 @@ public:
         Barrel Bar(GraphicManager->griglia);
         int addpunteggiomartello=0;
         int addpunteggiobarile=0;
+        pair <int,int> segnaCancellazione;
+        segnaCancellazione.first=0;
+        segnaCancellazione.second=0;   
         #define KEY_SEEN     1
         #define KEY_RELEASED 2
         unsigned char key[ALLEGRO_KEY_MAX];
@@ -210,10 +213,12 @@ public:
                                 temp=i;
                             /*    if(Barili.empty())
                                 {Barili.erase(temp); break;}*/
+                                segnaCancellazione.first=i->getX();
+                                segnaCancellazione.second=i->getY(); 
                                 i++;
                                 Barili.erase(temp);
                                 score += 300;
-                                addpunteggiomartello+=5;                                                   
+                                addpunteggiomartello+=5;                                                  
                             //    cout << "Score: " << score;
                             //    cout << "b: " << i->getX() << ","
                             }
@@ -247,6 +252,10 @@ public:
 
                 if(redraw and al_is_event_queue_empty(queue))
                 {
+                    if (Play->getLadderstate())
+                        cout<<"ladder"<<endl;
+                    else
+                        cout<<"no"<<endl;
                     GraphicManager->DrawMap();
                     GraphicManager->DrawPeach(Peach);
                     GraphicManager->DrawStaticBarrels();
@@ -270,7 +279,8 @@ public:
                     {
                         GraphicManager->DrawInstantScore(2,Play->getX()-9,Play->getY());
                         addpunteggiobarile--;
-                    } 
+                    }
+                    GraphicManager->DrawCancella(segnaCancellazione.first,segnaCancellazione.second); 
                     GraphicManager->DrawLives(vite);
                     al_flip_display();
                     redraw = false;

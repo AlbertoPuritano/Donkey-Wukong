@@ -176,11 +176,7 @@ public:
         jumpstate=1;
     }
     void HandleGravity()
-    {
-        if (griglia[(x/20)+1][((y+19)/20)]==0 and jumpstate==0 and direction == RIGHT) //se sotto ha il vuoto
-            falling=true;
-        else if(griglia[(x/20)+1][(y/20)+1]==0 and jumpstate==0 and direction == LEFT)
-            falling = true;
+    {  
         if (falling and jumpstate==0)
         {
             ladderstate=false;
@@ -202,6 +198,10 @@ public:
                 return;
             }
         }
+        if (griglia[(x/20)+1][((y+19)/20)]==0 and jumpstate==0 and direction == RIGHT) //se sotto ha il vuoto
+            falling=true;
+        else if(griglia[(x/20)+1][(y/20)+1]==0 and jumpstate==0 and direction == LEFT)
+            falling = true;
     }
 
     void setMorto(bool m){morto = m;}
@@ -230,13 +230,13 @@ public:
         if (direction==RIGHT)
         {    
             y+=5;
-            if ((y/20)+1>lMat or griglia[x/20][y/20]==2)
+            if ((y/20)+1>lMat or griglia[x/20][(y+20)/20]==2)
                 direction=LEFT;
         }
         else
         {
             y-=5;
-            if ((y/20)-1<0 or griglia[x/20][y/20]==2)
+            if ((y/20)-1<0 or griglia[x/20][(y-20)/20]==2)
                 direction=RIGHT;
         }
     }
@@ -259,8 +259,8 @@ public:
             if (direction==RIGHT)
                 direction=LEFT;
             else
-                direction=RIGHT;
-            return; 
+            {    direction=RIGHT; y-=13;}
+            return;
         }           
         if ((x/20)+2<=hMat and griglia[(x/20)+2][y/20]==1)
         {
