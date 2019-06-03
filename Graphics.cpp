@@ -43,6 +43,7 @@ public:
         staticBitmaps.push_back(al_load_bitmap("Assets/Bitmaps/hammer.png"));
         staticBitmaps.push_back(al_load_bitmap("Assets/Bitmaps/Barrel/barrel_standing.png"));
         staticBitmaps.push_back(al_load_bitmap("Assets/Bitmaps/Peach/peach0.png"));
+        staticBitmaps.push_back(al_load_bitmap("Assets/Bitmaps/Other/oilcan.png"));
         al_set_display_icon(display,icona);
         al_destroy_bitmap(icona);
 
@@ -69,7 +70,6 @@ public:
         fileinput.close();
         allocata=true;       
     }
-    
     void DrawMap ()
     {
         al_set_target_bitmap(buffer);
@@ -89,7 +89,7 @@ public:
                 }
             }
         }
-
+        al_draw_bitmap(staticBitmaps[5],40,520,0);             //barile incendiato
         al_set_target_backbuffer(display);
         al_clear_to_color(al_map_rgb(0, 0, 0));
         al_draw_scaled_bitmap(buffer, 0, 0, l, h,scaleX, scaleY, scaleW, scaleH,0);
@@ -197,6 +197,27 @@ public:
         al_draw_bitmap(staticBitmaps[3],33, 120,0);
         al_draw_bitmap(staticBitmaps[3],10, 99,0);
         al_draw_bitmap(staticBitmaps[3],10, 120,0);
+        al_set_target_backbuffer(display);
+        al_clear_to_color(al_map_rgb(0,0,0));
+        al_draw_scaled_bitmap(buffer, 0, 0, l, h,scaleX, scaleY, scaleW, scaleH,0);
+    }
+    void DrawExplosive(int& frame)
+    {
+        al_set_target_bitmap(buffer);
+        if (frame>=0 and frame<4) 
+            bitmap=al_load_bitmap("Assets/Bitmaps/Other/fire0.png");
+        else if(frame>=4 and frame<8)
+            bitmap=al_load_bitmap("Assets/Bitmaps/Other/fire1.png");
+        else if(frame>=8 and frame<12)
+            bitmap=al_load_bitmap("Assets/Bitmaps/Other/fire2.png");
+        else if(frame>=12 and frame<16)
+            bitmap=al_load_bitmap("Assets/Bitmaps/Other/fire3.png");
+        if (frame>=15)
+            frame=0;
+        else
+            frame++;
+        al_draw_bitmap(bitmap,40,500,0);
+        al_destroy_bitmap(bitmap);
         al_set_target_backbuffer(display);
         al_clear_to_color(al_map_rgb(0,0,0));
         al_draw_scaled_bitmap(buffer, 0, 0, l, h,scaleX, scaleY, scaleW, scaleH,0);

@@ -87,7 +87,8 @@ public:
         int addpunteggiobarile=0;
         pair <int,int> segnaCancellazione;
         segnaCancellazione.first=0;
-        segnaCancellazione.second=0;   
+        segnaCancellazione.second=0;
+        int frameExpl=0;   
         #define KEY_SEEN     1
         #define KEY_RELEASED 2
         unsigned char key[ALLEGRO_KEY_MAX];
@@ -199,8 +200,6 @@ public:
                             if (i->getStop())
                             {
                                 temp = i;
-                               /* if(Barili.empty())
-                                {Barili.erase(temp);    break;}*/
                                 i++;
                                 Barili.erase(temp);
                                 
@@ -211,16 +210,12 @@ public:
                             Play->getHammered() and Play->getDirection() == RIGHT and (Play->getY()/20)+1==i->getY()/20 and Play->getX()/20==i->getX()/20)
                             {
                                 temp=i;
-                            /*    if(Barili.empty())
-                                {Barili.erase(temp); break;}*/
                                 segnaCancellazione.first=i->getX();
                                 segnaCancellazione.second=i->getY(); 
                                 i++;
                                 Barili.erase(temp);
                                 score += 300;
                                 addpunteggiomartello+=5;                                                  
-                            //    cout << "Score: " << score;
-                            //    cout << "b: " << i->getX() << ","
                             }
                             
                         }
@@ -252,14 +247,11 @@ public:
 
                 if(redraw and al_is_event_queue_empty(queue))
                 {
-                    if (Play->getLadderstate())
-                        cout<<"ladder"<<endl;
-                    else
-                        cout<<"no"<<endl;
                     GraphicManager->DrawMap();
                     GraphicManager->DrawPeach(Peach);
                     GraphicManager->DrawStaticBarrels();
                     GraphicManager->DrawKong(Wukong);
+                    GraphicManager->DrawExplosive(frameExpl);
                     if(Play->getMartello() and Play->getFrame() <= 30)
                         GraphicManager->DrawPlayerHammer(Play);                    
                     else

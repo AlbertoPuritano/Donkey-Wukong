@@ -53,6 +53,7 @@ public:
                 y/=20;
                 x*=20;
                 y*=20;
+                direction=RIGHT;
             }
             x-=2;
             
@@ -180,7 +181,7 @@ public:
         if (falling and jumpstate==0)
         {
             ladderstate=false;
-            if (griglia[(x/20)+1][y/20]==2)
+            if (griglia[(x/20)+1][y/20]==2 or griglia[(x/20)+1][(y/20)+1]==2)
             {
                 falling=false;
                 return;
@@ -200,8 +201,8 @@ public:
         }
         if (griglia[(x/20)+1][((y+19)/20)]==0 and jumpstate==0 and direction == RIGHT) //se sotto ha il vuoto
             falling=true;
-        else if(griglia[(x/20)+1][(y/20)+1]==0 and jumpstate==0 and direction == LEFT)
-            falling = true;
+        else if (griglia[(x/20)+1][(y/20)+1]==0 and jumpstate==0 and direction == LEFT)
+            falling=true;
     }
 
     void setMorto(bool m){morto = m;}
