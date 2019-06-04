@@ -219,12 +219,16 @@ public:
                             }
                             
                         }
-                        if (Play->getX()/20==Peach->getX()/20 and Play->getY()/20==Peach->getY()/20)
+                        if (Play->getX()/20==Peach->getX()/20 and Play->getY()/20==Peach->getY()/20 and livello!=4)  //completa il livello
                         {
                             complete=true;
                             done=true;
                         }
-
+                        if (Play->getX()/20==6 and Play->getY()/20==1 and livello==4)  //completa il gioco
+                        {
+                            complete=true;
+                            done=true;
+                        }
                         redraw = true;
                         break;
 
@@ -247,7 +251,7 @@ public:
 
                 if(redraw and al_is_event_queue_empty(queue))
                 {
-                    GraphicManager->DrawMap();
+                    GraphicManager->DrawMap(false);
                     GraphicManager->DrawPeach(Peach);
                     GraphicManager->DrawStaticBarrels();
                     GraphicManager->DrawKong(Wukong);
@@ -341,6 +345,44 @@ public:
             al_wait_for_event(queue, &event);
             if (event.type==ALLEGRO_EVENT_KEY_DOWN)
                 return;
+        }
+    }
+    void runCut(ALLEGRO_EVENT_QUEUE* queue,ALLEGRO_TIMER* timer,int frame)
+    {                          
+        SoundManager->stopsounds();
+        GraphicManager->assegnaGriglia(0);
+        ALLEGRO_EVENT event;
+        al_start_timer(timer);
+        bool done = false;
+        bool redraw = true;
+        float rests[19]={1.3,0.5,1.0,0.5,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.7,0.8,1.6,1.2,2.0};
+        while (1)
+        {
+            al_wait_for_event(queue, &event);
+            switch (event.type)
+            {
+                case ALLEGRO_EVENT_TIMER:
+                    redraw=true;
+                    break;
+                case ALLEGRO_EVENT_DISPLAY_CLOSE:
+                    done=true;
+                    break;
+                case ALLEGRO_KEY_DOWN:
+                    done=true;
+                    break;
+            }
+            if (done)
+                break;
+            if (redraw and al_is_event_queue_empty(queue))
+            {
+                GraphicManager->DrawCut(frame);
+                al_flip_display();
+                redraw=false;
+                al_rest(rests[frame]);
+                frame++;
+                if (frame==14 or frame==19)
+                    done=true;
+            }
         }
     }
 };  

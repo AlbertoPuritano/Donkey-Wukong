@@ -42,7 +42,7 @@ public:
     Player(int** c):Entity(520,180,c),jumpstate(0), morto(false), martello(false), hammered(false){}
     void MoveUp()
     {      
-        if (morto or falling or jumpstate>0 or martello)
+        if (morto or falling or jumpstate>0 or martello or x-1<0)
             return;
         if(griglia[(x/20)][y/20]==1 or griglia[x/20][y/20]==2 and griglia[(x/20)-1][y/20]==0 or ladderstate)
         {
@@ -170,7 +170,7 @@ public:
     }
     void Jump()
     {
-        if(morto || martello)
+        if(morto or martello)
             return;
         if (falling or jumpstate>0 or ladderstate)
             return;
@@ -190,7 +190,9 @@ public:
         }
         if (!falling and jumpstate>0)
         {
-            x-=3;
+            if (griglia[x/20][y/20]!=2)
+                x-=3;
+            
             jumpstate++;
             if (jumpstate==11)
             {
@@ -260,7 +262,10 @@ public:
             if (direction==RIGHT)
                 direction=LEFT;
             else
-            {    direction=RIGHT; y-=13;}
+            {    
+                direction=RIGHT; 
+                y-=13;
+            }
             return;
         }           
         if ((x/20)+2<=hMat and griglia[(x/20)+2][y/20]==1)

@@ -75,14 +75,21 @@ int main()
             case 1: 
                 al_flush_event_queue(queue);
                 vite=3;
-                livello=1;
+                livello=4;
                 score=0;
                 while (vite!=0)
                 {
-                     if (livello==5)
+                    if (livello==5)
                         break;
-                    if (GameManager.runGame(timer,queue,vite,livello,score));
-                        livello++;                   
+                    if (GameManager.runGame(timer,queue,vite,livello,score)==true)
+                    {
+                        al_flush_event_queue(queue);
+                        if (livello==4)
+                            GameManager.runCut(queue,timer,14);        //cutscene
+                        else
+                            GameManager.runCut(queue,timer,0);        //cutscene
+                        livello++;
+                    }
                 } 
                 if (livello==5)
                     GameManager.runStatic(queue,1);

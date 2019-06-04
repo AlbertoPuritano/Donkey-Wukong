@@ -70,7 +70,7 @@ public:
         fileinput.close();
         allocata=true;       
     }
-    void DrawMap ()
+    void DrawMap (bool cutscene)
     {
         al_set_target_bitmap(buffer);
         al_clear_to_color(al_map_rgb(0,0,0));
@@ -89,7 +89,8 @@ public:
                 }
             }
         }
-        al_draw_bitmap(staticBitmaps[5],40,520,0);             //barile incendiato
+        if (cutscene==false)
+            al_draw_bitmap(staticBitmaps[5],40,520,0);             //barile incendiato
         al_set_target_backbuffer(display);
         al_clear_to_color(al_map_rgb(0, 0, 0));
         al_draw_scaled_bitmap(buffer, 0, 0, l, h,scaleX, scaleY, scaleW, scaleH,0);
@@ -387,6 +388,114 @@ public:
         if (a==2)
             bitmap=al_load_bitmap("Assets/Bitmaps/death.png");
         al_draw_bitmap(bitmap,0,0,0);
+        al_destroy_bitmap(bitmap);
+        al_set_target_backbuffer(display);
+        al_clear_to_color(al_map_rgb(0,0,0));
+        al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);
+    }
+    void DrawCut(int frame)
+    {
+        DrawMap(true);
+        al_set_target_bitmap(buffer);
+        switch (frame)
+        {
+        case 0:
+            bitmap=al_load_bitmap("Assets/Bitmaps/Cutscene/kong_standing.png");
+            al_draw_bitmap(bitmap,60,80,0);
+            al_draw_bitmap(staticBitmaps[4],280,60,0);          
+            break;
+        case 1:
+            bitmap=al_load_bitmap("Assets/Bitmaps/Cutscene/kong_standing.png");
+            al_draw_bitmap(bitmap,200,20,0);
+            al_draw_bitmap(staticBitmaps[4],280,60,0);           
+            break;
+        case 2:
+            bitmap=al_load_bitmap("Assets/Bitmaps/Cutscene/kong_standing.png");
+            al_draw_bitmap(bitmap,220,20,0);
+            al_draw_bitmap(staticBitmaps[4],280,60,0);           
+            break;
+        case 3:
+            bitmap=al_load_bitmap("Assets/Bitmaps/Cutscene/kong_climbing_right1.png");
+            al_draw_bitmap(bitmap,140,60,0);
+            break;
+        case 4:
+            bitmap=al_load_bitmap("Assets/Bitmaps/Cutscene/kong_climbing_right0.png");
+            al_draw_bitmap(bitmap,140,55,0);
+            break;
+        case 5:
+            bitmap=al_load_bitmap("Assets/Bitmaps/Cutscene/kong_climbing_left0.png");
+            al_draw_bitmap(bitmap,140,50,0);
+            break;
+        case 6:
+            bitmap=al_load_bitmap("Assets/Bitmaps/Cutscene/kong_climbing_left1.png");
+            al_draw_bitmap(bitmap,140,45,0);
+            break;
+        case 7:
+            bitmap=al_load_bitmap("Assets/Bitmaps/Cutscene/kong_climbing_right0.png");
+            al_draw_bitmap(bitmap,140,40,0);
+            break;
+        case 8:
+            bitmap=al_load_bitmap("Assets/Bitmaps/Cutscene/kong_climbing_right1.png");
+            al_draw_bitmap(bitmap,140,35,0);
+            break;
+        case 9:
+            bitmap=al_load_bitmap("Assets/Bitmaps/Cutscene/kong_climbing_left0.png");
+            al_draw_bitmap(bitmap,140,25,0);
+            break;
+        case 10:
+            bitmap=al_load_bitmap("Assets/Bitmaps/Cutscene/kong_climbing_left1.png");
+            al_draw_bitmap(bitmap,140,20,0);
+            break;
+        case 11:
+            bitmap=al_load_bitmap("Assets/Bitmaps/Cutscene/kong_climbing_right0.png");
+            al_draw_bitmap(bitmap,140,15,0);
+            break;
+        case 12:
+            bitmap=al_load_bitmap("Assets/Bitmaps/Cutscene/kong_climbing_right1.png");
+            al_draw_bitmap(bitmap,140,10,0);
+            break;
+        case 13:
+            bitmap=al_load_bitmap("Assets/Bitmaps/Cutscene/kong_climbing_left0.png");
+            al_draw_bitmap(bitmap,140,5,0);
+            break;
+        case 14:
+            bitmap=al_load_bitmap("Assets/Bitmaps/Cutscene/kong_standing.png");
+            al_draw_bitmap(bitmap,60,80,0);
+            al_destroy_bitmap(bitmap);
+            bitmap=al_load_bitmap("Assets/Bitmaps/Player/right1.png");
+            al_draw_bitmap(bitmap,20,120,0);
+            al_draw_bitmap(staticBitmaps[4],280,60,0);           
+            break;
+        case 15:
+            bitmap=al_load_bitmap("Assets/Bitmaps/Cutscene/kong_onhead.png");
+            al_draw_bitmap(bitmap,60,80,0);
+            al_destroy_bitmap(bitmap);
+            bitmap=al_load_bitmap("Assets/Bitmaps/Player/Hammer4R.png");
+            al_draw_bitmap(bitmap,37,120,0);
+            al_draw_bitmap(staticBitmaps[4],280,60,0);           
+            break;
+        case 16:
+            bitmap=al_load_bitmap("Assets/Bitmaps/Cutscene/kong_knockedout.png");
+            al_draw_bitmap(bitmap,60,80,0);
+            al_destroy_bitmap(bitmap);
+            bitmap=al_load_bitmap("Assets/Bitmaps/Player/Hammer4R.png");
+            al_draw_bitmap(bitmap,37,120,0);
+            al_draw_bitmap(staticBitmaps[4],280,60,0);           
+            break;
+        case 17:
+            al_draw_bitmap(staticBitmaps[4],280,60,0);           
+            bitmap=al_load_bitmap("Assets/Bitmaps/Player/right1.png");
+            al_draw_bitmap(bitmap,245,60,0);
+            break;
+        case 18:
+            al_draw_bitmap(staticBitmaps[4],280,60,1);           
+            bitmap=al_load_bitmap("Assets/Bitmaps/Player/right1.png");
+            al_draw_bitmap(bitmap,260,60,0);
+            al_destroy_bitmap(bitmap);
+            bitmap=al_load_bitmap("Assets/Bitmaps/Cutscene/heart.png");
+            al_draw_bitmap(bitmap,270,47,0);            
+            break;
+        }
         al_destroy_bitmap(bitmap);
         al_set_target_backbuffer(display);
         al_clear_to_color(al_map_rgb(0,0,0));
