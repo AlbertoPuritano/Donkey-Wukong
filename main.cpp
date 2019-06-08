@@ -1,4 +1,5 @@
 #include "Game.cpp"
+#include <allegro5/allegro.h>
 #include <stdio.h>
 
 using namespace std;
@@ -13,7 +14,7 @@ void must_init(bool test, string description)
 }
 
 
-int main()
+int main(int argv,char** argc)
 {
     srand(time(0));
     must_init(al_init(), "allegro");
@@ -75,7 +76,7 @@ int main()
             case 1: 
                 al_flush_event_queue(queue);
                 vite=3;
-                livello=4;
+                livello=1;
                 score=0;
                 while (vite!=0)
                 {

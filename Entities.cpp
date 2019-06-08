@@ -202,7 +202,6 @@ public:
         }
         /*if (griglia[x/20][y/20]==2 and jumpstate>0 and griglia[(x/20)+1][y/20]==0)
         {    falling=true; x+=9; jumpstate=0;}   //se rimane bloccato sul blocco*/
-        if (falling) cout<<"falling "<<jumpstate<<endl;
         if (griglia[(x/20)+1][((y+19)/20)]==0 and jumpstate==0 and direction == RIGHT) //se sotto ha il vuoto
             falling=true;
         else if (griglia[(x/20)+1][(y/20)+1]==0 and jumpstate==0 and direction == LEFT)

@@ -95,6 +95,11 @@ public:
         memset(key, 0, sizeof(key));
         while (vite!=0)
         {
+            #define KEY_SEEN     1
+            #define KEY_RELEASED 2
+            unsigned char key[ALLEGRO_KEY_MAX];
+            memset(key, 0, sizeof(key));
+            al_flush_event_queue(queue);
             hammerTime=0;
             Player* Play= new Player(GraphicManager->griglia);
             Kong* Wukong = new Kong(GraphicManager->griglia, difficulty);
@@ -150,6 +155,7 @@ public:
                         {
                             Play->setHammered(true);
                             hTime++;
+                            SoundManager->playHammer();
                         }
                         for(int i = 0; i < ALLEGRO_KEY_MAX; i++)
                             key[i] &= KEY_SEEN;
@@ -185,7 +191,7 @@ public:
                                 SoundManager->stopsounds();
                                 SoundManager->playDeath();
                                 Play->setMorto(true);
-                                al_rest(3.2);
+                                al_rest(4);
                                 done=true;
                             }
                             

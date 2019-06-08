@@ -12,9 +12,10 @@ class Sounds
         ALLEGRO_SAMPLE* walking;
         ALLEGRO_SAMPLE* jump;
         ALLEGRO_SAMPLE* menu;
-        ALLEGRO_SAMPLE_ID walkingid;        	
+        ALLEGRO_SAMPLE* hammer;
         ALLEGRO_SAMPLE_INSTANCE* walkingInstance;
         ALLEGRO_SAMPLE_INSTANCE* jumpInstance;
+        ALLEGRO_SAMPLE_INSTANCE* hammerInstance;
 
     public:
     Sounds()
@@ -26,17 +27,24 @@ class Sounds
         walking = al_load_sample("Assets/Audio/walking.wav");
         jump = al_load_sample("Assets/Audio/jump.wav");
         menu= al_load_sample("Assets/Audio/menu.wav");
+        hammer=al_load_sample("Assets/Audio/hammer.wav");
         walkingInstance = al_create_sample_instance(walking);
         jumpInstance= al_create_sample_instance(jump);
+        hammerInstance=al_create_sample_instance(hammer);
 	    al_attach_sample_instance_to_mixer(walkingInstance, al_get_default_mixer());
         al_attach_sample_instance_to_mixer(jumpInstance, al_get_default_mixer());
+        al_attach_sample_instance_to_mixer(hammerInstance, al_get_default_mixer());
     }
 
     void startNewGame()
     {
         al_play_sample(newgame, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
     }
-
+    void playHammer()
+    {
+        if (!al_get_sample_instance_playing(hammerInstance))
+         	al_play_sample_instance(hammerInstance);
+    }
     void playDeath()
     {
         al_play_sample(death, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
@@ -73,6 +81,8 @@ class Sounds
         al_destroy_sample_instance(jumpInstance);
         al_destroy_sample(jump);
         al_destroy_sample(menu);
+        al_destroy_sample_instance(hammerInstance);
+        al_destroy_sample(hammer);
         al_uninstall_audio();
     }
 
