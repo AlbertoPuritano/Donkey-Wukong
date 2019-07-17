@@ -367,14 +367,14 @@ public:
             al_wait_for_event(queue, &event);
             switch (event.type)
             {
-                case ALLEGRO_EVENT_TIMER:
-                    redraw=true;
-                    break;
                 case ALLEGRO_EVENT_DISPLAY_CLOSE:
                     done=true;
                     break;
                 case ALLEGRO_KEY_DOWN:
                     done=true;
+                    break;
+                case ALLEGRO_EVENT_TIMER:
+                    redraw=true;
                     break;
             }
             if (done)
