@@ -11,17 +11,19 @@
 class Game
 {
 private:
-    Sounds* SoundManager=NULL;
-    Graphics* GraphicManager=NULL;
+    Sounds* SoundManager;
+    Graphics* GraphicManager;
     float difficulty;
     int hTime = 0;
+    bool muted;
 public:
-    Game(Graphics* g,Sounds* s):SoundManager(s),GraphicManager(g),difficulty(1.0){}
+    Game(Graphics* g,Sounds* s):SoundManager(s),GraphicManager(g),difficulty(1.0),muted(false){}
     
     int runMenu(ALLEGRO_TIMER* timer, ALLEGRO_EVENT_QUEUE* queue)
     {        
-        SoundManager->stopsounds();
-        SoundManager->playMenu();
+        SoundManager->stopSamples();
+        if (!muted)
+            SoundManager->playMenu();
         int state=0;
         bool done = false;
         bool redraw = true;
@@ -66,21 +68,23 @@ public:
                 redraw=false;
             }
         }
-        SoundManager->stopsounds();
+        SoundManager->stopSamples();
         return 0;
     }
     
     
     bool runGame(ALLEGRO_TIMER* timer, ALLEGRO_EVENT_QUEUE* queue,int& vite,int& livello,int &score)
     {
+        SoundManager->stopMenu();
         if (livello==3)                     //nel livello 3 ci sono piu' barili
             difficulty-=0.3;
         GraphicManager->assegnaGriglia(livello);
         bool complete=false;
         unsigned hammerTime = 0;
         srand(time(0));
-        SoundManager->stopsounds();
-        SoundManager->startNewGame();
+        SoundManager->stopSamples();
+        if (!muted)
+            SoundManager->startNewGame();
         list <Barrel> Barili;
         Barrel Bar(GraphicManager->griglia);
         int addpunteggiomartello=0;
@@ -128,18 +132,21 @@ public:
                         }
                         if(key[ALLEGRO_KEY_LEFT])
                         {   
-                            Play->MoveLeft();      
-                            SoundManager->playWalking();  
+                            Play->MoveLeft();    
+                            if (!muted)
+                                SoundManager->playWalking();  
                         }
                         if(key[ALLEGRO_KEY_RIGHT])
                         {   
                             Play->MoveRight();      
-                            SoundManager->playWalking();
+                            if (!muted)
+                                SoundManager->playWalking();
                         }
                         if(key[ALLEGRO_KEY_SPACE])
                         {   
                             Play->Jump();           
-                            SoundManager->playJump();       
+                            if (!muted)
+                                SoundManager->playJump();       
                         }
                         if(key[ALLEGRO_KEY_ESCAPE])
                         {
@@ -155,7 +162,8 @@ public:
                         {
                             Play->setHammered(true);
                             hTime++;
-                            SoundManager->playHammer();
+                            if (!muted)
+                                SoundManager->playHammer();
                         }
                         for(int i = 0; i < ALLEGRO_KEY_MAX; i++)
                             key[i] &= KEY_SEEN;
@@ -188,8 +196,9 @@ public:
                             i->HandleGravity();
                             if (Play->getX()/20==i->getX()/20 and Play->getY()/20==i->getY()/20)
                             {            
-                                SoundManager->stopsounds();
-                                SoundManager->playDeath();
+                                SoundManager->stopSamples();
+                                if (!muted)
+                                    SoundManager->playDeath();
                                 Play->setMorto(true);
                                 al_rest(4);
                                 done=true;
@@ -295,7 +304,7 @@ public:
         }
         if (livello==3)                 //difficoltà torna normale
             difficulty+=0.3;
-        SoundManager->stopsounds();
+        SoundManager->stopSamples();
         return complete;
     }   
     void runOptions(ALLEGRO_TIMER* timer, ALLEGRO_EVENT_QUEUE* queue)
@@ -324,6 +333,19 @@ public:
                         state++;
                     if (event.keyboard.keycode==ALLEGRO_KEY_ENTER and state==1 or event.keyboard.keycode==ALLEGRO_KEY_ESCAPE)
                         done=true;
+                    if (event.keyboard.keycode==ALLEGRO_KEY_M)
+                    {
+                        if (muted)
+                        {
+                            muted=false;
+                            SoundManager->playMenu();
+                        }
+                        else
+                        {
+                            muted=true;
+                            SoundManager->stopMenu();
+                        }
+                    }
                     break;
                 case ALLEGRO_EVENT_DISPLAY_CLOSE:
                     done = true;
@@ -355,7 +377,7 @@ public:
     }
     void runCut(ALLEGRO_EVENT_QUEUE* queue,ALLEGRO_TIMER* timer,int frame)
     {                          
-        SoundManager->stopsounds();
+        SoundManager->stopSamples();
         GraphicManager->assegnaGriglia(0);
         ALLEGRO_EVENT event;
         al_start_timer(timer);

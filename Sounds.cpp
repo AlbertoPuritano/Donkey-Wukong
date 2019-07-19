@@ -16,11 +16,12 @@ class Sounds
         ALLEGRO_SAMPLE_INSTANCE* walkingInstance;
         ALLEGRO_SAMPLE_INSTANCE* jumpInstance;
         ALLEGRO_SAMPLE_INSTANCE* hammerInstance;
+        ALLEGRO_SAMPLE_INSTANCE* menuInstance;
 
     public:
     Sounds()
     {
-        al_reserve_samples(5);
+        al_reserve_samples(10);
         newgame = al_load_sample("Assets/Audio/newgame.wav");
         death = al_load_sample("Assets/Audio/morte.wav");
         mammamia = al_load_sample("Assets/Audio/MammaMiaPizzeria.wav");
@@ -31,9 +32,11 @@ class Sounds
         walkingInstance = al_create_sample_instance(walking);
         jumpInstance= al_create_sample_instance(jump);
         hammerInstance=al_create_sample_instance(hammer);
+        menuInstance=al_create_sample_instance(menu);
 	    al_attach_sample_instance_to_mixer(walkingInstance, al_get_default_mixer());
         al_attach_sample_instance_to_mixer(jumpInstance, al_get_default_mixer());
         al_attach_sample_instance_to_mixer(hammerInstance, al_get_default_mixer());
+        al_attach_sample_instance_to_mixer(menuInstance,al_get_default_mixer());
     }
 
     void startNewGame()
@@ -68,9 +71,15 @@ class Sounds
     }
     void playMenu()
     {
-        al_play_sample(menu,1.0,0.0,1.0,ALLEGRO_PLAYMODE_LOOP,NULL);
+        if (!al_get_sample_instance_playing(menuInstance))   
+            al_play_sample_instance(menuInstance);
     }
-    void stopsounds(){al_stop_samples();}
+    void stopSamples(){al_stop_samples();}
+    void stopMenu()
+    {
+        if (al_get_sample_instance_playing(menuInstance))
+            al_stop_sample_instance(menuInstance);
+    }
     ~Sounds()
     {
         al_destroy_sample(newgame);
