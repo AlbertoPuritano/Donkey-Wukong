@@ -1,25 +1,6 @@
-#include <iostream>
-#include <allegro5/allegro5.h>
-#include <allegro5/allegro_audio.h>
-#include <allegro5/allegro_acodec.h>
-using namespace std;
-class Sounds
-{
-    private:
-        ALLEGRO_SAMPLE* newgame;
-        ALLEGRO_SAMPLE* death;
-        ALLEGRO_SAMPLE* mammamia;
-        ALLEGRO_SAMPLE* walking;
-        ALLEGRO_SAMPLE* jump;
-        ALLEGRO_SAMPLE* menu;
-        ALLEGRO_SAMPLE* hammer;
-        ALLEGRO_SAMPLE_INSTANCE* walkingInstance;
-        ALLEGRO_SAMPLE_INSTANCE* jumpInstance;
-        ALLEGRO_SAMPLE_INSTANCE* hammerInstance;
-        ALLEGRO_SAMPLE_INSTANCE* menuInstance;
+#include "../Headers/Sounds.hpp"
 
-    public:
-    Sounds()
+    Sounds::Sounds()
     {
         al_reserve_samples(10);
         newgame = al_load_sample("Assets/Audio/newgame.wav");
@@ -39,48 +20,48 @@ class Sounds
         al_attach_sample_instance_to_mixer(menuInstance,al_get_default_mixer());
     }
 
-    void startNewGame()
+    void Sounds::startNewGame()
     {
         al_play_sample(newgame, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
     }
-    void playHammer()
+    void Sounds::playHammer()
     {
         if (!al_get_sample_instance_playing(hammerInstance))
          	al_play_sample_instance(hammerInstance);
     }
-    void playDeath()
+    void Sounds::playDeath()
     {
         al_play_sample(death, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
     }
 
-    void playMammaMia()
+    void Sounds::playMammaMia()
     {
         al_play_sample(mammamia, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
     }
 
-    void playWalking()
+    void Sounds::playWalking()
     {
         if (!al_get_sample_instance_playing(walkingInstance))
          	al_play_sample_instance(walkingInstance);
     }
 
-    void playJump()
+    void Sounds::playJump()
     {
         if (!al_get_sample_instance_playing(jumpInstance))    
         al_play_sample_instance(jumpInstance);        
     }
-    void playMenu()
+    void Sounds::playMenu()
     {
         if (!al_get_sample_instance_playing(menuInstance))   
             al_play_sample_instance(menuInstance);
     }
-    void stopSamples(){al_stop_samples();}
-    void stopMenu()
+    void Sounds::stopSamples(){al_stop_samples();}
+    void Sounds::stopMenu()
     {
         if (al_get_sample_instance_playing(menuInstance))
             al_stop_sample_instance(menuInstance);
     }
-    ~Sounds()
+    Sounds::~Sounds()
     {
         al_destroy_sample(newgame);
         al_destroy_sample(death);
@@ -94,5 +75,3 @@ class Sounds
         al_destroy_sample(hammer);
         al_uninstall_audio();
     }
-
-};

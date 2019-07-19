@@ -1,36 +1,10 @@
-#include <fstream>
-#include <allegro5/allegro5.h>
-#include <allegro5/allegro_font.h> 
-#include <allegro5/allegro_ttf.h>
-#include <allegro5/allegro_image.h>
-#include <iostream>
-#include "Entities.cpp"
-#include <vector>  
-using namespace std;
+#include "../Headers/Graphics.hpp"
 
-class Graphics
-{
-private:
-    int scaleW;
-    int scaleH;
-    int scaleX;
-    int scaleY;
-    ALLEGRO_DISPLAY * display;
-    ALLEGRO_BITMAP * buffer;
-    ALLEGRO_BITMAP* bitmap;
-    ALLEGRO_FONT* font;
-    ALLEGRO_FONT* fontpunteggio;
-    vector <ALLEGRO_BITMAP*> staticBitmaps;  
-    int x;
-    int y;
-    bool allocata;
-public:
-    int** griglia = NULL;
-    Graphics (ALLEGRO_DISPLAY* display,ALLEGRO_BITMAP* buffer,int scaleX, int scaleY,int scaleW,int scaleH,ALLEGRO_FONT* font,ALLEGRO_FONT* fontpunteggio)
+    Graphics::Graphics (ALLEGRO_DISPLAY* display,ALLEGRO_BITMAP* buffer,int scaleX, int scaleY,int scaleW,int scaleH,ALLEGRO_FONT* font,ALLEGRO_FONT* fontscore)
     {
         allocata=false;
         this->font=font;
-        this->fontpunteggio=fontpunteggio;
+        this->fontscore=fontscore;
         this->scaleH = scaleH;
         this->scaleW = scaleW;
         this->scaleX = scaleX;
@@ -48,29 +22,29 @@ public:
         al_destroy_bitmap(icona);
 
     }
-    void assegnaGriglia(int livello)
+    void Graphics::assegnaGriglia(int livello)
     {
         if (allocata)
         {
             for (int i=0;i<x;i++)
-                delete griglia[i];
-            delete [] griglia;
+                delete grid[i];
+            delete [] grid;
         }
         ifstream fileinput;
         fileinput.open(string("Assets/Maps/level" +to_string(livello)+ ".txt"));
         if (!fileinput)
             cout<<"could not initialize level "<<livello<<endl;
         fileinput>> x >> y;
-        griglia= new int* [x];
+        grid= new int* [x];
         for (int i=0;i<x;i++)
-            griglia[i]=new int [y];
+            grid[i]=new int [y];
         for (int i=0;i<x;i++)
             for (int j=0;j<y;j++)
-                fileinput>>griglia[i][j];
+                fileinput>>grid[i][j];
         fileinput.close();
         allocata=true;       
     }
-    void DrawMap (bool cutscene)
+    void Graphics::DrawMap (bool cutscene)
     {
         al_set_target_bitmap(buffer);
         al_clear_to_color(al_map_rgb(0,0,0));
@@ -78,7 +52,7 @@ public:
         {
             for (int j=0;j<y;j++)
             {
-                switch (griglia[i][j])
+                switch (grid[i][j])
                 {
                     case 1:
                         al_draw_bitmap(staticBitmaps[0],j*20,i*20,0);
@@ -96,7 +70,7 @@ public:
         al_draw_scaled_bitmap(buffer, 0, 0, l, h,scaleX, scaleY, scaleW, scaleH,0);
     }
     
-    void DrawHammer()
+    void Graphics::DrawHammer()
     {
         al_set_target_bitmap(buffer);
         al_draw_bitmap(staticBitmaps[2], 18*20, 21*20, 0);
@@ -106,7 +80,7 @@ public:
     }
 
     
-    void DrawPlayerHammer(Player* Play)
+    void Graphics::DrawPlayerHammer(Player* Play)
     {
         al_set_target_bitmap(buffer);
         if(Play->getFrame() >= 0 && Play->getFrame() <= 15 && Play->getHammered())
@@ -133,7 +107,7 @@ public:
         al_draw_scaled_bitmap(buffer, 0, 0, l, h,scaleX, scaleY, scaleW, scaleH,0);
     }
 
-    void DrawPlayer(Player* Play)
+    void Graphics::DrawPlayer(Player* Play)
     {
 
         al_set_target_bitmap(buffer);        
@@ -169,16 +143,16 @@ public:
     }
 
 
-    void DrawKong(Kong* Wukong)
+    void Graphics::DrawKong(Kong* Wukong)
     {
         al_set_target_bitmap(buffer);
-        if (Wukong->getFrame()>0 and Wukong->getFrame()<=Wukong->getDifficolta()*20)
+        if (Wukong->getFrame()>0 and Wukong->getFrame()<=Wukong->getDifficulty()*20)
             bitmap= al_load_bitmap("Assets/Bitmaps/Kong/kong1.png");
-        else if (Wukong->getFrame()>Wukong->getDifficolta()*20 and Wukong->getFrame()<=Wukong->getDifficolta()*40)
+        else if (Wukong->getFrame()>Wukong->getDifficulty()*20 and Wukong->getFrame()<=Wukong->getDifficulty()*40)
             bitmap= al_load_bitmap("Assets/Bitmaps/Kong/kong2.png");
-        else if (Wukong->getFrame()>Wukong->getDifficolta()*40 and Wukong->getFrame()<=Wukong->getDifficolta()*60)
+        else if (Wukong->getFrame()>Wukong->getDifficulty()*40 and Wukong->getFrame()<=Wukong->getDifficulty()*60)
             bitmap= al_load_bitmap("Assets/Bitmaps/Kong/kong3.png");
-        else if (Wukong->getFrame()>Wukong->getDifficolta()*60 and Wukong->getFrame()<=Wukong->getDifficolta()*80)
+        else if (Wukong->getFrame()>Wukong->getDifficulty()*60 and Wukong->getFrame()<=Wukong->getDifficulty()*80)
             bitmap= al_load_bitmap("Assets/Bitmaps/Kong/kong4.png");
         else
             bitmap= al_load_bitmap("Assets/Bitmaps/Kong/kong5.png");
@@ -191,7 +165,7 @@ public:
     } 
 
 
-    void DrawStaticBarrels()
+    void Graphics::DrawStaticBarrels()
     {
         al_set_target_bitmap(buffer);  
         al_draw_bitmap(staticBitmaps[3],33, 99,0);
@@ -202,7 +176,7 @@ public:
         al_clear_to_color(al_map_rgb(0,0,0));
         al_draw_scaled_bitmap(buffer, 0, 0, l, h,scaleX, scaleY, scaleW, scaleH,0);
     }
-    void DrawExplosive(int& frame)
+    void Graphics::DrawExplosive(int& frame)
     {
         al_set_target_bitmap(buffer);
         if (frame>=0 and frame<4) 
@@ -223,7 +197,7 @@ public:
         al_clear_to_color(al_map_rgb(0,0,0));
         al_draw_scaled_bitmap(buffer, 0, 0, l, h,scaleX, scaleY, scaleW, scaleH,0);
     }
-    void DrawBarrel(Barrel& Bar)
+    void Graphics::DrawBarrel(Barrel& Bar)
     {
         al_set_target_bitmap(buffer);
         if (Bar.isFalling())
@@ -277,7 +251,7 @@ public:
         
     }
 
-    void DrawPeach(Entity* Peach)
+    void Graphics::DrawPeach(Entity* Peach)
     {
         al_set_target_bitmap(buffer);
         al_draw_bitmap(staticBitmaps[4],Peach->getY(),Peach->getX(),0);
@@ -285,7 +259,7 @@ public:
         al_clear_to_color(al_map_rgb(0,0,0));
         al_draw_scaled_bitmap(buffer, 0, 0, l, h,scaleX, scaleY, scaleW, scaleH,0);
     }
-    void DrawMenu(short unsigned n)
+    void Graphics::DrawMenu(short unsigned n)
     {
         al_set_target_bitmap(buffer);
         al_clear_to_color(al_map_rgb(0,0,0));
@@ -310,7 +284,7 @@ public:
         al_clear_to_color(al_map_rgb(0, 0, 0));
         al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);
     }
-    void DrawInstantScore(int opt,int x,int y)
+    void Graphics::DrawInstantScore(int opt,int x,int y)
     {
         al_set_target_bitmap(buffer);        
         if (opt==1)
@@ -324,7 +298,7 @@ public:
         al_set_target_backbuffer(display);
         al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);
     }
-    void DrawCancella(int& x,int& y)
+    void Graphics::DrawClear(int& x,int& y)
     {
         if (x==0 and y==0)
             return;
@@ -338,15 +312,15 @@ public:
         x=0;       
         y=0;     
     }
-    void DrawScore (int score)
+    void Graphics::DrawScore (int score)
     {  
         al_set_target_bitmap(buffer);
-        al_draw_textf(fontpunteggio,al_map_rgb(255,255,255),315,50,0," SCORE");
-        al_draw_textf(fontpunteggio,al_map_rgb(255,0,0),329,75,0,"%d",score);
+        al_draw_textf(fontscore,al_map_rgb(255,255,255),315,50,0," SCORE");
+        al_draw_textf(fontscore,al_map_rgb(255,0,0),329,75,0,"%d",score);
         al_set_target_backbuffer(display);
         al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);
     }
-    void DrawLives(int vite)
+    void Graphics::DrawLives(int vite)
     {
         al_set_target_bitmap(buffer);
         bitmap=al_load_bitmap("Assets/Bitmaps/life.png");
@@ -359,7 +333,7 @@ public:
         al_clear_to_color(al_map_rgb(0,0,0));
         al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);
     }
-    void DrawOptions(int n,float difficulty)
+    void Graphics::DrawOptions(int n,float difficulty)
     {
         al_set_target_bitmap(buffer);
         al_clear_to_color(al_map_rgb(0,0,0));
@@ -377,7 +351,7 @@ public:
         al_clear_to_color(al_map_rgb(0, 0, 0));
         al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);
     }
-    void DrawImage(int a)
+    void Graphics::DrawImage(int a)
     {
         al_set_target_bitmap(buffer);
         al_clear_to_color(al_map_rgb(0,0,0));
@@ -393,7 +367,7 @@ public:
         al_clear_to_color(al_map_rgb(0,0,0));
         al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);
     }
-    void DrawCut(int frame)
+    void Graphics::DrawCut(int frame)
     {
         DrawMap(true);
         al_set_target_bitmap(buffer);
@@ -501,16 +475,15 @@ public:
         al_clear_to_color(al_map_rgb(0,0,0));
         al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);
     }
-    ~Graphics()
+    Graphics::~Graphics()
     {
         if (allocata)
         {
             for (int i=0;i<x;i++)
-                delete griglia[i];
-            delete [] griglia;
+                delete grid[i];
+            delete [] grid;
         }
         al_destroy_bitmap(buffer);
         for (int i=0;i<staticBitmaps.size();i++)
             al_destroy_bitmap(staticBitmaps[i]);
     }
-};

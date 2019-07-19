@@ -1,50 +1,25 @@
-#include <list>
-const int h=560;
-const int l=500;
-const int hMat=560/20-1;
-const int lMat=500/20-1;
-//le X sono le Y. CAMBIALE!
-enum directions { RIGHT = 0, LEFT};
+#include "../Headers/Entities.hpp"
 
-class Entity
-{
-protected:
-    int x;
-    int y;
-    int** griglia=NULL;
-    int frame;
-    bool falling;
-    bool ladderstate;
-    directions direction;
-public:
-    Entity(int a, int b,int** c):x(a),y(b),griglia(c),frame(0),falling(false),ladderstate(false), direction(RIGHT){}         //coordinate in pixel dell'entità e puntatore della matrice su cui deve muoversi
-    int getX(){return x;}
-    int getY(){return y;}
-    int getFrame(){return frame;}
-    void setFrame(int a){frame=a;}
-    bool isFalling() {return falling;}
-    bool getLadderstate() {return ladderstate;}
-    directions getDirection(){return direction;}
-    bool operator== (Entity* a)
+    Entity::Entity(int a, int b,int** c):x(a),y(b),grid(c),frame(0),falling(false),ladderstate(false), direction(RIGHT){}         //coordinate in pixel dell'entità e puntatore della matrice su cui deve muoversi
+    int Entity::getX(){return x;}
+    int Entity::getY(){return y;}
+    int Entity::getFrame(){return frame;}
+    void Entity::setFrame(int a){frame=a;}
+    bool Entity::isFalling() {return falling;}
+    bool Entity::getLadderstate() {return ladderstate;}
+    directions Entity::getDirection(){return direction;}
+    bool Entity::operator== (Entity* a)
     {
         return (a->getX()==x and a->getY()==y);
     }
-};
 
 
-class Player: public Entity
-{
-private:
-    int jumpstate;
-    bool morto;
-    bool martello, hammered;
-public:
-    Player(int** c):Entity(520,180,c),jumpstate(0), morto(false), martello(false), hammered(false){}
-    void MoveUp()
+    Player::Player(int** c):Entity(520,180,c),jumpstate(0), dead(false), hammer(false), hammered(false){}
+    void Player::MoveUp()
     {      
-        if (morto or falling or jumpstate>0 or martello or x-1<0)
+        if (dead or falling or jumpstate>0 or hammer or x-1<0)
             return;
-        if(griglia[(x/20)][y/20]==1 or griglia[x/20][y/20]==2 and griglia[(x/20)-1][y/20]==0 or ladderstate)
+        if(grid[(x/20)][y/20]==1 or grid[x/20][y/20]==2 and grid[(x/20)-1][y/20]==0 or ladderstate)
         {
             if (!ladderstate)
             {
@@ -64,13 +39,13 @@ public:
                 frame++;
         }
     }
-    void MoveDown()
+    void Player::MoveDown()
     {        
-        if (morto or falling or jumpstate>0 or martello)
+        if (dead or falling or jumpstate>0 or hammer)
             return;
-        if (griglia[x/20][y/20]==1 and griglia[(x/20)+1][y/20]==2)
+        if (grid[x/20][y/20]==1 and grid[(x/20)+1][y/20]==2)
             ladderstate=false;
-        if(griglia[x/20][x/20]==0 and griglia[(x/20)+1][y/20]==2 and griglia[(x/20)+2][y/20]==1 and griglia[(x/20)+3][y/20]==1 or ladderstate)
+        if(grid[x/20][x/20]==0 and grid[(x/20)+1][y/20]==2 and grid[(x/20)+2][y/20]==1 and grid[(x/20)+3][y/20]==1 or ladderstate)
         {
             if (!ladderstate)
             {
@@ -90,17 +65,17 @@ public:
                 frame++;        
         }                     
     }
-    void MoveLeft()
+    void Player::MoveLeft()
     {
-        if (morto or hammered)
+        if (dead or hammered)
             return;
-        if (falling and griglia[(x/20)+1][y/20]==0 and griglia[(x/20)+2][y/20]==0 and griglia[(x/20)+3][y/20]==0) //per evitare che
+        if (falling and grid[(x/20)+1][y/20]==0 and grid[(x/20)+2][y/20]==0 and grid[(x/20)+3][y/20]==0) //per evitare che
             return;                                                                                               //si muova troppo        
-        if (ladderstate or (y/20)-1<0 or griglia[x/20][(y/20)-1]==2)                                              //durante la caduta   
+        if (ladderstate or (y/20)-1<0 or grid[x/20][(y/20)-1]==2)                                              //durante la caduta   
             return;
         direction = LEFT;
             y-=3;
-        if (ladderstate and griglia[x/20][(y/20)-1]==0)
+        if (ladderstate and grid[x/20][(y/20)-1]==0)
             ladderstate=false;
         
         
@@ -116,7 +91,7 @@ public:
                 else
                     frame++;
             }
-            else if(martello)
+            else if(hammer)
             {
                 frame = 16;
                 return;
@@ -124,7 +99,7 @@ public:
             else
                 frame=38;
         }
-        else if(martello)
+        else if(hammer)
         {
             frame = 16;
             return;
@@ -132,15 +107,15 @@ public:
         else
             frame=40;
     }
-    void MoveRight() 
+    void Player::MoveRight() 
     {
-        if(morto or hammered)
+        if(dead or hammered)
             return;
-        if (falling and griglia[(x/20)-1][y/20]==0 and griglia[(x/20)-2][y/20]==0 and griglia[(x/20)-3][y/20]==0) //per evitare che
+        if (falling and grid[(x/20)-1][y/20]==0 and grid[(x/20)-2][y/20]==0 and grid[(x/20)-3][y/20]==0) //per evitare che
             return;                                                                                               //si muova troppo         
-        if (ladderstate or (y/20)+1>lMat or griglia[x/20][(y/20)+1]==2)                                             //durante la caduta
+        if (ladderstate or (y/20)+1>lMat or grid[x/20][(y/20)+1]==2)                                             //durante la caduta
             return;
-        if (ladderstate and griglia[x/20][(y/20)+1]==0)
+        if (ladderstate and grid[x/20][(y/20)+1]==0)
             ladderstate=false;
         direction = RIGHT;
         y+=3;
@@ -158,30 +133,30 @@ public:
                 else
                     frame++;
             }
-            else if(martello)
+            else if(hammer)
                 frame = 0;
             else
                 frame=37;
         }
-        else if(martello)
+        else if(hammer)
             frame = 0;
         else
             frame=39;
     }
-    void Jump()
+    void Player::Jump()
     {
-        if(morto or martello)
+        if(dead or hammer)
             return;
         if (falling or jumpstate>0 or ladderstate)
             return;
         jumpstate=1;
     }
-    void HandleGravity()
+    void Player::HandleGravity()
     {  
         if (falling and jumpstate==0)
         {
             ladderstate=false;
-            if (griglia[(x/20)+1][y/20]==2 or griglia[(x/20)+1][(y/20)+1]==2 and griglia[x/20][(y/20)+1]==0)
+            if (grid[(x/20)+1][y/20]==2 or grid[(x/20)+1][(y/20)+1]==2 and grid[x/20][(y/20)+1]==0)
             {
                 falling=false;
                 return;
@@ -190,7 +165,7 @@ public:
         }
         if (!falling and jumpstate>0)
         {
-            if (griglia[x/20][y/20]!=2)
+            if (grid[x/20][y/20]!=2)
                 x-=3;
             jumpstate++;
             if (jumpstate==11)
@@ -200,64 +175,58 @@ public:
                 return;
             }
         }
-        /*if (griglia[x/20][y/20]==2 and jumpstate>0 and griglia[(x/20)+1][y/20]==0)
+        /*if (grid[x/20][y/20]==2 and jumpstate>0 and grid[(x/20)+1][y/20]==0)
         {    falling=true; x+=9; jumpstate=0;}   //se rimane bloccato sul blocco*/
-        if (griglia[(x/20)+1][((y+19)/20)]==0 and jumpstate==0 and direction == RIGHT) //se sotto ha il vuoto
+        if (grid[(x/20)+1][((y+19)/20)]==0 and jumpstate==0 and direction == RIGHT) //se sotto ha il vuoto
             falling=true;
-        else if (griglia[(x/20)+1][(y/20)+1]==0 and jumpstate==0 and direction == LEFT)
+        else if (grid[(x/20)+1][(y/20)+1]==0 and jumpstate==0 and direction == LEFT)
             falling=true;
     }
 
-    void setMorto(bool m){morto = m;}
-    bool getMorto(){return morto;}
-    void setMartello(bool c){martello = c;}
-    bool getMartello(){return martello;}
-    void setHammered(bool h){hammered = h;}
-    bool getHammered(){return hammered;}
-    bool getJump(){return jumpstate>0;}
+    void Player::setDead(bool m){dead = m;}
+    bool Player::getDead(){return dead;}
+    void Player::setHammer(bool c){hammer = c;}
+    bool Player::getHammer(){return hammer;}
+    void Player::setHammered(bool h){hammered = h;}
+    bool Player::getHammered(){return hammered;}
+    bool Player::getJump(){return jumpstate>0;}
 
 
-};
 
 
-class Barrel:public Entity
-{
-private:
-    bool stop;
-    bool jumped;
-public:
-    Barrel(int** c):Entity(120,110,c),stop(false),jumped(false){};
-    void roll()
+
+    Barrel::Barrel(int** c):Entity(120,110,c),stop(false),jumped(false){};
+    void Barrel::roll()
     {
         if (falling or stop)
             return;
         if (direction==RIGHT)
         {    
             y+=5;
-            if ((y/20)+1>lMat or griglia[x/20][(y+20)/20]==2)
+            if ((y/20)+1>lMat or grid[x/20][(y+20)/20]==2)
                 direction=LEFT;
         }
         else
         {
             y-=5;
-            if ((y/20)-1<0 or griglia[x/20][(y-20)/20]==2)
+            if ((y/20)-1<0 or grid[x/20][(y-20)/20]==2)
                 direction=RIGHT;
         }
     }
-    void HandleGravity()
+    void Barrel::HandleGravity()
     {
         if (x/20==26 and y/20==2)
             stop=true;
         if (falling)
         {
             x+=4;
-            if (griglia[(x/20)+1][y/20]==2)
+            if (grid[(x/20)+1][y/20]==2)
             {
                 falling=false;
             }
             return; 
         }
-        else if (griglia[(x/20)+1][y/20]==0)
+        else if (grid[(x/20)+1][y/20]==0)
         {
             falling=true;
             if (direction==RIGHT)
@@ -269,7 +238,7 @@ public:
             }
             return;
         }           
-        if ((x/20)+2<=hMat and griglia[(x/20)+2][y/20]==1)
+        if ((x/20)+2<=hMat and grid[(x/20)+2][y/20]==1)
         {
             int a=rand()%100;            
             if (a>=75)
@@ -287,28 +256,20 @@ public:
             }
         }
     }
-    bool getStop(){return stop;}
-    bool getJumped(){return jumped;}
-    void setJumped(bool j){jumped = j;}
-    void nextFrame(){frame++;}
-};
+    bool Barrel::getStop(){return stop;}
+    bool Barrel::getJumped(){return jumped;}
+    void Barrel::setJumped(bool j){jumped = j;}
+    void Barrel::nextFrame(){frame++;}
 
 
-class Kong: public Entity
-{
-    float difficolta;
-    int lancia;
-public:
-    Kong(int** c, float d):Entity(80,60,c), difficolta(d), lancia(81*d){};
-    void resetFrame(){frame=1;}
-    void nextFrame()
+    Kong::Kong(int** c, float d):Entity(80,60,c), difficulty(d), launch(81*d){};
+    void Kong::resetFrame(){frame=1;}
+    void Kong::nextFrame()
     {
-        if (frame<difficolta*100)
+        if (frame<difficulty*100)
             frame++;
         else
             frame = 1;        
     }
-    int getLancia(){return lancia;}
-    float getDifficolta(){return difficolta;}
-
-};
+    int Kong::getLaunch(){return launch;}
+    float Kong::getDifficulty(){return difficulty;}
