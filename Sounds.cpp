@@ -1,5 +1,4 @@
-#include "../Headers/Sounds.hpp"
-
+#include "Sounds.hpp"
     Sounds::Sounds()
     {
         al_reserve_samples(10);
@@ -60,6 +59,14 @@
     {
         if (al_get_sample_instance_playing(menuInstance))
             al_stop_sample_instance(menuInstance);
+    }
+    void Sounds::pauseMenu()
+    {
+        al_set_sample_instance_playing(menuInstance,false);
+    }
+    void Sounds::resumeMenu()
+    {
+        al_set_sample_instance_playing(menuInstance,true);
     }
     Sounds::~Sounds()
     {

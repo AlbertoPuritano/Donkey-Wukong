@@ -1,4 +1,4 @@
-#include "../Headers/Game.hpp"
+#include "Game.cpp"
 #include <allegro5/allegro.h>
 #include <stdio.h>
 

@@ -1,5 +1,4 @@
-#include "../Headers/Game.hpp"
-
+#include "Game.hpp"
     Game::Game(Graphics* g,Sounds* s):SoundManager(s),GraphicManager(g),difficulty(1.0),muted(false){}
     
     int Game::runMenu(ALLEGRO_TIMER* timer, ALLEGRO_EVENT_QUEUE* queue)
@@ -69,7 +68,7 @@
         if (!muted)
             SoundManager->startNewGame();
         list <Barrel> Barili;
-        Barrel Bar(GraphicManager->grid);
+        Barrel Bar(GraphicManager->griglia);
         int addpunteggiomartello=0;
         int addpunteggiobarile=0;
         pair <int,int> segnaCancellazione;
@@ -88,9 +87,9 @@
             memset(key, 0, sizeof(key));
             al_flush_event_queue(queue);
             hammerTime=0;
-            Player* Play= new Player(GraphicManager->grid);
-            Kong* Wukong = new Kong(GraphicManager->grid, difficulty);
-            Entity* Peach= new Entity(60,220,GraphicManager->grid);
+            Player* Play= new Player(GraphicManager->griglia);
+            Kong* Wukong = new Kong(GraphicManager->griglia, difficulty);
+            Entity* Peach= new Entity(60,220,GraphicManager->griglia);
             auto temp=Barili.begin();
             bool done = false;
             bool redraw = true;
@@ -141,7 +140,7 @@
                             complete=true;          //LEVEL SKIPPER CHEAT
                             done=true;
                         }
-                        if(key[ALLEGRO_KEY_LSHIFT] and Play->getHammer())
+                        if(key[ALLEGRO_KEY_LSHIFT] and Play->getMartello())
                         {
                             Play->setHammered(true);
                             hTime++;
@@ -153,8 +152,8 @@
 
 
                         Play->HandleGravity(); 
-                        if(Play -> getX()/20 == 21 and Play -> getY()/20 == 17 and Play->getHammer()==false and hammerTime == 0)//prende il martello.
-                            Play -> setHammer(true);    
+                        if(Play -> getX()/20 == 21 and Play -> getY()/20 == 17 and Play->getMartello()==false and hammerTime == 0)//prende il martello.
+                            Play -> setMartello(true);    
                         if(hTime < 30)
                             hTime++;
                         else
@@ -163,11 +162,11 @@
                             Play->setHammered(false);
                         }
                     
-                        if(Play->getHammer())
+                        if(Play->getMartello())
                             hammerTime++;
-                        if(hammerTime > 325 and Play->getHammer())
-                            Play->setHammer(false);    
-                        if (Wukong->getLaunch() == Wukong->getFrame())
+                        if(hammerTime > 325 and Play->getMartello())
+                            Play->setMartello(false);    
+                        if (Wukong->getLancia() == Wukong->getFrame())
                         {    
                             Barili.push_back(Bar);
                             Wukong->nextFrame();
@@ -182,7 +181,7 @@
                                 SoundManager->stopSamples();
                                 if (!muted)
                                     SoundManager->playDeath();
-                                Play->setDead(true);
+                                Play->setMorto(true);
                                 al_rest(4);
                                 done=true;
                             }
@@ -254,14 +253,14 @@
                     GraphicManager->DrawStaticBarrels();
                     GraphicManager->DrawKong(Wukong);
                     GraphicManager->DrawExplosive(frameExpl);
-                    if(Play->getHammer() and Play->getFrame() <= 30)
+                    if(Play->getMartello() and Play->getFrame() <= 30)
                         GraphicManager->DrawPlayerHammer(Play);                    
                     else
                         GraphicManager->DrawPlayer(Play);
                     
                     for (auto i=Barili.begin();i!=Barili.end();i++)   
                         GraphicManager->DrawBarrel(*i);
-                    if(Play->getHammer()==false and hammerTime <200)
+                    if(Play->getMartello()==false and hammerTime <200)
                         GraphicManager->DrawHammer();
                     GraphicManager->DrawScore(score);
                     if (addpunteggiomartello>0)
@@ -274,7 +273,7 @@
                         GraphicManager->DrawInstantScore(2,Play->getX()-9,Play->getY());
                         addpunteggiobarile--;
                     }
-                    GraphicManager->DrawClear(segnaCancellazione.first,segnaCancellazione.second); 
+                    GraphicManager->DrawCancella(segnaCancellazione.first,segnaCancellazione.second); 
                     GraphicManager->DrawLives(vite);
                     al_flip_display();
                     redraw = false;
@@ -321,12 +320,12 @@
                         if (muted)
                         {
                             muted=false;
-                            SoundManager->playMenu();
+                            SoundManager->pauseMenu();
                         }
                         else
                         {
                             muted=true;
-                            SoundManager->stopMenu();
+                            SoundManager->resumeMenu();
                         }
                     }
                     break;
@@ -395,4 +394,4 @@
                     done=true;
             }
         }
-    }
+    }  

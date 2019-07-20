@@ -1,10 +1,11 @@
-#include "../Headers/Graphics.hpp"
+#include "Graphics.hpp"
 
-    Graphics::Graphics (ALLEGRO_DISPLAY* display,ALLEGRO_BITMAP* buffer,int scaleX, int scaleY,int scaleW,int scaleH,ALLEGRO_FONT* font,ALLEGRO_FONT* fontscore)
+    
+    Graphics::Graphics (ALLEGRO_DISPLAY* display,ALLEGRO_BITMAP* buffer,int scaleX, int scaleY,int scaleW,int scaleH,ALLEGRO_FONT* font,ALLEGRO_FONT* fontpunteggio)
     {
         allocata=false;
         this->font=font;
-        this->fontscore=fontscore;
+        this->fontpunteggio=fontpunteggio;
         this->scaleH = scaleH;
         this->scaleW = scaleW;
         this->scaleX = scaleX;
@@ -27,20 +28,20 @@
         if (allocata)
         {
             for (int i=0;i<x;i++)
-                delete grid[i];
-            delete [] grid;
+                delete griglia[i];
+            delete [] griglia;
         }
         ifstream fileinput;
         fileinput.open(string("Assets/Maps/level" +to_string(livello)+ ".txt"));
         if (!fileinput)
             cout<<"could not initialize level "<<livello<<endl;
         fileinput>> x >> y;
-        grid= new int* [x];
+        griglia= new int* [x];
         for (int i=0;i<x;i++)
-            grid[i]=new int [y];
+            griglia[i]=new int [y];
         for (int i=0;i<x;i++)
             for (int j=0;j<y;j++)
-                fileinput>>grid[i][j];
+                fileinput>>griglia[i][j];
         fileinput.close();
         allocata=true;       
     }
@@ -52,7 +53,7 @@
         {
             for (int j=0;j<y;j++)
             {
-                switch (grid[i][j])
+                switch (griglia[i][j])
                 {
                     case 1:
                         al_draw_bitmap(staticBitmaps[0],j*20,i*20,0);
@@ -146,13 +147,13 @@
     void Graphics::DrawKong(Kong* Wukong)
     {
         al_set_target_bitmap(buffer);
-        if (Wukong->getFrame()>0 and Wukong->getFrame()<=Wukong->getDifficulty()*20)
+        if (Wukong->getFrame()>0 and Wukong->getFrame()<=Wukong->getDifficolta()*20)
             bitmap= al_load_bitmap("Assets/Bitmaps/Kong/kong1.png");
-        else if (Wukong->getFrame()>Wukong->getDifficulty()*20 and Wukong->getFrame()<=Wukong->getDifficulty()*40)
+        else if (Wukong->getFrame()>Wukong->getDifficolta()*20 and Wukong->getFrame()<=Wukong->getDifficolta()*40)
             bitmap= al_load_bitmap("Assets/Bitmaps/Kong/kong2.png");
-        else if (Wukong->getFrame()>Wukong->getDifficulty()*40 and Wukong->getFrame()<=Wukong->getDifficulty()*60)
+        else if (Wukong->getFrame()>Wukong->getDifficolta()*40 and Wukong->getFrame()<=Wukong->getDifficolta()*60)
             bitmap= al_load_bitmap("Assets/Bitmaps/Kong/kong3.png");
-        else if (Wukong->getFrame()>Wukong->getDifficulty()*60 and Wukong->getFrame()<=Wukong->getDifficulty()*80)
+        else if (Wukong->getFrame()>Wukong->getDifficolta()*60 and Wukong->getFrame()<=Wukong->getDifficolta()*80)
             bitmap= al_load_bitmap("Assets/Bitmaps/Kong/kong4.png");
         else
             bitmap= al_load_bitmap("Assets/Bitmaps/Kong/kong5.png");
@@ -298,7 +299,7 @@
         al_set_target_backbuffer(display);
         al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);
     }
-    void Graphics::DrawClear(int& x,int& y)
+    void Graphics::DrawCancella(int& x,int& y)
     {
         if (x==0 and y==0)
             return;
@@ -315,8 +316,8 @@
     void Graphics::DrawScore (int score)
     {  
         al_set_target_bitmap(buffer);
-        al_draw_textf(fontscore,al_map_rgb(255,255,255),315,50,0," SCORE");
-        al_draw_textf(fontscore,al_map_rgb(255,0,0),329,75,0,"%d",score);
+        al_draw_textf(fontpunteggio,al_map_rgb(255,255,255),315,50,0," SCORE");
+        al_draw_textf(fontpunteggio,al_map_rgb(255,0,0),329,75,0,"%d",score);
         al_set_target_backbuffer(display);
         al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);
     }
@@ -480,8 +481,8 @@
         if (allocata)
         {
             for (int i=0;i<x;i++)
-                delete grid[i];
-            delete [] grid;
+                delete griglia[i];
+            delete [] griglia;
         }
         al_destroy_bitmap(buffer);
         for (int i=0;i<staticBitmaps.size();i++)
