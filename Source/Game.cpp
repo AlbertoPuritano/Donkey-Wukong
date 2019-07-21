@@ -1,4 +1,4 @@
-#include "Game.hpp"
+#include "../Headers/Game.hpp"
     Game::Game(Graphics* g,Sounds* s):SoundManager(s),GraphicManager(g),difficulty(1.0),muted(false){}
     
     int Game::runMenu(ALLEGRO_TIMER* timer, ALLEGRO_EVENT_QUEUE* queue)

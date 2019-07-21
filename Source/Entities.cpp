@@ -1,4 +1,4 @@
-#include "Entities.hpp"
+#include "../Headers/Entities.hpp"
     Entity::Entity(int a, int b,int** c):x(a),y(b),griglia(c),frame(0),falling(false),ladderstate(false), direction(RIGHT){} ;        //coordinate in pixel dell'entità e puntatore della matrice su cui deve muoversi
     int Entity::getX(){return x;}
     int Entity::getY(){return y;}

@@ -1,4 +1,4 @@
-#include "Graphics.hpp"
+#include "../Headers/Graphics.hpp"
 
     
     Graphics::Graphics (ALLEGRO_DISPLAY* display,ALLEGRO_BITMAP* buffer,int scaleX, int scaleY,int scaleW,int scaleH,ALLEGRO_FONT* font,ALLEGRO_FONT* fontpunteggio)

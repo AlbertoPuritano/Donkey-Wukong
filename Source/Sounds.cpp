@@ -1,4 +1,4 @@
-#include "Sounds.hpp"
+#include "../Headers/Sounds.hpp"
     Sounds::Sounds()
     {
         al_reserve_samples(10);
