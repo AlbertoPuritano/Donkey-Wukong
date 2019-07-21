@@ -4,7 +4,7 @@
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_image.h>
 #include <iostream>
-#include "Entities.cpp"
+#include "Entities.hpp"
 #include <vector>  
 using namespace std;
 

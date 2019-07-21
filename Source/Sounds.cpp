@@ -2,13 +2,13 @@
     Sounds::Sounds()
     {
         al_reserve_samples(10);
-        newgame = al_load_sample("Assets/Audio/newgame.wav");
-        death = al_load_sample("Assets/Audio/morte.wav");
-        mammamia = al_load_sample("Assets/Audio/MammaMiaPizzeria.wav");
-        walking = al_load_sample("Assets/Audio/walking.wav");
-        jump = al_load_sample("Assets/Audio/jump.wav");
-        menu= al_load_sample("Assets/Audio/menu.wav");
-        hammer=al_load_sample("Assets/Audio/hammer.wav");
+        newgame = al_load_sample("../Assets/Audio/newgame.wav");
+        death = al_load_sample("../Assets/Audio/morte.wav");
+        mammamia = al_load_sample("../Assets/Audio/MammaMiaPizzeria.wav");
+        walking = al_load_sample("../Assets/Audio/walking.wav");
+        jump = al_load_sample("../Assets/Audio/jump.wav");
+        menu= al_load_sample("../Assets/Audio/menu.wav");
+        hammer=al_load_sample("../Assets/Audio/hammer.wav");
         walkingInstance = al_create_sample_instance(walking);
         jumpInstance= al_create_sample_instance(jump);
         hammerInstance=al_create_sample_instance(hammer);

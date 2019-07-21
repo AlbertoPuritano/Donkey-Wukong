@@ -1,6 +1,5 @@
-#ifndef ENTITIES_H
-#define ENTITIES_H
 #include <list>
+#include <cstdlib>
 const int h=560;
 const int l=500;
 const int hMat=560/20-1;
@@ -13,7 +12,7 @@ class Entity
 protected:
     int x;
     int y;
-    int** grid=NULL;
+    int** griglia=NULL;
     int frame;
     bool falling;
     bool ladderstate;
@@ -35,8 +34,8 @@ class Player: public Entity
 {
 private:
     int jumpstate;
-    bool dead;
-    bool hammer, hammered;
+    bool morto;
+    bool martello, hammered;
 public:
     Player(int** c);
     void MoveUp();
@@ -45,10 +44,10 @@ public:
     void MoveRight();
     void Jump();
     void HandleGravity();
-    void setDead(bool m);
-    bool getDead();
-    void setHammer(bool c);
-    bool getHammer();
+    void setMorto(bool m);
+    bool getMorto();
+    void setMartello(bool c);
+    bool getMartello();
     void setHammered(bool h);
     bool getHammered();
     bool getJump();
@@ -73,13 +72,12 @@ public:
 
 class Kong: public Entity
 {
-    float difficulty;
-    int launch;
+    float difficolta;
+    int lancia;
 public:
     Kong(int** c, float d);
     void resetFrame();
     void nextFrame();
-    int getLaunch();
-    float getDifficulty();
+    int getLancia();
+    float getDifficolta();
 };
-#endif

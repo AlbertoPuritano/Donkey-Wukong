@@ -1,5 +1,3 @@
-#ifndef SOUNDS_H
-#define SOUNDS_H
 #include <iostream>
 #include <allegro5/allegro5.h>
 #include <allegro5/allegro_audio.h>
@@ -31,6 +29,7 @@ class Sounds
     void playMenu();
     void stopSamples();
     void stopMenu();
+    void pauseMenu();
+    void resumeMenu();
     ~Sounds();
 };
-#endif

@@ -1,15 +1,6 @@
-#ifndef GAME_H
-#define GAME_H
 #include "Sounds.hpp"
 #include "Graphics.hpp"
-#include "Entities.hpp"
-#include <allegro5/allegro5.h>
-#include <allegro5/allegro_image.h>
-#include <allegro5/allegro_audio.h>
-#include <allegro5/allegro_acodec.h>
 #include <ctime>
-#include <list>
-#include <iostream>
 
 class Game
 {
@@ -21,11 +12,10 @@ private:
     bool muted;
 public:
     Game(Graphics* g,Sounds* s);
-    
     int runMenu(ALLEGRO_TIMER* timer, ALLEGRO_EVENT_QUEUE* queue);
-    bool runGame(ALLEGRO_TIMER* timer, ALLEGRO_EVENT_QUEUE* queue,int& lifes,int& livello,int &score);
+    
+    bool runGame(ALLEGRO_TIMER* timer, ALLEGRO_EVENT_QUEUE* queue,int& vite,int& livello,int &score); 
     void runOptions(ALLEGRO_TIMER* timer, ALLEGRO_EVENT_QUEUE* queue);
     void runStatic(ALLEGRO_EVENT_QUEUE* queue,int a);
     void runCut(ALLEGRO_EVENT_QUEUE* queue,ALLEGRO_TIMER* timer,int frame);
 };
-#endif

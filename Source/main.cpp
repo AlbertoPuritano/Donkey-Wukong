@@ -1,4 +1,4 @@
-#include "Game.cpp"
+#include "Game.hpp"
 #include <allegro5/allegro.h>
 #include <stdio.h>
 
@@ -27,7 +27,7 @@ int main(int argv,char** argc)
     must_init(al_init_ttf_addon(), "ttf");
     ALLEGRO_FONT* font = al_create_builtin_font();
     must_init(font, "fonts");
-    ALLEGRO_FONT* fontpunteggio=al_load_ttf_font("Assets/Fonts/slkscr.ttf", 30, 0);
+    ALLEGRO_FONT* fontpunteggio=al_load_ttf_font("../Assets/Fonts/slkscr.ttf", 30, 0);
     must_init(fontpunteggio,"fontpunteggio");
 
 

@@ -1,5 +1,3 @@
-#ifndef GRAPHICS_H
-#define GRAPHICS_H
 #include <fstream>
 #include <allegro5/allegro5.h>
 #include <allegro5/allegro_font.h> 
@@ -21,15 +19,15 @@ private:
     ALLEGRO_BITMAP * buffer;
     ALLEGRO_BITMAP* bitmap;
     ALLEGRO_FONT* font;
-    ALLEGRO_FONT* fontscore;
+    ALLEGRO_FONT* fontpunteggio;
     vector <ALLEGRO_BITMAP*> staticBitmaps;  
     int x;
     int y;
     bool allocata;
 public:
-    int** grid = NULL;
-    Graphics (ALLEGRO_DISPLAY* display,ALLEGRO_BITMAP* buffer,int scaleX, int scaleY,int scaleW,int scaleH,ALLEGRO_FONT* font,ALLEGRO_FONT* fontscore);
-    void assegnaGriglia(int level);
+    int** griglia = NULL;
+    Graphics (ALLEGRO_DISPLAY* display,ALLEGRO_BITMAP* buffer,int scaleX, int scaleY,int scaleW,int scaleH,ALLEGRO_FONT* font,ALLEGRO_FONT* fontpunteggio);
+    void assegnaGriglia(int livello);
     void DrawMap (bool cutscene);
     void DrawHammer();
     void DrawPlayerHammer(Player* Play);
@@ -40,13 +38,12 @@ public:
     void DrawBarrel(Barrel& Bar);
     void DrawPeach(Entity* Peach);
     void DrawMenu(short unsigned n);
-    void DrawInstantScore(int opt, int x, int y);
-    void DrawClear(int& x,int& y);
+    void DrawInstantScore(int opt,int x,int y);
+    void DrawCancella(int& x,int& y);
     void DrawScore (int score);
-    void DrawLives(int lifes);
+    void DrawLives(int vite);
     void DrawOptions(int n,float difficulty);
     void DrawImage(int a);
     void DrawCut(int frame);
     ~Graphics();
 };
-#endif
