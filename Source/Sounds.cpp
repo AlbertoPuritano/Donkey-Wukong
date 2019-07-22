@@ -9,6 +9,8 @@
         jump = al_load_sample("../Assets/Audio/jump.wav");
         menu= al_load_sample("../Assets/Audio/menu.wav");
         hammer=al_load_sample("../Assets/Audio/hammer.wav");
+        press=al_load_sample("../Assets/Audio/press.wav");
+        back=al_load_sample("../Assets/Audio/back.wav");
         walkingInstance = al_create_sample_instance(walking);
         jumpInstance= al_create_sample_instance(jump);
         hammerInstance=al_create_sample_instance(hammer);
@@ -25,8 +27,6 @@
     }
     void Sounds::playHammer()
     {
-        if(al_get_sample_instance_playing(walkingInstance))
-                al_stop_sample_instance(walkingInstance);
         if (!al_get_sample_instance_playing(hammerInstance))
          	al_play_sample_instance(hammerInstance);
     }
@@ -42,21 +42,23 @@
 
     void Sounds::playWalking()
     {
-        if (!al_get_sample_instance_playing(walkingInstance))
+        if (!al_get_sample_instance_playing(walkingInstance) and !al_get_sample_instance_playing(jumpInstance) and !al_get_sample_instance_playing(hammerInstance))
          	al_play_sample_instance(walkingInstance);
     }
 
     void Sounds::playJump()
     {
-     //   if(al_get_sample_instance_playing(walkingInstance))
-                {al_stop_sample_instance(walkingInstance);cout << " ho stoppato";}
-        if (!al_get_sample_instance_playing(jumpInstance))   
+        if (!al_get_sample_instance_playing(jumpInstance))    
             al_play_sample_instance(jumpInstance);        
     }
     void Sounds::playMenu()
     {
-        if (!al_get_sample_instance_playing(menuInstance))   
+        if (!al_get_sample_instance_playing(menuInstance))
+        { 
             al_play_sample_instance(menuInstance);
+            al_set_sample_instance_playmode(menuInstance,ALLEGRO_PLAYMODE_LOOP);
+            al_set_sample_instance_gain(menuInstance,0.6);
+        }
     }
     void Sounds::stopSamples(){al_stop_samples();}
     void Sounds::stopMenu()
@@ -64,13 +66,13 @@
         if (al_get_sample_instance_playing(menuInstance))
             al_stop_sample_instance(menuInstance);
     }
-    void Sounds::pauseMenu()
+    void Sounds::playPress()
     {
-        al_set_sample_instance_playing(menuInstance,false);
+        al_play_sample(press, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
     }
-    void Sounds::resumeMenu()
+    void Sounds::playBack()
     {
-        al_set_sample_instance_playing(menuInstance,true);
+        al_play_sample(back, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);        
     }
     Sounds::~Sounds()
     {
@@ -84,5 +86,7 @@
         al_destroy_sample(menu);
         al_destroy_sample_instance(hammerInstance);
         al_destroy_sample(hammer);
+        al_destroy_sample(press);
+        al_destroy_sample(back);
         al_uninstall_audio();
     }

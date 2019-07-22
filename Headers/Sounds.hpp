@@ -13,6 +13,8 @@ class Sounds
         ALLEGRO_SAMPLE* jump;
         ALLEGRO_SAMPLE* menu;
         ALLEGRO_SAMPLE* hammer;
+        ALLEGRO_SAMPLE* press;
+        ALLEGRO_SAMPLE* back;
         ALLEGRO_SAMPLE_INSTANCE* walkingInstance;
         ALLEGRO_SAMPLE_INSTANCE* jumpInstance;
         ALLEGRO_SAMPLE_INSTANCE* hammerInstance;
@@ -29,7 +31,7 @@ class Sounds
     void playMenu();
     void stopSamples();
     void stopMenu();
-    void pauseMenu();
-    void resumeMenu();
+    void playPress();
+    void playBack();
     ~Sounds();
 };

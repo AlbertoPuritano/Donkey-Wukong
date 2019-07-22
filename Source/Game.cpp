@@ -3,6 +3,7 @@
     
     int Game::runMenu(ALLEGRO_TIMER* timer, ALLEGRO_EVENT_QUEUE* queue)
     {        
+        al_flush_event_queue(queue);
         SoundManager->stopSamples();
         if (!muted)
             SoundManager->playMenu();
@@ -21,9 +22,17 @@
                     break;
                 case ALLEGRO_EVENT_KEY_CHAR:
                     if(event.keyboard.keycode==ALLEGRO_KEY_UP and state!=0)
+                    {
                         state--;
+                        if (!muted)
+                            SoundManager->playPress();
+                    }
                     if(event.keyboard.keycode==ALLEGRO_KEY_DOWN and state!=3)
+                    {
                         state++;
+                        if (!muted)
+                            SoundManager->playPress();
+                    }
                     if (event.keyboard.keycode==ALLEGRO_KEY_ENTER and state==0)                       
                         return 1;
                     if (event.keyboard.keycode==ALLEGRO_KEY_ENTER and state==1)
@@ -55,12 +64,12 @@
     }
     
     
-    bool Game::runGame(ALLEGRO_TIMER* timer, ALLEGRO_EVENT_QUEUE* queue,int& vite,int& livello,int &score)
+    bool Game::runGame(ALLEGRO_TIMER* timer, ALLEGRO_EVENT_QUEUE* queue,int& lifes,int& level,int &score)
     {
         SoundManager->stopMenu();
-        if (livello==3)                     //nel livello 3 ci sono piu' barili
+        if (level==3)                     //nel level 3 ci sono piu' barili
             difficulty-=0.3;
-        GraphicManager->assegnaGriglia(livello);
+        GraphicManager->assignGrid(level);
         bool complete=false;
         unsigned hammerTime = 0;
         srand(time(0));
@@ -68,7 +77,7 @@
         if (!muted)
             SoundManager->startNewGame();
         list <Barrel> Barili;
-        Barrel Bar(GraphicManager->griglia);
+        Barrel Bar(GraphicManager->grid);
         int addpunteggiomartello=0;
         int addpunteggiobarile=0;
         pair <int,int> segnaCancellazione;
@@ -79,7 +88,7 @@
         #define KEY_RELEASED 2
         unsigned char key[ALLEGRO_KEY_MAX];
         memset(key, 0, sizeof(key));
-        while (vite!=0)
+        while (lifes!=0)
         {
             #define KEY_SEEN     1
             #define KEY_RELEASED 2
@@ -87,9 +96,9 @@
             memset(key, 0, sizeof(key));
             al_flush_event_queue(queue);
             hammerTime=0;
-            Player* Play= new Player(GraphicManager->griglia);
-            Kong* Wukong = new Kong(GraphicManager->griglia, difficulty);
-            Entity* Peach= new Entity(60,220,GraphicManager->griglia);
+            Player* Play= new Player(GraphicManager->grid);
+            Kong* Wukong = new Kong(GraphicManager->grid, difficulty);
+            Entity* Peach= new Entity(60,220,GraphicManager->grid);
             auto temp=Barili.begin();
             bool done = false;
             bool redraw = true;
@@ -133,7 +142,7 @@
                         if(key[ALLEGRO_KEY_ESCAPE])
                         {
                             done = true;                    
-                            vite=1;
+                            lifes=1;
                         }
                         if(key[ALLEGRO_KEY_TAB])
                         {
@@ -216,12 +225,12 @@
                             }
                             
                         }
-                        if (Play->getX()/20==Peach->getX()/20 and Play->getY()/20==Peach->getY()/20 and livello!=4)  //completa il livello
+                        if (Play->getX()/20==Peach->getX()/20 and Play->getY()/20==Peach->getY()/20 and level!=4)  //completa il level
                         {
                             complete=true;
                             done=true;
                         }
-                        if (Play->getX()/20==6 and Play->getY()/20==1 and livello==4)  //completa il gioco
+                        if (Play->getX()/20==6 and Play->getY()/20==1 and level==4)  //completa il gioco
                         {
                             complete=true;
                             done=true;
@@ -238,7 +247,7 @@
 
                     case ALLEGRO_EVENT_DISPLAY_CLOSE:
                         done = true;
-                        vite=1;
+                        lifes=1;
                         break;
             
                 }
@@ -273,8 +282,8 @@
                         GraphicManager->DrawInstantScore(2,Play->getX()-9,Play->getY());
                         addpunteggiobarile--;
                     }
-                    GraphicManager->DrawCancella(segnaCancellazione.first,segnaCancellazione.second); 
-                    GraphicManager->DrawLives(vite);
+                    GraphicManager->DrawDelete(segnaCancellazione.first,segnaCancellazione.second); 
+                    GraphicManager->DrawLives(lifes);
                     al_flip_display();
                     redraw = false;
                 }
@@ -282,9 +291,9 @@
             delete Play;    delete Wukong;    delete Peach;   Barili.clear();
             if (complete)
                 break;
-            vite--;
+            lifes--;
         }
-        if (livello==3)                 //difficoltà torna normale
+        if (level==3)                 //difficoltà torna normale
             difficulty+=0.3;
         SoundManager->stopSamples();
         return complete;
@@ -306,26 +315,48 @@
                     break;
                 case ALLEGRO_EVENT_KEY_CHAR:
                     if (event.keyboard.keycode==ALLEGRO_KEY_RIGHT and state!=1 and difficulty>=1)
+                    {
                         difficulty-=0.5;
+                        if (!muted)
+                            SoundManager->playPress();
+                    }
                     if (event.keyboard.keycode==ALLEGRO_KEY_LEFT and state!=1 and difficulty<=1)
+                    {
                         difficulty+=0.5;
+                        if (!muted)
+                            SoundManager->playPress();
+                    }
                     if (event.keyboard.keycode==ALLEGRO_KEY_UP and state!=0)
+                    {
                         state--;
+                        if (!muted)
+                            SoundManager->playPress();
+                    }
                     if (event.keyboard.keycode==ALLEGRO_KEY_DOWN and state!=1)
+                    {
                         state++;
+                        if (!muted)                
+                            SoundManager->playPress();
+                    }
                     if (event.keyboard.keycode==ALLEGRO_KEY_ENTER and state==1 or event.keyboard.keycode==ALLEGRO_KEY_ESCAPE)
+                    {
                         done=true;
+                        if (!muted)
+                            SoundManager->playBack();
+                        al_rest(0.3);
+                    }
                     if (event.keyboard.keycode==ALLEGRO_KEY_M)
                     {
+                        SoundManager->playPress();                        
                         if (muted)
                         {
                             muted=false;
-                            SoundManager->pauseMenu();
+                            SoundManager->playMenu();
                         }
                         else
                         {
                             muted=true;
-                            SoundManager->resumeMenu();
+                            SoundManager->stopMenu();
                         }
                     }
                     break;
@@ -347,20 +378,30 @@
     }
     void Game::runStatic(ALLEGRO_EVENT_QUEUE* queue,int a)
     {
+        al_flush_event_queue(queue);
         GraphicManager->DrawImage(a);
+        if (a==2 and !muted)
+            SoundManager->playMammaMia();
         al_flip_display();
         ALLEGRO_EVENT event;
         while (1)
         {
             al_wait_for_event(queue, &event);
             if (event.type==ALLEGRO_EVENT_KEY_DOWN)
+            {
+                if (!muted)
+                {
+                    SoundManager->playBack();
+                    al_rest(0.3);
+                }
                 return;
+            }
         }
     }
     void Game::runCut(ALLEGRO_EVENT_QUEUE* queue,ALLEGRO_TIMER* timer,int frame)
     {                          
         SoundManager->stopSamples();
-        GraphicManager->assegnaGriglia(0);
+        GraphicManager->assignGrid(0);
         ALLEGRO_EVENT event;
         al_start_timer(timer);
         bool done = false;

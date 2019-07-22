@@ -19,16 +19,16 @@ private:
     ALLEGRO_BITMAP * buffer;
     ALLEGRO_BITMAP* bitmap;
     ALLEGRO_FONT* font;
-    ALLEGRO_FONT* fontpunteggio;
+    ALLEGRO_FONT* fontScore;
     vector <ALLEGRO_BITMAP*> staticBitmaps;  
     int x;
     int y;
-    bool allocata;
+    bool allocated;
 public:
-    int** griglia = NULL;
-    Graphics (ALLEGRO_DISPLAY* display,ALLEGRO_BITMAP* buffer,int scaleX, int scaleY,int scaleW,int scaleH,ALLEGRO_FONT* font,ALLEGRO_FONT* fontpunteggio);
-    void assegnaGriglia(int livello);
-    void DrawMap (bool cutscene);
+    int** grid = NULL;
+    Graphics (ALLEGRO_DISPLAY* display,ALLEGRO_BITMAP* buffer,int scaleX, int scaleY,int scaleW,int scaleH,ALLEGRO_FONT* font,ALLEGRO_FONT* fontScore);
+    void assignGrid(int level);
+    void DrawMap (bool cutScene);
     void DrawHammer();
     void DrawPlayerHammer(Player* Play);
     void DrawPlayer(Player* Play);
@@ -39,9 +39,9 @@ public:
     void DrawPeach(Entity* Peach);
     void DrawMenu(short unsigned n);
     void DrawInstantScore(int opt,int x,int y);
-    void DrawCancella(int& x,int& y);
+    void DrawDelete(int& x,int& y);
     void DrawScore (int score);
-    void DrawLives(int vite);
+    void DrawLives(int lifes);
     void DrawOptions(int n,float difficulty);
     void DrawImage(int a);
     void DrawCut(int frame);

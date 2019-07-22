@@ -1,51 +1,51 @@
 #include "../Headers/Graphics.hpp"
 
     
-    Graphics::Graphics (ALLEGRO_DISPLAY* display,ALLEGRO_BITMAP* buffer,int scaleX, int scaleY,int scaleW,int scaleH,ALLEGRO_FONT* font,ALLEGRO_FONT* fontpunteggio)
+    Graphics::Graphics (ALLEGRO_DISPLAY* display,ALLEGRO_BITMAP* buffer,int scaleX, int scaleY,int scaleW,int scaleH,ALLEGRO_FONT* font,ALLEGRO_FONT* fontScore)
     {
-        allocata=false;
+        allocated=false;
         this->font=font;
-        this->fontpunteggio=fontpunteggio;
+        this->fontScore=fontScore;
         this->scaleH = scaleH;
         this->scaleW = scaleW;
         this->scaleX = scaleX;
         this->scaleY = scaleY;
         this->buffer = buffer;
         this->display = display;
-        ALLEGRO_BITMAP* icona= al_load_bitmap("../Assets/Bitmaps/icon.png");
+        ALLEGRO_BITMAP* icon= al_load_bitmap("../Assets/Bitmaps/icon.png");
         staticBitmaps.push_back(al_load_bitmap("../Assets/Bitmaps/Tiles/scala.png"));
         staticBitmaps.push_back(al_load_bitmap("../Assets/Bitmaps/Tiles/ground.png"));
         staticBitmaps.push_back(al_load_bitmap("../Assets/Bitmaps/hammer.png"));
         staticBitmaps.push_back(al_load_bitmap("../Assets/Bitmaps/Barrel/barrel_standing.png"));
         staticBitmaps.push_back(al_load_bitmap("../Assets/Bitmaps/Peach/peach0.png"));
         staticBitmaps.push_back(al_load_bitmap("../Assets/Bitmaps/Other/oilcan.png"));
-        al_set_display_icon(display,icona);
-        al_destroy_bitmap(icona);
+        al_set_display_icon(display,icon);
+        al_destroy_bitmap(icon);
 
     }
-    void Graphics::assegnaGriglia(int livello)
+    void Graphics::assignGrid(int level)
     {
-        if (allocata)
+        if (allocated)
         {
             for (int i=0;i<x;i++)
-                delete griglia[i];
-            delete [] griglia;
+                delete grid[i];
+            delete [] grid;
         }
         ifstream fileinput;
-        fileinput.open(string("../Assets/Maps/level" +to_string(livello)+ ".txt"));
+        fileinput.open(string("../Assets/Maps/level" +to_string(level)+ ".txt"));
         if (!fileinput)
-            cout<<"could not initialize level "<<livello<<endl;
+            cout<<"could not initialize level "<<level<<endl;
         fileinput>> x >> y;
-        griglia= new int* [x];
+        grid= new int* [x];
         for (int i=0;i<x;i++)
-            griglia[i]=new int [y];
+            grid[i]=new int [y];
         for (int i=0;i<x;i++)
             for (int j=0;j<y;j++)
-                fileinput>>griglia[i][j];
+                fileinput>>grid[i][j];
         fileinput.close();
-        allocata=true;       
+        allocated=true;       
     }
-    void Graphics::DrawMap (bool cutscene)
+    void Graphics::DrawMap (bool cutScene)
     {
         al_set_target_bitmap(buffer);
         al_clear_to_color(al_map_rgb(0,0,0));
@@ -53,7 +53,7 @@
         {
             for (int j=0;j<y;j++)
             {
-                switch (griglia[i][j])
+                switch (grid[i][j])
                 {
                     case 1:
                         al_draw_bitmap(staticBitmaps[0],j*20,i*20,0);
@@ -64,7 +64,7 @@
                 }
             }
         }
-        if (cutscene==false)
+        if (cutScene==false)
             al_draw_bitmap(staticBitmaps[5],40,520,0);             //barile incendiato
         al_set_target_backbuffer(display);
         al_clear_to_color(al_map_rgb(0, 0, 0));
@@ -84,8 +84,9 @@
     void Graphics::DrawPlayerHammer(Player* Play)
     {
         al_set_target_bitmap(buffer);
+        bool decenter=false;
         if(Play->getFrame() >= 0 && Play->getFrame() <= 15 && Play->getHammered())
-            bitmap=al_load_bitmap("../Assets/Bitmaps/Player/Hammer4R.png");
+            bitmap=al_load_bitmap("../Assets/Bitmaps/Player/Hammer4.png");
         else if(Play->getFrame() >= 16 && Play->getFrame() <= 33 && Play->getHammered())
             bitmap=al_load_bitmap("../Assets/Bitmaps/Player/Hammer4.png");
 
@@ -101,7 +102,13 @@
             bitmap=al_load_bitmap("../Assets/Bitmaps/Player/Hammer3.png");
         else if (Play->getFrame()>=26 and Play->getFrame()<=30)
             bitmap=al_load_bitmap("../Assets/Bitmaps/Player/Hammer5.png");
-        al_draw_bitmap(bitmap,Play->getY(),Play->getX(),0);
+        if (!Play->getHammered())
+            al_draw_bitmap(bitmap,Play->getY(),Play->getX(),0);
+        else
+            if (Play->getDirection()==LEFT)
+                al_draw_bitmap(bitmap,Play->getY(),Play->getX(),0);
+            else
+                al_draw_bitmap(bitmap,Play->getY(),Play->getX(),1);
         al_destroy_bitmap(bitmap);
         al_set_target_backbuffer(display);
         al_clear_to_color(al_map_rgb(0,0,0));
@@ -299,7 +306,7 @@
         al_set_target_backbuffer(display);
         al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);
     }
-    void Graphics::DrawCancella(int& x,int& y)
+    void Graphics::DrawDelete(int& x,int& y)
     {
         if (x==0 and y==0)
             return;
@@ -316,16 +323,16 @@
     void Graphics::DrawScore (int score)
     {  
         al_set_target_bitmap(buffer);
-        al_draw_textf(fontpunteggio,al_map_rgb(255,255,255),315,50,0," SCORE");
-        al_draw_textf(fontpunteggio,al_map_rgb(255,0,0),329,75,0,"%d",score);
+        al_draw_textf(fontScore,al_map_rgb(255,255,255),315,50,0," SCORE");
+        al_draw_textf(fontScore,al_map_rgb(255,0,0),329,75,0,"%d",score);
         al_set_target_backbuffer(display);
         al_draw_scaled_bitmap(buffer, 0, 0, l, h, scaleX, scaleY, scaleW, scaleH, 0);
     }
-    void Graphics::DrawLives(int vite)
+    void Graphics::DrawLives(int lifes)
     {
         al_set_target_bitmap(buffer);
         bitmap=al_load_bitmap("../Assets/Bitmaps/life.png");
-        for(int c=0;c<vite;c++)
+        for(int c=0;c<lifes;c++)
         {
             al_draw_bitmap(bitmap,335+(c*22),32,0);
         }
@@ -390,7 +397,7 @@
             al_draw_bitmap(staticBitmaps[4],280,60,0);           
             break;
         case 3:
-            bitmap=al_load_bitmap("../Assets/Bitmaps/Cutscene/kong_climbing_right1.png");
+            bitmap=al_load_bitmap("../Assets/Bitmaps/Cutscene/kong_climbing_left0.png");
             al_draw_bitmap(bitmap,140,60,0);
             break;
         case 4:
@@ -402,15 +409,15 @@
             al_draw_bitmap(bitmap,140,50,0);
             break;
         case 6:
-            bitmap=al_load_bitmap("../Assets/Bitmaps/Cutscene/kong_climbing_left1.png");
+            bitmap=al_load_bitmap("../Assets/Bitmaps/Cutscene/kong_climbing_right0.png");
             al_draw_bitmap(bitmap,140,45,0);
             break;
         case 7:
-            bitmap=al_load_bitmap("../Assets/Bitmaps/Cutscene/kong_climbing_right0.png");
+            bitmap=al_load_bitmap("../Assets/Bitmaps/Cutscene/kong_climbing_left0.png");
             al_draw_bitmap(bitmap,140,40,0);
             break;
         case 8:
-            bitmap=al_load_bitmap("../Assets/Bitmaps/Cutscene/kong_climbing_right1.png");
+            bitmap=al_load_bitmap("../Assets/Bitmaps/Cutscene/kong_climbing_right0.png");
             al_draw_bitmap(bitmap,140,35,0);
             break;
         case 9:
@@ -418,15 +425,15 @@
             al_draw_bitmap(bitmap,140,25,0);
             break;
         case 10:
-            bitmap=al_load_bitmap("../Assets/Bitmaps/Cutscene/kong_climbing_left1.png");
+            bitmap=al_load_bitmap("../Assets/Bitmaps/Cutscene/kong_climbing_right0.png");
             al_draw_bitmap(bitmap,140,20,0);
             break;
         case 11:
-            bitmap=al_load_bitmap("../Assets/Bitmaps/Cutscene/kong_climbing_right0.png");
+            bitmap=al_load_bitmap("../Assets/Bitmaps/Cutscene/kong_climbing_left0.png");
             al_draw_bitmap(bitmap,140,15,0);
             break;
         case 12:
-            bitmap=al_load_bitmap("../Assets/Bitmaps/Cutscene/kong_climbing_right1.png");
+            bitmap=al_load_bitmap("../Assets/Bitmaps/Cutscene/kong_climbing_right0.png");
             al_draw_bitmap(bitmap,140,10,0);
             break;
         case 13:
@@ -478,11 +485,11 @@
     }
     Graphics::~Graphics()
     {
-        if (allocata)
+        if (allocated)
         {
             for (int i=0;i<x;i++)
-                delete griglia[i];
-            delete [] griglia;
+                delete grid[i];
+            delete [] grid;
         }
         al_destroy_bitmap(buffer);
         for (int i=0;i<staticBitmaps.size();i++)
