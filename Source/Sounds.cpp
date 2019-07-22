@@ -25,6 +25,8 @@
     }
     void Sounds::playHammer()
     {
+        if(al_get_sample_instance_playing(walkingInstance))
+                al_stop_sample_instance(walkingInstance);
         if (!al_get_sample_instance_playing(hammerInstance))
          	al_play_sample_instance(hammerInstance);
     }
@@ -46,8 +48,10 @@
 
     void Sounds::playJump()
     {
-        if (!al_get_sample_instance_playing(jumpInstance))    
-        al_play_sample_instance(jumpInstance);        
+     //   if(al_get_sample_instance_playing(walkingInstance))
+                {al_stop_sample_instance(walkingInstance);cout << " ho stoppato";}
+        if (!al_get_sample_instance_playing(jumpInstance))   
+            al_play_sample_instance(jumpInstance);        
     }
     void Sounds::playMenu()
     {
