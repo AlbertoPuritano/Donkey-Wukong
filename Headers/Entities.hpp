@@ -81,3 +81,4 @@ public:
     int getLancia();
     float getDifficolta();
 };
+
